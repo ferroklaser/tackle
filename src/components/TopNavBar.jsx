@@ -1,9 +1,27 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { useNavigation, router } from 'expo-router';
 
 const TopNavBar = ( ) => {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={() => router.back()}>
+        <Image 
+          source={require('../assets/Icons/BackButton.png')}
+          style={styles.Button}
+        />
+      </TouchableOpacity>
+
+      <View style={{flex: 1}}/>
+
+      <TouchableOpacity onPress={() => router.push('/profile')}>
+        <Image 
+          source={require('../assets/Icons/ProfileIcon.png')}
+          style={styles.Button}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -17,14 +35,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 10,
 
-    // Shadow for iOS
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-
-    // Shadow for Android
-    elevation: 5,
+  },
+  Button: {
+    marginRight: 10,
+    marginTop: 30,
+    alignItems: 'center',
+    width: 40,
+    height: 40,
+    resizeMode: 'contain',
   },
 });
 
