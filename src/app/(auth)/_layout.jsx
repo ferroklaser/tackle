@@ -10,12 +10,12 @@ const layout = () => {
     return (
         <ImageBackground 
             source={require('../../assets/Backgrounds/PaperTexture.png')}
-            resizeMode='cover'
             style={ styles.background }>
-                <View  style={ styles.shadow }>
-                    <Image source={require('../../assets/StickyNote.png')} />
-                </View>
-                <Slot/>
+                    <View style={ styles.shadow }>
+                        <ImageBackground source={require('../../assets/StickyNote.png')}>
+                            <Slot />
+                        </ImageBackground>
+                    </View>
         </ImageBackground>
     )
 }
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute'
-    }, 
+    },
     shadow: {
         ...Platform.select({
             ios: {
@@ -46,5 +46,5 @@ const styles = StyleSheet.create({
                 elevation: 10,
             }
         })
-    }
+    },
 })
