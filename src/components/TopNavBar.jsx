@@ -10,7 +10,7 @@ const TopNavBar = ( ) => {
       <TouchableOpacity onPress={() => router.back()}>
         <Image 
           source={require('../assets/Icons/BackButton.png')}
-          style={styles.Button}
+          style={[styles.Button, {width: 35}, {height: 35}]}
         />
       </TouchableOpacity>
 
