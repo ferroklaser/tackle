@@ -4,6 +4,7 @@ import { Stack, Slot, Tab } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { Image } from 'react-native'
 import { Platform } from 'react-native'
+import { Dimensions } from 'react-native'
 
 
 const layout = () => {
@@ -12,7 +13,8 @@ const layout = () => {
             source={require('../../assets/Backgrounds/PaperTexture.png')}
             style={ styles.background }>
                     <View style={ styles.shadow }>
-                        <ImageBackground source={require('../../assets/StickyNote.png')}>
+                        <ImageBackground source={require('../../assets/StickyNote.png')} 
+                        style={ styles.stickyNote }>
                             <Slot />
                         </ImageBackground>
                     </View>
@@ -25,11 +27,8 @@ export default layout
 const styles = StyleSheet.create({
     background: {
         flex: 1,
-        width: '100%',
-        height: '120%',
         justifyContent: 'center',
         alignItems: 'center',
-        position: 'absolute'
     },
     shadow: {
         ...Platform.select({
@@ -47,4 +46,8 @@ const styles = StyleSheet.create({
             }
         })
     },
+    stickyNote: {
+        width: 350,
+        height: 600,
+    }
 })
