@@ -1,14 +1,11 @@
 import { StyleSheet, Text, View, ImageBackground } from 'react-native'
 import React from 'react'
-import { StatusBar } from 'expo-status-bar'
-import { SafeAreaView } from 'react-native-safe-area-context'
 
 
 const login = () => {
-
   return (
     <View>
-      <Text></Text>
+      <Text>Log In</Text>
     </View>
   )
 }
@@ -16,9 +13,5 @@ const login = () => {
 export default login
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    height: '120%',
-    width: '100%',
-  }
+  
 })
