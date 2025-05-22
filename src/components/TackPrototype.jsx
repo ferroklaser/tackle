@@ -3,7 +3,7 @@ import { View, StyleSheet, Image, Text } from 'react-native';
 import { Asset } from 'expo-asset';
 
 
-const TackPrototype = ({ frameDelay = 100, size = 150 }) => {
+const TackPrototype = ({frameDelay, size}) => {
     const frames = [
         require('../assets/Tack_Prototype/Tack_Prototype-1.png'),
         require('../assets/Tack_Prototype/Tack_Prototype-2.png'),
@@ -31,11 +31,10 @@ const TackPrototype = ({ frameDelay = 100, size = 150 }) => {
 
     return (
         <View style={styles.container}>
-            <Text> Hi</Text>
-                <Image
-                    source={frames[frameIndex]}
-                    style={{ width: size, height: size, resizeMode: 'contain' }}
-                />
+            <Image
+                source={frames[frameIndex]}
+                style={{ width: size, height: size, resizeMode: 'contain' }}
+            />
         </View>
     );
 };
