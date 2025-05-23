@@ -1,8 +1,18 @@
 import { StyleSheet, Text, View, Pressable } from 'react-native'
 import React from 'react'
 import ThemedInput from '../../components/ThemedInput'
+import { Link } from 'expo-router'
+import { useState } from 'react'
 
 const signUp = () => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirm, setConfirm] = useState('')
+
+  const toggleSecureText = () => {
+    secureText = setSecureText(!secureText)
+  }
+
   return (
     <View style={{ flex: 1, justifyContent: 'space-between'}}>
       <View>
@@ -10,9 +20,9 @@ const signUp = () => {
           <Text style={{ fontWeight: "bold", fontSize: 30, padding: 20 }}>Sign Up</Text>
         </View>
         <View style={{ alignItems: 'center'}}>
-          <ThemedInput placeholder='Email Address'></ThemedInput>
-          <ThemedInput placeholder='Password'></ThemedInput>
-          <ThemedInput placeholder='Confirm Password'></ThemedInput>
+          <ThemedInput value={email} onChangeText={setEmail} placeholder='Email Address'></ThemedInput>
+          <ThemedInput value={password} onChangeText={setPassword} placeholder='Password' secureTextEntry={secureText}></ThemedInput>
+          <ThemedInput value={confirm} onChangeText={setConfirm} placeholder='Confirm Password'secureTextEntry={secureText}></ThemedInput>
         </View>
       </View>
       <View style={{ alignItems: 'center', justifyContent: 'space-around' }}> 
@@ -20,11 +30,11 @@ const signUp = () => {
           <Text style={{ fontWeight: 700, fontSize: 17 }}>SIGN UP</Text>
         </Pressable>
         <View style={ styles.login }>
-          <Text style={{
-            fontSize: 12,
+          <Link href="/login" style={{
+            fontSize: 13,
             fontWeight: 'bold',
             textDecorationLine: 'underline'
-          }}>Already have an account? Tap Here!</Text>
+          }}>Already have an account? Tap Here!</Link>
         </View>
       </View>
     </View>
