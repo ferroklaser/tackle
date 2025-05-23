@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, ImageBackground, TextInput, Pressable } from 'react-native'
 import React from 'react'
+import ThemedInput from '../../components/ThemedInput'
 
 
 const login = () => {
@@ -10,12 +11,11 @@ const login = () => {
         <Text style={{ fontWeight: "bold", fontSize: 30, padding: 20}}>Log In</Text>
       </View>
       <View style={{ alignItems: 'center' }}>
-        <View style={ styles.input }>
-          <TextInput>Email Address</TextInput>
-        </View>
-        <View style={ styles.input }>
-          <TextInput>Password</TextInput>
-        </View>
+        <ThemedInput placeholder='Email Address'></ThemedInput>
+        <ThemedInput placeholder='Password'></ThemedInput>
+        {/* <View style={ styles.input }>
+          <TextInput placeholder='Password'></TextInput>
+        </View> */}
       </View>
       <View style={ styles.forgot }>
         <Text style={{ fontSize: 12,
@@ -44,13 +44,6 @@ export default login
 const styles = StyleSheet.create({
   title: {
     alignItems: "center"
-  },
-  input: {
-    backgroundColor: 'white',
-    padding: 15,
-    width: '85%',
-    margin: 10,
-    borderRadius: 10,
   },
   forgot: {
     alignItems: 'flex-end',
