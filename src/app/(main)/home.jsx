@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, ImageBackground } from 'react-native'
 import React from 'react'
 import Background from '../../assets/Backgrounds/BGHomeDay.png';
-import TackPrototype from '../../components/TackPrototype.jsx';
+import CombinedTack from '../../components/CombinedTack.jsx';
 import LoadingSplash from '../../components/LoadingSplash.jsx';
 import { Asset } from 'expo-asset';
 
@@ -9,10 +9,10 @@ const home = () => {
   let [isLoaded, setIsLoaded] = React.useState(false);
 
   let cacheResources = async() => {
-    const assetPromise = Asset.fromModule(Background).downloadAsync();
+    const bgPromise = Asset.fromModule(Background).downloadAsync();
     const delayPromise = new Promise((resolve) => setTimeout(resolve, 1000));
 
-    await Promise.all([assetPromise, delayPromise]);
+    await Promise.all([bgPromise, delayPromise]);
     setIsLoaded(true);
   }
 
@@ -36,9 +36,12 @@ const home = () => {
         source = {Background}
         style={styles.container}
         resizeMode="cover">
-            <View style={styles.tack}>
-              <TackPrototype frameDelay={120} size={320} />
-            </View>
+          <View style={styles.tackContainer}>
+            <CombinedTack 
+              frameDelay={120} 
+              size={320}
+            />
+          </View>
     </ImageBackground>
   )
 }
@@ -47,14 +50,13 @@ export default home
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+      flex: 1,
     },
-    tack: {
-        flex: 1, 
-        justifyContent: 'center', 
-        alignItems: 'center',
-        position: 'absolute',
-        top: 380,
-        width: '100%'
-    }
+    tackContainer: {
+      position: 'relative',
+      flex: 1, 
+      justifyContent: 'center', 
+      alignItems: 'center',
+      width: '100%',
+    },
 })

@@ -5,21 +5,21 @@ import { Asset } from 'expo-asset';
 
 const TackPrototype = ({frameDelay, size}) => {
     const frames = [
-        require('../assets/Tack_Prototype/Tack_Prototype-1.png'),
-        require('../assets/Tack_Prototype/Tack_Prototype-2.png'),
-        require('../assets/Tack_Prototype/Tack_Prototype-3.png'),
-        require('../assets/Tack_Prototype/Tack_Prototype-4.png'),
-        require('../assets/Tack_Prototype/Tack_Prototype-5.png'),
-        require('../assets/Tack_Prototype/Tack_Prototype-6.png'),
-        require('../assets/Tack_Prototype/Tack_Prototype-7.png'),
-        require('../assets/Tack_Prototype/Tack_Prototype-8.png'),
+        require('../../assets/Tack_Prototype/Tack_Prototype-1.png'),
+        require('../../assets/Tack_Prototype/Tack_Prototype-2.png'),
+        require('../../assets/Tack_Prototype/Tack_Prototype-3.png'),
+        require('../../assets/Tack_Prototype/Tack_Prototype-4.png'),
+        require('../../assets/Tack_Prototype/Tack_Prototype-5.png'),
+        require('../../assets/Tack_Prototype/Tack_Prototype-6.png'),
+        require('../../assets/Tack_Prototype/Tack_Prototype-7.png'),
+        require('../../assets/Tack_Prototype/Tack_Prototype-8.png'),
     ];
 
     const [frameIndex, setFrameIndex] = useState(0);
 
     useEffect(() => {
         const loadAssets = async () => {
-            await Asset.loadAsync(frames); // preload all frames
+            await Asset.loadAsync(frames);
             const interval = setInterval(() => {
                 setFrameIndex((prev) => (prev + 1) % frames.length);
             }, frameDelay);
