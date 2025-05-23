@@ -3,14 +3,18 @@ import React from 'react'
 import ThemedInput from '../../components/ThemedInput'
 import { Link } from 'expo-router'
 import { useState } from 'react'
+import { MaterialCommunityIcons } from "@expo/vector-icons"
+import LoadingSplash from '../../components/LoadingSplash.jsx';
+import { Asset } from 'expo-asset'
 
 const login = () => {
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [secureText, setSecureText] = useState(true)
 
   const toggleSecureText = () => {
-    secureText = setSecureText(!secureText)
+    setSecureText(prevState => !prevState)
   }
 
   return (
@@ -21,9 +25,14 @@ const login = () => {
         </View>
         <View style={{ alignItems: 'center' }}>
           <ThemedInput placeholder='Email Address' value={email} onChangeText={setEmail}></ThemedInput>
-          <View>
-
-            <ThemedInput placeholder='Password' value={password} onChangeText={setPassword} secureTextEntry={secureText}></ThemedInput>
+          <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+            <ThemedInput placeholder='Password' 
+              value={password} 
+              onChangeText={setPassword} 
+              secureTextEntry={secureText}></ThemedInput>
+            <Pressable style={{ position: 'absolute', right: 20}} onPress={toggleSecureText}>
+              <MaterialCommunityIcons name={secureText ? "eye" : "eye-off"} size={25} color="black" />
+            </Pressable>
           </View>
         </View>
         <View style={ styles.forgot }>

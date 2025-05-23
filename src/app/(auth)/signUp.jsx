@@ -3,14 +3,21 @@ import React from 'react'
 import ThemedInput from '../../components/ThemedInput'
 import { Link } from 'expo-router'
 import { useState } from 'react'
+import { MaterialCommunityIcons } from "@expo/vector-icons"
 
 const signUp = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
+  const [securePassword, setSecurePassword] = useState(true)
+  const [secureConfirm, setSecureConfirm] = useState(true)
 
-  const toggleSecureText = () => {
-    secureText = setSecureText(!secureText)
+  const toggleSecurePassword = () => {
+    setSecurePassword(prevState => !prevState)
+  }
+
+  const toggleSecureConfirm = () => {
+    setSecureConfirm(prevState => !prevState)
   }
 
   return (
@@ -21,8 +28,24 @@ const signUp = () => {
         </View>
         <View style={{ alignItems: 'center'}}>
           <ThemedInput value={email} onChangeText={setEmail} placeholder='Email Address'></ThemedInput>
-          <ThemedInput value={password} onChangeText={setPassword} placeholder='Password' secureTextEntry={secureText}></ThemedInput>
-          <ThemedInput value={confirm} onChangeText={setConfirm} placeholder='Confirm Password'secureTextEntry={secureText}></ThemedInput>
+          <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+            <ThemedInput value={password} 
+            onChangeText={setPassword} 
+            placeholder='Password' 
+            secureTextEntry={securePassword}></ThemedInput>
+            <Pressable style={{ position: 'absolute', right: 20}} onPress={toggleSecurePassword}>
+              <MaterialCommunityIcons name={securePassword ? "eye" : "eye-off"} size={25} color="black" />
+            </Pressable>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+            <ThemedInput value={confirm} 
+              onChangeText={setConfirm} 
+              placeholder='Confirm Password'
+              secureTextEntry={secureConfirm}></ThemedInput>
+            <Pressable style={{ position: 'absolute', right: 20}} onPress={toggleSecureConfirm}>
+              <MaterialCommunityIcons name={secureConfirm ? "eye" : "eye-off"} size={25} color="black" />
+            </Pressable>
+          </View>
         </View>
       </View>
       <View style={{ alignItems: 'center', justifyContent: 'space-around' }}> 
