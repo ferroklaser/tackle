@@ -5,7 +5,7 @@ import { Link } from 'expo-router'
 const index = () => {
   return (
     <View style={ styles.title }>
-      <Text>Title Page</Text>
+      <Text>Profile Page</Text>
     </View>
   )
 }
