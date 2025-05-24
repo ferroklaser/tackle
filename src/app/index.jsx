@@ -9,6 +9,7 @@ const index = () => {
       <Link href="/login">Login Page</Link>
       <Link href="/signUp">Sign Up</Link>
       <Link href="/home">Home</Link>
+      <Link href="/customisation">Customisation</Link>
     </View>
   )
 }

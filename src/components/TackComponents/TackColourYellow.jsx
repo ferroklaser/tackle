@@ -13,14 +13,14 @@ const TackColourYellow = ({ frameIndex, size }) => {
 };
 
 TackColourYellow.frames = [
-  require('../../assets/Tack/TackColourYellow/Frame1.png'),
-  require('../../assets/Tack/TackColourYellow/Frame2.png'),
-  require('../../assets/Tack/TackColourYellow/Frame3.png'),
-  require('../../assets/Tack/TackColourYellow/Frame4.png'),
-  require('../../assets/Tack/TackColourYellow/Frame5.png'),
-  require('../../assets/Tack/TackColourYellow/Frame6.png'),
-  require('../../assets/Tack/TackColourYellow/Frame7.png'),
-  require('../../assets/Tack/TackColourYellow/Frame8.png'),
+  require('../../assets/Tack/TackColourYellow/Frame-1.png'),
+  require('../../assets/Tack/TackColourYellow/Frame-2.png'),
+  require('../../assets/Tack/TackColourYellow/Frame-3.png'),
+  require('../../assets/Tack/TackColourYellow/Frame-4.png'),
+  require('../../assets/Tack/TackColourYellow/Frame-5.png'),
+  require('../../assets/Tack/TackColourYellow/Frame-6.png'),
+  require('../../assets/Tack/TackColourYellow/Frame-7.png'),
+  require('../../assets/Tack/TackColourYellow/Frame-8.png'),
 ];
 
 const styles = StyleSheet.create({

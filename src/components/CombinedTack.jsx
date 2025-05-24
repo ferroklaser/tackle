@@ -4,7 +4,7 @@ import { View, StyleSheet } from 'react-native';
 import { Asset } from 'expo-asset';
 
 const SyncTackAnimations = ({ frameDelay, size }) => {
-  const totalFrames = 8; // assuming both have 8 frames
+  const totalFrames = 8;
 
   const [frameIndex, setFrameIndex] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -15,12 +15,15 @@ const SyncTackAnimations = ({ frameDelay, size }) => {
     const loadAssets = async () => {
       const framesBlue = TackComponents.TackColourBlue.frames;
       const framesYellow = TackComponents.TackColourYellow.frames;
-      const framesOutline = TackComponents.TackOutline1.frames;
+      const framesMouth_HappyOpen = TackComponents.Mouth_HappyOpen.frames;
+      const framesEye_Excited = TackComponents.Eye_Excited.frames;
+
 
       await Promise.all([
         Asset.loadAsync(framesBlue),
-        Asset.loadAsync(framesOutline),
-        Asset.loadAsync(framesYellow)
+        Asset.loadAsync(framesYellow),
+        Asset.loadAsync(framesMouth_HappyOpen),
+        Asset.loadAsync(framesEye_Excited),
       ]);
       
       if (isMounted) setIsLoaded(true);
@@ -57,7 +60,14 @@ const SyncTackAnimations = ({ frameDelay, size }) => {
       </View>
       
       <View style={styles.tackComponents}>
-        <TackComponents.TackOutline1 
+        <TackComponents.Mouth_HappyOpen 
+        frameIndex={frameIndex}
+        size={size}
+        />
+      </View>
+
+      <View style={styles.tackComponents}>
+        <TackComponents.Eye_Excited 
         frameIndex={frameIndex}
         size={size}
         />

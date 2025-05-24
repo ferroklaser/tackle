@@ -13,14 +13,14 @@ const TackColourBlue = ({ frameIndex, size }) => {
 };
 
 TackColourBlue.frames = [
-  require('../../assets/Tack/TackColourBlue/Frame1.png'),
-  require('../../assets/Tack/TackColourBlue/Frame2.png'),
-  require('../../assets/Tack/TackColourBlue/Frame3.png'),
-  require('../../assets/Tack/TackColourBlue/Frame4.png'),
-  require('../../assets/Tack/TackColourBlue/Frame5.png'),
-  require('../../assets/Tack/TackColourBlue/Frame6.png'),
-  require('../../assets/Tack/TackColourBlue/Frame7.png'),
-  require('../../assets/Tack/TackColourBlue/Frame8.png'),
+  require('../../assets/Tack/TackColourBlue/Frame-1.png'),
+  require('../../assets/Tack/TackColourBlue/Frame-2.png'),
+  require('../../assets/Tack/TackColourBlue/Frame-3.png'),
+  require('../../assets/Tack/TackColourBlue/Frame-4.png'),
+  require('../../assets/Tack/TackColourBlue/Frame-5.png'),
+  require('../../assets/Tack/TackColourBlue/Frame-6.png'),
+  require('../../assets/Tack/TackColourBlue/Frame-7.png'),
+  require('../../assets/Tack/TackColourBlue/Frame-8.png'),
 ];
 
 const styles = StyleSheet.create({
