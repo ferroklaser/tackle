@@ -4,21 +4,24 @@ import ThemedInput from '../../components/ThemedInput'
 import { Link } from 'expo-router'
 import { useState } from 'react'
 import { MaterialCommunityIcons } from "@expo/vector-icons"
+import { createUserWithEmailAndPassword } from "firebase/auth"
+import { auth, FIREBASE_AUTH } from '../../firebaseConfig'
 
 const signUp = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirm, setConfirm] = useState('')
-  const [securePassword, setSecurePassword] = useState(true)
-  const [secureConfirm, setSecureConfirm] = useState(true)
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
+  const [securePassword, setSecurePassword] = useState(true);
+  const [secureConfirm, setSecureConfirm] = useState(true);
+  const auth = FIREBASE_AUTH;
 
   const toggleSecurePassword = () => {
     setSecurePassword(prevState => !prevState)
-  }
+  };
 
   const toggleSecureConfirm = () => {
     setSecureConfirm(prevState => !prevState)
-  }
+  };
 
   return (
     <View style={{ flex: 1, justifyContent: 'space-between'}}>

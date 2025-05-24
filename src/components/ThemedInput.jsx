@@ -8,6 +8,7 @@ const ThemedInput = ({ onChangeText, value, placeholder, ...props}) => {
         value={value} 
         placeholder={placeholder} 
         onChangeText={onChangeText}
+        autoCapitalize="none"
         {...props}/>
     </View>
   )

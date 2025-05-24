@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "tackle",
     "name": "tackle",
     "slug": "tackle",
     "version": "1.0.0",

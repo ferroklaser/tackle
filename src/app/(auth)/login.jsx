@@ -4,17 +4,29 @@ import ThemedInput from '../../components/ThemedInput'
 import { Link } from 'expo-router'
 import { useState } from 'react'
 import { MaterialCommunityIcons } from "@expo/vector-icons"
-import LoadingSplash from '../../components/LoadingSplash.jsx';
-import { Asset } from 'expo-asset'
+import { signInWithEmailAndPassword } from "firebase/auth"
+import { FIREBASE_AUTH } from '../../firebaseConfig'
+import { router } from 'expo-router';
 
 const login = () => {
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [secureText, setSecureText] = useState(true)
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [secureText, setSecureText] = useState(true);
+  const auth = FIREBASE_AUTH;
 
   const toggleSecureText = () => {
     setSecureText(prevState => !prevState)
+  };
+
+  const signIn = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      alert("Welcome")
+      router.replace('/home')
+    } catch (error) {
+      console.log("Login error:", error.code, error.message);
+    }
   }
 
   return (
@@ -44,7 +56,7 @@ const login = () => {
         </View>
       </View>
       <View style={{ alignItems: 'center', justifyContent: 'space-around' }}>
-          <Pressable style={[styles.button,  {marginBottom: 50},]}>
+          <Pressable style={[styles.button,  {marginBottom: 50},]} onPress={() => signIn()}>
             <Text style={{ fontWeight: 700, fontSize: 17 }}>LOG IN</Text>
           </Pressable>
         <View style={[ styles.forgot, {marginBottom: 30} ]}>
