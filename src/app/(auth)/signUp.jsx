@@ -53,11 +53,14 @@ const signUp = () => {
           <Text style={{ fontWeight: 700, fontSize: 17 }}>SIGN UP</Text>
         </Pressable>
         <View style={ styles.login }>
-          <Link href="/login" style={{
+          <Link href='/login' asChild>
+            <Pressable>
+              <Text style={{
             fontSize: 13,
             fontWeight: 'bold',
-            textDecorationLine: 'underline'
-          }}>Already have an account? Tap Here!</Link>
+            textDecorationLine: 'underline'}} >Already have an account? Tap Here!</Text>
+            </Pressable>
+          </Link>
         </View>
       </View>
     </View>

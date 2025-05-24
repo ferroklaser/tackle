@@ -4,13 +4,11 @@ import ThemedInput from '../../components/ThemedInput'
 import { Link } from 'expo-router'
 import { useState } from 'react'
 import { MaterialCommunityIcons } from "@expo/vector-icons"
-import LoadingSplash from '../../components/LoadingSplash.jsx';
-import { Asset } from 'expo-asset'
 
 const login = () => {
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState()
+  const [password, setPassword] = useState()
   const [secureText, setSecureText] = useState(true)
 
   const toggleSecureText = () => {

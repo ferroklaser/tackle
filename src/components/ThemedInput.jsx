@@ -1,13 +1,15 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
 
-const ThemedInput = ({ onChangeText, value, placeholder, ...props}) => {
+const ThemedInput = ({ onChangeText, value, placeholder, secureTextEntry, ...props}) => {
   return (
     <View style={ styles.input }>
       <TextInput 
         value={value} 
         placeholder={placeholder} 
         onChangeText={onChangeText}
+        autoCapitalize='none'
+        secureTextEntry={secureTextEntry}
         {...props}/>
     </View>
   )
