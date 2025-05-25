@@ -1,18 +1,22 @@
 import { StyleSheet, Text, View, ImageBackground } from 'react-native'
 import React from 'react'
 import Background from '../../assets/Backgrounds/BGHomeDay.png';
-import CombinedTack from '../../components/CombinedTack.jsx';
+import CombinedTackSprite from '../../components/CombinedTackSprite.jsx';
 import LoadingSplash from '../../components/LoadingSplash.jsx';
 import { Asset } from 'expo-asset';
+import Tack from '../../assets/Tack/index.js';
 
 const home = () => {
   let [isLoaded, setIsLoaded] = React.useState(false);
 
   let cacheResources = async() => {
     const bgPromise = Asset.fromModule(Background).downloadAsync();
+    const eyesPromise = Asset.fromModule(Tack.Eyes["Excited"]).downloadAsync(); // retrieve from database
+    const tackBasePromise = Asset.fromModule(Tack.TackBase["Blue"]).downloadAsync(); // retrieve from database
+    const mouthPromise = Asset.fromModule(Tack.Mouth["Open_Smile"]).downloadAsync(); // retrieve from database
     const delayPromise = new Promise((resolve) => setTimeout(resolve, 1000));
 
-    await Promise.all([bgPromise, delayPromise]);
+    await Promise.all([bgPromise, delayPromise, eyesPromise, mouthPromise, tackBasePromise]);
     setIsLoaded(true);
   }
 
@@ -37,10 +41,12 @@ const home = () => {
         style={styles.container}
         resizeMode="cover">
           <View style={styles.tackContainer}>
-            <CombinedTack 
-              frameDelay={120} 
-              size={320}
-            />
+            <CombinedTackSprite
+             // retrieve from database
+             TackBaseOption='Blue'
+             EyesOption='Excited'
+             MouthOption='Open_Smile'
+             />
           </View>
     </ImageBackground>
   )
@@ -58,5 +64,6 @@ const styles = StyleSheet.create({
       justifyContent: 'center', 
       alignItems: 'center',
       width: '100%',
+      marginTop: '55%',
     },
 })
