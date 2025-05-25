@@ -1,19 +1,21 @@
 import { StyleSheet, Text, View, Pressable } from 'react-native'
 import React from 'react'
 import ThemedInput from '../../components/ThemedInput'
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
 import { useState } from 'react'
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { createUserWithEmailAndPassword } from "firebase/auth"
-import { auth, FIREBASE_AUTH } from '../../firebaseConfig'
+import { FIREBASE_AUTH } from '../../firebaseConfig'
 
 const signUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
+  const auth = FIREBASE_AUTH;
+
   const [securePassword, setSecurePassword] = useState(true);
   const [secureConfirm, setSecureConfirm] = useState(true);
-  const auth = FIREBASE_AUTH;
+
 
   const toggleSecurePassword = () => {
     setSecurePassword(prevState => !prevState)
@@ -22,6 +24,19 @@ const signUp = () => {
   const toggleSecureConfirm = () => {
     setSecureConfirm(prevState => !prevState)
   };
+
+  const register = () => {
+    if (password != confirm) {
+      alert("Passwords are different");
+      return;
+    }
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        console.log("User created: " + userCredential.user);
+      }).catch((error) => {
+        console.error("Error during sign up:", error.code, error.message);
+      });
+  }
 
   return (
     <View style={{ flex: 1, justifyContent: 'space-between'}}>
@@ -52,7 +67,7 @@ const signUp = () => {
         </View>
       </View>
       <View style={{ alignItems: 'center', justifyContent: 'space-around' }}> 
-        <Pressable style={[ styles.button, {marginBottom: 50} ]}>
+        <Pressable style={[ styles.button, {marginBottom: 50} ]} onPress={() => register()}>
           <Text style={{ fontWeight: 700, fontSize: 17 }}>SIGN UP</Text>
         </Pressable>
         <View style={ styles.login }>

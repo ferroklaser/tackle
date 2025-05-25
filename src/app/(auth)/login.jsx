@@ -20,13 +20,12 @@ const login = () => {
   };
 
   const signIn = async () => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      alert("Welcome")
-      router.replace('/home')
-    } catch (error) {
-      console.log("Login error:", error.code, error.message);
-    }
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        console.log("User sign in" + userCredential.user);
+      }).catch((error) => {
+        console.log("Error during log in:", error.code, error.message)
+      })
   }
 
   return (
