@@ -1,41 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { Asset } from 'expo-asset';
-import * as TackComponents from './TackComponents';
+import Tack from '../assets/Tack';
+import CombinedTackSprite from './CombinedTackSprite';
+import MyButton from './MyButton';
+import { router } from 'expo-router';
 
-const colorOptions = ['TackColourBlue', 'TackColourYellow'];
-const eyeOptions = ['Eye_Excited'];
-const mouthOptions = ['Mouth_HappyOpen'];
+// only add those available for users into these arrays
+const colourOptions = ['Yellow', 'Blue'];
+const eyeOptions = ['Excited'];
+const mouthOptions = ['Open_Smile'];
+// const accessoryOptions = [];
 
-const CustomizationComponent = ({ frameDelay = 100, size = 100 }) => {
-  const totalFrames = 8;
+const CustomizationComponent = () => {
 
-  const [frameIndex, setFrameIndex] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const [colorIndex, setColorIndex] = useState(0);
+  const [colourIndex, setColourIndex] = useState(0);
   const [eyeIndex, setEyeIndex] = useState(0);
   const [mouthIndex, setMouthIndex] = useState(0);
+//   const [accessoryIndex, setAccessoryIndex] = useState(0);
 
   useEffect(() => {
 
     const loadAssets = async () => {
       const assets = [];
 
-      colorOptions.forEach((key) => {
-        const frames = TackComponents[key].frames;
-        assets.push(Asset.loadAsync(frames));
+      colourOptions.forEach((key) => {
+        const spriteSheet = Tack.TackBase[key];
+        assets.push(Asset.loadAsync(spriteSheet));
       });
 
       eyeOptions.forEach((key) => {
-        const frames = TackComponents[key].frames;
-        assets.push(Asset.loadAsync(frames));
+        const spriteSheet = Tack.Eyes[key];
+        assets.push(Asset.loadAsync(spriteSheet));
       });
 
       mouthOptions.forEach((key) => {
-        const frames = TackComponents[key].frames;
-        assets.push(Asset.loadAsync(frames));
+        const spriteSheet = Tack.Mouth[key];
+        assets.push(Asset.loadAsync(spriteSheet));
       });
+
+    //   accessoryOptions.forEach((key) => {
+    //     // const spriteSheet = Tack.Accessory[key];
+    //     // assets.push(Asset.loadAsync(spriteSheet));
+    //   });
 
       await Promise.all(assets);
       setIsLoaded(true);
@@ -44,23 +53,14 @@ const CustomizationComponent = ({ frameDelay = 100, size = 100 }) => {
     loadAssets();
   }, []);
 
-  useEffect(() => {
-    if (!isLoaded) return;
-
-    const interval = setInterval(() => {
-      setFrameIndex((prev) => (prev + 1) % totalFrames);
-    }, frameDelay);
-
-    return () => clearInterval(interval);
-  }, [isLoaded, frameDelay]);
-
   if (!isLoaded) {
     return <View />;
   }
 
-  const CurrentColorComponent = TackComponents[colorOptions[colorIndex]];
-  const CurrentEyeComponent = TackComponents[eyeOptions[eyeIndex]];
-  const CurrentMouthComponent = TackComponents[mouthOptions[mouthIndex]];
+  const currentColour = colourOptions[colourIndex];
+  const currentEyes = eyeOptions[eyeIndex];
+  const currentMouth = mouthOptions[mouthIndex];
+//   const currentAccessory = accessoryOptions[accessoryIndex];
 
   const Next = (setter, array, currentIndex) => {
     setter((currentIndex + 1) % array.length);
@@ -73,55 +73,90 @@ const CustomizationComponent = ({ frameDelay = 100, size = 100 }) => {
   return (
     <View style={styles.container}>
       <View style={styles.tackContainer}>
-        <View style={styles.tackComponents}>
-          <CurrentColorComponent frameIndex={frameIndex} size={size} />
-        </View>
-        
-        <View style={styles.tackComponents}>
-          <CurrentEyeComponent frameIndex={frameIndex} size={size} />
-        </View>
-  
-        <View style={styles.tackComponents}>
-          <CurrentMouthComponent frameIndex={frameIndex} size={size} />
-        </View>
+        <CombinedTackSprite
+            tackBaseOption={currentColour}
+            eyesOption={currentEyes}
+            mouthOption={currentMouth}
+        />
       </View>
 
       <View style={styles.buttonsCol}>
         <View style={styles.buttonsRow}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => Back(setColorIndex, colorOptions, colorIndex)}
+            onPress={() => Back(setColourIndex, colourOptions, colourIndex)}
           >
-            <Text style={styles.buttonText}>{'<'}</Text>
+            <Text style={styles.Text}>{'<'}</Text>
           </TouchableOpacity>
 
-          <Text>
-            {colorOptions[colorIndex]}
-          </Text>
+          <Text style={[styles.button, styles.Text]}>Colour</Text>
           
           <TouchableOpacity
             style={styles.button}
-            onPress={() => Next(setColorIndex, colorOptions, colorIndex)}
+            onPress={() => Next(setColourIndex, colourOptions, colourIndex)}
           >
-            <Text style={styles.buttonText}>{'>'}</Text>
+            <Text style={styles.Text}>{'>'}</Text>
           </TouchableOpacity>
         </View>
-        
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => Next(setEyeIndex, eyeOptions, eyeIndex)}
-        >
-          <Text style={styles.buttonText}>Next Eyes</Text>
-        </TouchableOpacity>
+        <View style={styles.buttonsRow}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => Back(setEyeIndex, eyeOptions, eyeIndex)}
+          >
+            <Text style={styles.Text}>{'<'}</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => Next(setMouthIndex, mouthOptions, mouthIndex)}
-        >
-          <Text style={styles.buttonText}>Next Mouth</Text>
-        </TouchableOpacity>
+          <Text style={[styles.button, styles.Text]}>Eyes</Text>
+          
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => Next(setEyeIndex, eyeOptions, eyeIndex)}
+          >
+            <Text style={styles.Text}>{'>'}</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.buttonsRow}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => Back(setMouthIndex, mouthOptions, mouthIndex)}
+          >
+            <Text style={styles.Text}>{'<'}</Text>
+          </TouchableOpacity>
+
+          <Text style={[styles.button, styles.Text]}>Mouth</Text>
+          
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => Next(setMouthIndex, mouthOptions, mouthIndex)}
+          >
+            <Text style={styles.Text}>{'>'}</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.buttonsRow}>
+          <TouchableOpacity
+            style={styles.button}
+            // onPress={() => Back(setAccessoryIndex, accessoryOptions, accessoryIndex)}
+          >
+            <Text style={styles.Text}>{'<'}</Text>
+          </TouchableOpacity>
+
+          <Text style={[styles.button, styles.Text]}>Accessory</Text>
+          
+          <TouchableOpacity
+            style={styles.button}
+            // onPress={() => Next(setAccessoryIndex, accessoryOptions, accessoryIndex)}
+          >
+            <Text style={styles.Text}>{'>'}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
+
+      <MyButton 
+        title="DONE"
+        onPress={() => router.replace('/home')}/>
     </View>
   );
 };
@@ -130,34 +165,39 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   tackContainer: {
     position: 'relative',
-    flex: 1, 
     justifyContent: 'center', 
     alignItems: 'center',
     width: '100%',
-  },
-  tackComponents: {
-    position: 'absolute',
-    marginTop: '20%%',
+    marginTop: '70%',
+    marginBottom: '40%',
   },
   buttonsCol: {
     flexDirection: 'column',
-    width: '80%'
+    marginBottom: '4%',
+    gap: 12,
   },
   buttonsRow: {
     flexDirection: 'row',
-    width: '80%'
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    justifyContent: 'space-between',
+
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
   button: {
-    borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,
-    marginHorizontal: 5
+    marginHorizontal: 5,
   },
-  buttonText: {
+  Text: {
     fontSize: 16,
     color: 'black',
     fontWeight: 'bold',

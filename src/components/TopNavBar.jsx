@@ -1,9 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { useNavigation, router } from 'expo-router';
+import { router } from 'expo-router';
 
 const TopNavBar = ( ) => {
-  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
