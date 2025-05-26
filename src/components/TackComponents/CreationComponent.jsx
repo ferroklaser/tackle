@@ -5,6 +5,7 @@ import Tack from '../../assets/Tack';
 import CombinedTackSprite from './CombinedTackSprite';
 import MyButton from '../MyButton';
 import { router } from 'expo-router';
+import ThemedInput from '../ThemedInput';
 
 // only add those available for users into these arrays
 const colourOptions = ['Yellow', 'Blue'];
@@ -13,6 +14,7 @@ const mouthOptions = ['Open_Smile'];
 const accessoryOptions = [];
 
 const CreationComponent = () => {
+  const [username, setUsername] = useState('');
 
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -79,6 +81,13 @@ const CreationComponent = () => {
             mouthOption={currentMouth}
         />
       </View>
+      <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+        <ThemedInput 
+        value={username}
+        onChangeText={setUsername}
+        placeholder="Enter your username here!"/>
+      </View>
+      
 
       <View style={styles.buttonsCol}>
         <View style={styles.buttonsRow}>
@@ -172,8 +181,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     alignItems: 'center',
     width: '100%',
-    marginTop: '70%',
-    marginBottom: '40%',
+    marginTop: '50%',
+    marginBottom: '50%',
   },
   buttonsCol: {
     flexDirection: 'column',
@@ -184,16 +193,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     backgroundColor: 'white',
-    borderRadius: 10,
     justifyContent: 'space-between',
-
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
   },
   button: {
-    paddingVertical: 10,
+    paddingVertical: 5,
     paddingHorizontal: 12,
     marginHorizontal: 5,
   },

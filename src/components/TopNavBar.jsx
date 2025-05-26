@@ -1,17 +1,28 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { router } from 'expo-router';
+import { usePathname } from 'expo-router';
 
 const TopNavBar = ( ) => {
+  const pathname = usePathname();
+
+   const handleBack = () => {
+    if (pathname === '/home') {
+      return;
+    }
+    router.back();
+  };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => router.back()}>
-        <Image 
-          source={require('../assets/Icons/BackButton.png')}
-          style={[styles.Button, {width: 35}, {height: 35}]}
-        />
-      </TouchableOpacity>
+      {pathname !== '/home' && (
+        <TouchableOpacity onPress={handleBack}>
+          <Image 
+            source={require('../assets/Icons/BackButton.png')}
+            style={[styles.Button, {width: 35}, {height: 35}]}
+          />
+        </TouchableOpacity>
+      )}
 
       <View style={{flex: 1}}/>
 
