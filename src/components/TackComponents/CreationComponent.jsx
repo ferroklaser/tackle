@@ -8,6 +8,9 @@ import { router } from 'expo-router';
 import UnderlinedInput from '../UnderlinedInput';
 import { useFonts } from 'expo-font';
 
+import { FIREBASE_DATABASE } from '../../firebaseConfig.js';
+import { collection, addDoc } from 'firebase/firestore';
+
 // only add those available for users into these arrays
 const colourOptions = ['Yellow', 'Blue'];
 const eyeOptions = ['Excited', 'Side_Eye'];
@@ -74,6 +77,23 @@ const CreationComponent = () => {
 
   const Back = (setter, array, currentIndex) => {
     setter(Math.abs((currentIndex - 1) % array.length));
+  }
+
+  const storeData = async () => {
+    try {
+      const docRef = await addDoc(collection(FIREBASE_DATABASE, "userTackComponent"), {
+        username: username,
+        colour: colourIndex,
+        eye: eyeIndex,
+        mouth: mouthIndex,
+        accessory: accessoryIndex,
+      })
+      console.log("Document written in ID: ", docRef.id);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      router.replace('/home');
+    }
   }
 
   return (
@@ -172,7 +192,7 @@ const CreationComponent = () => {
 
       <MyButton 
         title="CONFIRM"
-        onPress={() => router.replace('/home')}/>
+        onPress={storeData}/>
     </View>
   );
 };

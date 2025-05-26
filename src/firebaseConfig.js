@@ -23,11 +23,10 @@ const FIREBASE_APP = initializeApp(firebaseConfig);
 export const FIREBASE_AUTH = initializeAuth(FIREBASE_APP, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage)
 });
-// initializeAuth(FIREBASE_APP, { 
-//    persistence: getReactNativePersistence(ReactNativeAsyncStorage)});
+
 
 // connectAuthEmulator(FIREBASE_AUTH, "http://127.0.0.1:9099");
-const db = getFirestore(FIREBASE_APP);
+export const FIREBASE_DATABASE = getFirestore(FIREBASE_APP);
 
 
 

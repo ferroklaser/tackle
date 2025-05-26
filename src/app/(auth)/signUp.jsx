@@ -37,6 +37,7 @@ const signUp = () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       console.log("Welcome")
+      router.replace('/creation')
     } catch (error) {
         console.log("Error during sign up:", error.code, error.message);
     } finally {
