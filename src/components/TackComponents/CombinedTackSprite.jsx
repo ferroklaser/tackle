@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import AnimatedSprite from './AnimatedSprite';
-import Tack from '../assets/Tack';
+import Tack from '../../assets/Tack';
 
 const CombinedTackAnimation = ({
     size = 300,

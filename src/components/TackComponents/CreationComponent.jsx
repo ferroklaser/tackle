@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { Asset } from 'expo-asset';
-import Tack from '../assets/Tack';
+import Tack from '../../assets/Tack';
 import CombinedTackSprite from './CombinedTackSprite';
-import MyButton from './MyButton';
+import MyButton from '../MyButton';
 import { router } from 'expo-router';
 
 // only add those available for users into these arrays
 const colourOptions = ['Yellow', 'Blue'];
 const eyeOptions = ['Excited'];
 const mouthOptions = ['Open_Smile'];
-// const accessoryOptions = [];
+const accessoryOptions = [];
 
-const CustomizationComponent = () => {
+const CreationComponent = () => {
 
   const [isLoaded, setIsLoaded] = useState(false);
 
   const [colourIndex, setColourIndex] = useState(0);
   const [eyeIndex, setEyeIndex] = useState(0);
   const [mouthIndex, setMouthIndex] = useState(0);
-//   const [accessoryIndex, setAccessoryIndex] = useState(0);
+  const [accessoryIndex, setAccessoryIndex] = useState(0);
 
   useEffect(() => {
 
@@ -41,10 +41,10 @@ const CustomizationComponent = () => {
         assets.push(Asset.loadAsync(spriteSheet));
       });
 
-    //   accessoryOptions.forEach((key) => {
-    //     // const spriteSheet = Tack.Accessory[key];
-    //     // assets.push(Asset.loadAsync(spriteSheet));
-    //   });
+      accessoryOptions.forEach((key) => {
+        const spriteSheet = Tack.Accessory[key];
+        assets.push(Asset.loadAsync(spriteSheet));
+      });
 
       await Promise.all(assets);
       setIsLoaded(true);
@@ -60,7 +60,7 @@ const CustomizationComponent = () => {
   const currentColour = colourOptions[colourIndex];
   const currentEyes = eyeOptions[eyeIndex];
   const currentMouth = mouthOptions[mouthIndex];
-//   const currentAccessory = accessoryOptions[accessoryIndex];
+  const currentAccessory = accessoryOptions[accessoryIndex];
 
   const Next = (setter, array, currentIndex) => {
     setter((currentIndex + 1) % array.length);
@@ -138,7 +138,7 @@ const CustomizationComponent = () => {
         <View style={styles.buttonsRow}>
           <TouchableOpacity
             style={styles.button}
-            // onPress={() => Back(setAccessoryIndex, accessoryOptions, accessoryIndex)}
+            onPress={() => Back(setAccessoryIndex, accessoryOptions, accessoryIndex)}
           >
             <Text style={styles.Text}>{'<'}</Text>
           </TouchableOpacity>
@@ -147,7 +147,7 @@ const CustomizationComponent = () => {
           
           <TouchableOpacity
             style={styles.button}
-            // onPress={() => Next(setAccessoryIndex, accessoryOptions, accessoryIndex)}
+            onPress={() => Next(setAccessoryIndex, accessoryOptions, accessoryIndex)}
           >
             <Text style={styles.Text}>{'>'}</Text>
           </TouchableOpacity>
@@ -205,4 +205,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CustomizationComponent;
+export default CreationComponent;

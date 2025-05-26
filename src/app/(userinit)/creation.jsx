@@ -1,13 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import CustomizationComponent from '../components/CustomizationComponent'
-import { router } from 'expo-router';
-import MyButton from '../components/MyButton';
+import CreationComponent from '../../components/TackComponents/CreationComponent'
 
 const index = () => {
   return (
     <View style={ styles.title }>
-      <CustomizationComponent />
+      <CreationComponent />
     </View>
     
   )

@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, ImageBackground } from 'react-native'
 import React from 'react'
 import Background from '../../assets/Backgrounds/BGHomeDay.png';
-import CombinedTackSprite from '../../components/CombinedTackSprite.jsx';
+import CombinedTackSprite from '../../components/TackComponents/CombinedTackSprite.jsx';
 import LoadingSplash from '../../components/LoadingSplash.jsx';
 import { Asset } from 'expo-asset';
 import Tack from '../../assets/Tack/index.js';
