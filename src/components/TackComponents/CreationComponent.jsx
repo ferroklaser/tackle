@@ -85,7 +85,8 @@ const CreationComponent = () => {
         <ThemedInput 
         value={username}
         onChangeText={setUsername}
-        placeholder="Enter your username here!"/>
+        placeholder="Enter your username here!"
+        maxLength={20} />
       </View>
       
 
@@ -192,7 +193,6 @@ const styles = StyleSheet.create({
   buttonsRow: {
     flexDirection: 'row',
     justifyContent: 'center',
-    backgroundColor: 'white',
     justifyContent: 'space-between',
   },
   button: {
