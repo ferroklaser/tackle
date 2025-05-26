@@ -8,6 +8,7 @@ const CombinedTackAnimation = ({
     tackBaseOption = "Blue", 
     eyesOption = "Excited", 
     mouthOption = "Open_Smile",
+    accessoryOption = "Coil_Doodle"
 }) => {
   const frameWidth = 299;
   const frameHeight = 260;
@@ -49,6 +50,15 @@ const CombinedTackAnimation = ({
         />
         <AnimatedSprite
             spriteSheet={Tack.Mouth[mouthOption]}
+            frameIndex={frameIndex}
+            frameWidth={frameWidth}
+            frameHeight={frameHeight}
+            totalFrames={totalFrames}
+            rowIndex={rowIndex}
+            scale={scale}
+        />
+        <AnimatedSprite
+            spriteSheet={Tack.Accessory[accessoryOption]}
             frameIndex={frameIndex}
             frameWidth={frameWidth}
             frameHeight={frameHeight}
