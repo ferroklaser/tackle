@@ -1,16 +1,15 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { Link } from 'expo-router'
 import CustomizationComponent from '../components/CustomizationComponent'
+import { router } from 'expo-router';
+import MyButton from '../components/MyButton';
 
 const index = () => {
   return (
     <View style={ styles.title }>
-      <CustomizationComponent 
-              frameDelay={120} 
-              size={320}
-            />
+      <CustomizationComponent />
     </View>
+    
   )
 }
 
