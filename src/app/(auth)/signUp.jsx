@@ -1,11 +1,13 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native'
+import { StyleSheet, Text, View, Pressable} from 'react-native'
 import React from 'react'
-import ThemedInput from '../../components/ThemedInput'
+import ThemedInput from '../../components/AuthComponents/ThemedInput'
 import { Link, router } from 'expo-router'
 import { useState } from 'react'
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { createUserWithEmailAndPassword } from "firebase/auth"
 import { FIREBASE_AUTH } from '../../firebaseConfig'
+import AuthButton from '../../components/AuthComponents/AuthButton'
+
 
 const signUp = () => {
   const [email, setEmail] = useState('');
@@ -71,9 +73,9 @@ const signUp = () => {
         </View>
       </View>
       <View style={{ alignItems: 'center', justifyContent: 'space-around' }}> 
-        <Pressable style={[ styles.button, {marginBottom: 50} ]} onPress={() => register()}>
+        <AuthButton style={ {marginBottom: 50} } onPress={register}>
           <Text style={{ fontWeight: 700, fontSize: 17 }}>SIGN UP</Text>
-        </Pressable>
+        </AuthButton>
         <View style={ styles.login }>
           <Link href='/login' asChild>
             <Pressable>

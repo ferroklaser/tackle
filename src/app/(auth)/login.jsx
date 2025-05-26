@@ -1,12 +1,13 @@
 import { StyleSheet, Text, View, Pressable } from 'react-native'
 import React from 'react'
-import ThemedInput from '../../components/ThemedInput'
+import ThemedInput from '../../components/AuthComponents/ThemedInput'
 import { Link } from 'expo-router'
 import { useState } from 'react'
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { signInWithEmailAndPassword } from "firebase/auth"
 import { FIREBASE_AUTH } from '../../firebaseConfig'
 import { router } from 'expo-router';
+import AuthButton from '../../components/AuthComponents/AuthButton'
 
 const login = () => {
 
@@ -19,10 +20,11 @@ const login = () => {
     setSecureText(prevState => !prevState)
   };
 
-  const signIn = async () => {
+  const login = async () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log("User sign in" + userCredential.user);
+        router.replace('/home');
       }).catch((error) => {
         console.log("Error during log in:", error.code, error.message)
       })
@@ -55,9 +57,9 @@ const login = () => {
         </View>
       </View>
       <View style={{ alignItems: 'center', justifyContent: 'space-around' }}>
-          <Pressable style={[styles.button,  {marginBottom: 50},]} onPress={() => signIn()}>
+          <AuthButton style={{marginBottom: 50}} onPress={login}>
             <Text style={{ fontWeight: 700, fontSize: 17 }}>LOG IN</Text>
-          </Pressable>
+          </AuthButton>
         <View style={[ styles.forgot, {marginBottom: 30} ]}>
           <Link href="/signUp" asChild>
             <Pressable>
