@@ -19,9 +19,10 @@ export default ThemedInput
 
 const styles = StyleSheet.create({
     input: {
-    padding: 15,
-    width: '85%',
+    padding: 10,
+    width: '65%',
     margin: 10,
-    borderRadius: 10,
+    borderBottomWidth: 4,         
+    borderBottomColor: '#000',
   }
 })

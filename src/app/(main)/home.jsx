@@ -7,6 +7,12 @@ import LoadingSplash from '../../components/LoadingSplash.jsx';
 import { Asset } from 'expo-asset';
 import Tack from '../../assets/Tack/index.js';
 
+//retrieve strings of each item from database and initiate here
+const userColour = "Yellow";
+const userEyes = "Side_Eye";
+const userMouth = "Side_Tongue";
+const userAccessory = "Heart_Doodle";
+
 const home = () => {
   let [isLoaded, setIsLoaded] = React.useState(false);
 
@@ -22,12 +28,13 @@ const home = () => {
 
   let cacheResources = async() => {
     const bgPromise = Asset.fromModule(backgroundImage).downloadAsync();
-    const eyesPromise = Asset.fromModule(Tack.Eyes["Excited"]).downloadAsync(); // retrieve from database
-    const tackBasePromise = Asset.fromModule(Tack.TackBase["Blue"]).downloadAsync(); // retrieve from database
-    const mouthPromise = Asset.fromModule(Tack.Mouth["Open_Smile"]).downloadAsync(); // retrieve from database
-    const delayPromise = new Promise((resolve) => setTimeout(resolve, 1000));
+    const eyesPromise = Asset.fromModule(Tack.Eyes[userEyes]).downloadAsync();
+    const colourPromise = Asset.fromModule(Tack.TackBase[userColour]).downloadAsync();
+    const mouthPromise = Asset.fromModule(Tack.Mouth[userMouth]).downloadAsync();
+    const accessoryPromise = Asset.fromModule(Tack.Accessory[userAccessory]).downloadAsync();
+    const delayPromise = new Promise((resolve) => setTimeout(resolve, 0));
 
-    await Promise.all([bgPromise, delayPromise, eyesPromise, mouthPromise, tackBasePromise]);
+    await Promise.all([bgPromise, eyesPromise, colourPromise, mouthPromise, accessoryPromise, delayPromise]);
     setIsLoaded(true);
   }
 
@@ -53,10 +60,10 @@ const home = () => {
         resizeMode="cover">
           <View style={styles.tackContainer}>
             <CombinedTackSprite
-             // retrieve from database
-             TackBaseOption='Blue'
-             EyesOption='Excited'
-             MouthOption='Open_Smile'
+             tackBaseOption={userColour}
+             eyesOption={userEyes}
+             mouthOption={userMouth}
+             accessoryOption={userAccessory}
              />
           </View>
     </ImageBackground>
@@ -75,6 +82,6 @@ const styles = StyleSheet.create({
       justifyContent: 'center', 
       alignItems: 'center',
       width: '100%',
-      marginTop: '55%',
+      marginTop: '90%',
     },
 })
