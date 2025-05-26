@@ -5,7 +5,8 @@ import Tack from '../../assets/Tack';
 import CombinedTackSprite from './CombinedTackSprite';
 import MyButton from '../MyButton';
 import { router } from 'expo-router';
-import ThemedInput from '../ThemedInput';
+import UnderlinedInput from '../UnderlinedInput';
+import { useFonts } from 'expo-font';
 
 // only add those available for users into these arrays
 const colourOptions = ['Yellow', 'Blue'];
@@ -22,6 +23,9 @@ const CreationComponent = () => {
   const [eyeIndex, setEyeIndex] = useState(0);
   const [mouthIndex, setMouthIndex] = useState(0);
   const [accessoryIndex, setAccessoryIndex] = useState(0);
+
+  useFonts({
+    'Doodle': require('../../assets/fonts/doodle.ttf')});
 
   useEffect(() => {
 
@@ -82,11 +86,12 @@ const CreationComponent = () => {
         />
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-        <ThemedInput 
+        <UnderlinedInput 
         value={username}
         onChangeText={setUsername}
         placeholder="Enter your username here!"
-        maxLength={20} />
+        maxLength={20} 
+        style={styles.Text}/>
       </View>
       
 
@@ -165,7 +170,7 @@ const CreationComponent = () => {
       </View>
 
       <MyButton 
-        title="DONE"
+        title="CONFIRM"
         onPress={() => router.replace('/home')}/>
     </View>
   );
@@ -201,10 +206,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   Text: {
-    fontSize: 16,
+    fontSize: 20,
     color: 'black',
     fontWeight: 'bold',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: 'Doodle'
   }
 });
 
