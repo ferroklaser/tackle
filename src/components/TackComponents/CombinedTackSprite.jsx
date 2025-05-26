@@ -5,10 +5,10 @@ import Tack from '../../assets/Tack';
 
 const CombinedTackAnimation = ({
     size = 300,
-    tackBaseOption = "Blue", 
-    eyesOption = "Excited", 
-    mouthOption = "Open_Smile",
-    accessoryOption = "Coil_Doodle"
+    tackBaseOption, 
+    eyesOption, 
+    mouthOption,
+    accessoryOption,
 }) => {
   const frameWidth = 299;
   const frameHeight = 260;
@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     alignItems: 'center',
     width: '100%',
+    marginBottom: '30%',
   },
 });
 

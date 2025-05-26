@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     marginTop: '50%',
-    marginBottom: '50%',
+    marginBottom: '20%',
   },
   buttonsCol: {
     flexDirection: 'column',
