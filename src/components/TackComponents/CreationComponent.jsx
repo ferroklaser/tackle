@@ -10,9 +10,9 @@ import { useFonts } from 'expo-font';
 
 // only add those available for users into these arrays
 const colourOptions = ['Yellow', 'Blue'];
-const eyeOptions = ['Excited'];
-const mouthOptions = ['Open_Smile'];
-const accessoryOptions = [];
+const eyeOptions = ['Excited', 'Side_Eye'];
+const mouthOptions = ['Open_Smile', 'Side_Tongue'];
+const accessoryOptions = ['Coil_Doodle', 'Hashtag_Doodle', 'Heart_Doodle'];
 
 const CreationComponent = () => {
   const [username, setUsername] = useState('');
@@ -83,6 +83,7 @@ const CreationComponent = () => {
             tackBaseOption={currentColour}
             eyesOption={currentEyes}
             mouthOption={currentMouth}
+            accessoryOption={currentAccessory}
         />
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center'}}>
