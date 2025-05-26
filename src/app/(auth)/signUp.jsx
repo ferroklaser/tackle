@@ -11,6 +11,7 @@ const signUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
+  const [loading, setLoading] = useState(false);
   const auth = FIREBASE_AUTH;
 
   const [securePassword, setSecurePassword] = useState(true);
@@ -25,17 +26,20 @@ const signUp = () => {
     setSecureConfirm(prevState => !prevState)
   };
 
-  const register = () => {
+  const register = async () => {
+    setLoading(true);
     if (password != confirm) {
       alert("Passwords are different");
       return;
     }
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log("User created: " + userCredential.user);
-      }).catch((error) => {
-        console.error("Error during sign up:", error.code, error.message);
-      });
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      console.log("Welcome")
+    } catch (error) {
+        console.log("Error during sign up:", error.code, error.message);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
