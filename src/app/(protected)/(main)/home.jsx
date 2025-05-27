@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View, ImageBackground } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import BGHomeDay from '../../assets/Backgrounds/BGHomeDay/index.js';
-import BGHomeNight from '../../assets/Backgrounds/BGHomeNight/index.js';
-import CombinedTackSprite from '../../components/TackComponents/CombinedTackSprite.jsx';
-import LoadingSplash from '../../components/LoadingSplash.jsx';
+import BGHomeDay from '../../../assets/Backgrounds/BGHomeDay/index.js';
+import BGHomeNight from '../../../assets/Backgrounds/BGHomeNight/index.js';
+import CombinedTackSprite from '../../../components/TackComponents/CombinedTackSprite.jsx';
+import LoadingSplash from '../../../components/LoadingSplash.jsx';
 import { Asset } from 'expo-asset';
-import Tack from '../../assets/Tack/index.js';
-import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig.js';
+import Tack from '../../../assets/Tack/index.js';
+import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../../firebaseConfig.js';
 import { getDoc, doc } from 'firebase/firestore';
 
 const home = () => {

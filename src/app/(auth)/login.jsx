@@ -2,33 +2,30 @@ import { StyleSheet, Text, View, Pressable } from 'react-native'
 import React from 'react'
 import ThemedInput from '../../components/AuthComponents/ThemedInput'
 import { Link } from 'expo-router'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { MaterialCommunityIcons } from "@expo/vector-icons"
-import { signInWithEmailAndPassword } from "firebase/auth"
-import { FIREBASE_AUTH } from '../../firebaseConfig'
-import { router } from 'expo-router';
 import AuthButton from '../../components/AuthComponents/AuthButton'
+import { AuthContext } from '../../context/AuthContext'
 
 const login = () => {
-
+  const authContext = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [secureText, setSecureText] = useState(true);
-  const auth = FIREBASE_AUTH;
 
   const toggleSecureText = () => {
     setSecureText(prevState => !prevState)
   };
 
   const handleLogin = async () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        setEmail("");
-        setPassword("");
-        router.replace('/home');
-      }).catch((error) => {
-        console.log("Error during log in:", error.code, error.message)
-      })
+    try {
+      await authContext.login(email, password);
+      setEmail("");
+      setPassword("");
+    } catch (error) {
+      alert("Error during login, try again");
+      console.log(error);
+    }
   }
 
   return (
