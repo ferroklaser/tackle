@@ -22,8 +22,9 @@ const login = () => {
 
   const login = async () => {
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log("User sign in" + userCredential.user);
+      .then(() => {
+        setEmail("");
+        setPassword("");
         router.replace('/home');
       }).catch((error) => {
         console.log("Error during log in:", error.code, error.message)
@@ -94,7 +95,7 @@ const login = () => {
           </Text>
         </View>
       </View>
-      
+
       <View 
         style={{ 
           alignItems: 'center', 

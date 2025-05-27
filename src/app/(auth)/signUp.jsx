@@ -29,24 +29,30 @@ const signUp = () => {
     setSecureConfirm(prevState => !prevState)
   };
 
-  const register = async () => {
+  const signUp = async () => {
     setLoading(true);
+
     if (password != confirm) {
       alert("Passwords are different");
       return;
     }
+
     try {
-     await createUserWithEmailAndPassword(auth, email, password)
-      .then(async cred => await setDoc(doc(FIREBASE_DATABASE, "userTackComponent", cred.user.uid), {
-        username: "",
-        colour: "Yellow",
-        eye: "Side_Eye",
-        mouth: "Side_Tongue",
-        accessory: "Heart_Doodle",
-      }));
-      router.replace('/creation')
+      await createUserWithEmailAndPassword(auth, email, password)
+        .then(async cred => await setDoc(
+          doc(FIREBASE_DATABASE, "userTackComponent", cred.user.uid), {
+            username: "",
+            colour: "Yellow",
+            eye: "Side_Eye",
+            mouth: "Side_Tongue",
+            accessory: "Heart_Doodle",
+          }));
+      setEmail("");
+      setPassword("");
+      setConfirm("");
+      router.replace('/creation');
     } catch (error) {
-        console.log("Error during sign up:", error.code, error.message);
+      console.log("Error during sign up:", error.code, error.message);
     } finally {
       setLoading(false);
     }
@@ -149,7 +155,7 @@ const signUp = () => {
           style={{
             marginBottom: 50
           }} 
-          onPress={register}>
+          onPress={signUp}>
           <Text 
             style={{ 
               fontWeight: 700, 
