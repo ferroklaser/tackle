@@ -8,8 +8,8 @@ import { router } from 'expo-router';
 import UnderlinedInput from '../UnderlinedInput';
 import { useFonts } from 'expo-font';
 
-import { FIREBASE_DATABASE } from '../../firebaseConfig.js';
-import { collection, addDoc } from 'firebase/firestore';
+import { FIREBASE_DATABASE, FIREBASE_AUTH } from '../../firebaseConfig.js';
+import { doc, setDoc} from 'firebase/firestore';
 
 // only add those available for users into these arrays
 const colourOptions = ['Yellow', 'Blue'];
@@ -81,14 +81,14 @@ const CreationComponent = () => {
 
   const storeData = async () => {
     try {
-      const docRef = await addDoc(collection(FIREBASE_DATABASE, "userTackComponent"), {
+      await setDoc(doc(FIREBASE_DATABASE, "userTackComponent", FIREBASE_AUTH.currentUser.uid), {
         username: username,
-        colour: colourIndex,
-        eye: eyeIndex,
-        mouth: mouthIndex,
-        accessory: accessoryIndex,
+        colour: currentColour,
+        eye: currentEyes,
+        mouth: currentMouth,
+        accessory: currentAccessory,
       })
-      console.log("Document written in ID: ", docRef.id);
+    
     } catch (error) {
       console.log(error);
     } finally {
