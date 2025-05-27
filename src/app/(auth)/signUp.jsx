@@ -44,7 +44,6 @@ const signUp = () => {
         mouth: "Side_Tongue",
         accessory: "Heart_Doodle",
       }));
-      console.log("Welcome")
       router.replace('/creation')
     } catch (error) {
         console.log("Error during sign up:", error.code, error.message);
@@ -56,42 +55,125 @@ const signUp = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'space-between'}}>
       <View>
-        <View style={ styles.title }>
-          <Text style={{ fontWeight: "bold", fontSize: 30, padding: 20 }}>Sign Up</Text>
+        <View 
+          style={ 
+            styles.title 
+          }
+        >
+          <Text   
+            style={{ 
+              fontWeight: "bold", 
+              fontSize: 30, 
+              padding: 20 
+            }}
+          >
+            Sign Up
+          </Text>
         </View>
-        <View style={{ alignItems: 'center'}}>
-          <ThemedInput value={email} onChangeText={setEmail} placeholder='Email Address'></ThemedInput>
-          <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-            <ThemedInput value={password} 
-            onChangeText={setPassword} 
-            placeholder='Password' 
-            secureTextEntry={securePassword}></ThemedInput>
-            <Pressable style={{ position: 'absolute', right: 20}} onPress={toggleSecurePassword}>
-              <MaterialCommunityIcons name={securePassword ? "eye" : "eye-off"} size={25} color="black" />
+        <View   
+          style={{ 
+            alignItems: 'center'
+          }}
+        >
+          <ThemedInput 
+            value={email} 
+            onChangeText={setEmail} 
+            placeholder='Email Address'>
+          </ThemedInput>
+          <View 
+            style={{ 
+              flexDirection: 'row', 
+              alignItems: 'center'
+            }}
+          >
+            <ThemedInput  
+              value={password} 
+              onChangeText={setPassword} 
+              placeholder='Password' 
+              secureTextEntry={securePassword}>
+            </ThemedInput>
+            <Pressable 
+              style={{ 
+                position: 'absolute', 
+                right: 20
+              }} 
+              onPress={toggleSecurePassword}>
+              <MaterialCommunityIcons 
+                name={
+                  securePassword 
+                  ? "eye" 
+                  : "eye-off"
+                } 
+                size={25} 
+                color="black" 
+              />
             </Pressable>
           </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-            <ThemedInput value={confirm} 
+          <View 
+            style={{  
+              flexDirection: 'row', 
+              alignItems: 'center'
+            }}
+          >
+            <ThemedInput 
+              value={confirm} 
               onChangeText={setConfirm} 
               placeholder='Confirm Password'
-              secureTextEntry={secureConfirm}></ThemedInput>
-            <Pressable style={{ position: 'absolute', right: 20}} onPress={toggleSecureConfirm}>
-              <MaterialCommunityIcons name={secureConfirm ? "eye" : "eye-off"} size={25} color="black" />
+              secureTextEntry={secureConfirm}>
+            </ThemedInput>
+            <Pressable 
+              style={{ 
+                position: 'absolute', 
+                right: 20
+              }} 
+              onPress={toggleSecureConfirm}>
+              <MaterialCommunityIcons 
+                name={
+                  secureConfirm 
+                  ? "eye" 
+                  : "eye-off"
+                } 
+                size={25} 
+                color="black" />
             </Pressable>
           </View>
         </View>
       </View>
-      <View style={{ alignItems: 'center', justifyContent: 'space-around' }}> 
-        <AuthButton style={ {marginBottom: 50} } onPress={register}>
-          <Text style={{ fontWeight: 700, fontSize: 17 }}>SIGN UP</Text>
+      <View 
+        style={{ 
+          alignItems: 'center', 
+          justifyContent: 'space-around' 
+        }}
+      > 
+        <AuthButton 
+          style={{
+            marginBottom: 50
+          }} 
+          onPress={register}>
+          <Text 
+            style={{ 
+              fontWeight: 700, 
+              fontSize: 17 
+            }}
+          >
+            SIGN UP
+          </Text>
         </AuthButton>
-        <View style={ styles.login }>
+        <View 
+          style={ 
+            styles.login 
+          }>
           <Link href='/login' asChild>
             <Pressable>
-              <Text style={{
-            fontSize: 13,
-            fontWeight: 'bold',
-            textDecorationLine: 'underline'}} >Already have an account? Tap Here!</Text>
+              <Text 
+                style={{
+                  fontSize: 13,
+                  fontWeight: 'bold',
+                  textDecorationLine: 'underline'
+                }} 
+              >
+                Already have an account? Tap Here!
+              </Text>
             </Pressable>
           </Link>
         </View>

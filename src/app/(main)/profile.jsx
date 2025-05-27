@@ -9,14 +9,6 @@ import GradientButton from '../../components/GradientButton.jsx';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig.js';
 import { getDoc, doc } from 'firebase/firestore';
 
-
-//retrieve strings of each item from database and initiate here
-// const userColour = "Yellow";
-// const userEyes = "Side_Eye";
-// const userMouth = "Side_Tongue";
-// const userAccessory = "Heart_Doodle";
-// const userName = "Jaepple";
-
 const index = () => {
   const [userName, setUserName] = useState(null);
   const [userColour, setUserColor] = useState(null);
