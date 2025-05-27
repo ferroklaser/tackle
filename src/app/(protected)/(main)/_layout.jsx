@@ -1,7 +1,7 @@
 import { ImageBackground, StyleSheet, View } from 'react-native'
 import { Slot, Stack } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import TopNavBar from '../../components/TopNavBar.jsx';
+import TopNavBar from '../../../components/TopNavBar.jsx';
 
 export default function Layout() {
   return (

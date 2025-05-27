@@ -1,21 +1,17 @@
-import { StyleSheet, Text, View, Pressable} from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
+import React, { useContext } from 'react'
 import ThemedInput from '../../components/AuthComponents/ThemedInput'
 import { Link, router } from 'expo-router'
 import { useState } from 'react'
 import { MaterialCommunityIcons } from "@expo/vector-icons"
-import { createUserWithEmailAndPassword } from "firebase/auth"
-import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig'
-import { setDoc, doc } from 'firebase/firestore'
 import AuthButton from '../../components/AuthComponents/AuthButton'
-
+import { AuthContext } from '../../context/AuthContext'
 
 const signUp = () => {
+  const authContext = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
-  const [loading, setLoading] = useState(false);
-  const auth = FIREBASE_AUTH;
 
   const [securePassword, setSecurePassword] = useState(true);
   const [secureConfirm, setSecureConfirm] = useState(true);
@@ -30,153 +26,159 @@ const signUp = () => {
   };
 
   const handleSignUp = async () => {
-    setLoading(true);
-
     if (password != confirm) {
       alert("Passwords are different");
       return;
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password)
-        .then(async cred => await setDoc(
-          doc(FIREBASE_DATABASE, "userTackComponent", cred.user.uid), {
-            username: "",
-            colour: "Yellow",
-            eye: "Side_Eye",
-            mouth: "Side_Tongue",
-            accessory: "Heart_Doodle",
-          }));
+      await authContext.signUp(email, password);
       setEmail("");
       setPassword("");
       setConfirm("");
-      router.replace('/creation');
     } catch (error) {
-      console.log("Error during sign up:", error.code, error.message);
-    } finally {
-      setLoading(false);
+      alert("Error during sign up, try again");
+      console.log(error);
     }
+
+    // try {
+    //   await createUserWithEmailAndPassword(auth, email, password)
+    //     .then(async cred => await setDoc(
+    //       doc(FIREBASE_DATABASE, "userTackComponent", cred.user.uid), {
+    //         username: "",
+    //         colour: "Yellow",
+    //         eye: "Side_Eye",
+    //         mouth: "Side_Tongue",
+    //         accessory: "Heart_Doodle",
+    //       }));
+    //   setEmail("");
+    //   setPassword("");
+    //   setConfirm("");
+    //   router.replace('/creation');
+    // } catch (error) {
+    //   console.log("Error during sign up:", error.code, error.message);
+    // } 
   }
 
   return (
-    <View style={{ flex: 1, justifyContent: 'space-between'}}>
+    <View style={{ flex: 1, justifyContent: 'space-between' }}>
       <View>
-        <View 
-          style={ 
-            styles.title 
+        <View
+          style={
+            styles.title
           }
         >
-          <Text   
-            style={{ 
-              fontWeight: "bold", 
-              fontSize: 30, 
-              padding: 20 
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: 30,
+              padding: 20
             }}
           >
             Sign Up
           </Text>
         </View>
-        <View   
-          style={{ 
+        <View
+          style={{
             alignItems: 'center'
           }}
         >
-          <ThemedInput 
-            value={email} 
-            onChangeText={setEmail} 
+          <ThemedInput
+            value={email}
+            onChangeText={setEmail}
             placeholder='Email Address'>
           </ThemedInput>
-          <View 
-            style={{ 
-              flexDirection: 'row', 
+          <View
+            style={{
+              flexDirection: 'row',
               alignItems: 'center'
             }}
           >
-            <ThemedInput  
-              value={password} 
-              onChangeText={setPassword} 
-              placeholder='Password' 
+            <ThemedInput
+              value={password}
+              onChangeText={setPassword}
+              placeholder='Password'
               secureTextEntry={securePassword}>
             </ThemedInput>
-            <Pressable 
-              style={{ 
-                position: 'absolute', 
+            <Pressable
+              style={{
+                position: 'absolute',
                 right: 20
-              }} 
+              }}
               onPress={toggleSecurePassword}>
-              <MaterialCommunityIcons 
+              <MaterialCommunityIcons
                 name={
-                  securePassword 
-                  ? "eye" 
-                  : "eye-off"
-                } 
-                size={25} 
-                color="black" 
+                  securePassword
+                    ? "eye"
+                    : "eye-off"
+                }
+                size={25}
+                color="black"
               />
             </Pressable>
           </View>
-          <View 
-            style={{  
-              flexDirection: 'row', 
+          <View
+            style={{
+              flexDirection: 'row',
               alignItems: 'center'
             }}
           >
-            <ThemedInput 
-              value={confirm} 
-              onChangeText={setConfirm} 
+            <ThemedInput
+              value={confirm}
+              onChangeText={setConfirm}
               placeholder='Confirm Password'
               secureTextEntry={secureConfirm}>
             </ThemedInput>
-            <Pressable 
-              style={{ 
-                position: 'absolute', 
+            <Pressable
+              style={{
+                position: 'absolute',
                 right: 20
-              }} 
+              }}
               onPress={toggleSecureConfirm}>
-              <MaterialCommunityIcons 
+              <MaterialCommunityIcons
                 name={
-                  secureConfirm 
-                  ? "eye" 
-                  : "eye-off"
-                } 
-                size={25} 
+                  secureConfirm
+                    ? "eye"
+                    : "eye-off"
+                }
+                size={25}
                 color="black" />
             </Pressable>
           </View>
         </View>
       </View>
-      <View 
-        style={{ 
-          alignItems: 'center', 
-          justifyContent: 'space-around' 
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'space-around'
         }}
-      > 
-        <AuthButton 
+      >
+        <AuthButton
           style={{
             marginBottom: 50
-          }} 
+          }}
           onPress={handleSignUp}>
-          <Text 
-            style={{ 
-              fontWeight: 700, 
-              fontSize: 17 
+          <Text
+            style={{
+              fontWeight: 700,
+              fontSize: 17
             }}
           >
             SIGN UP
           </Text>
         </AuthButton>
-        <View 
-          style={ 
-            styles.login 
+        <View
+          style={
+            styles.login
           }>
           <Link href='/login' asChild>
             <Pressable>
-              <Text 
+              <Text
                 style={{
                   fontSize: 13,
                   fontWeight: 'bold',
                   textDecorationLine: 'underline'
-                }} 
+                }}
               >
                 Already have an account? Tap Here!
               </Text>

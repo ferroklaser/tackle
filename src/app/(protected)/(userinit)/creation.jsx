@@ -1,16 +1,16 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import CreationComponent from '../../components/TackComponents/CreationComponent'
+import CreationComponent from '../../../components/TackComponents/CreationComponent.jsx'
 import { Video } from 'expo-av';
 import { Asset } from 'expo-asset';
-import LoadingSplash from '../../components/LoadingSplash.jsx';
+import LoadingSplash from '../../../components/LoadingSplash.jsx';
 
 
 const index = () => {
   let [isLoaded, setIsLoaded] = React.useState(false);
 
   let cacheResources = async() => {
-    const bgPromise = Asset.fromModule(require('../../assets/videos/creationBackground.mp4')).downloadAsync();
+    const bgPromise = Asset.fromModule(require('../../../assets/videos/creationBackground.mp4')).downloadAsync();
     const delayPromise = new Promise((resolve) => setTimeout(resolve, 500));
 
     await Promise.all([bgPromise, delayPromise]);
@@ -35,7 +35,7 @@ const index = () => {
   return (
     <View style={styles.container}>
       <Video
-        source={require('../../assets/videos/creationBackground.mp4')}
+        source={require('../../../assets/videos/creationBackground.mp4')}
         rate={1.0}
         volume={1.0}
         isMuted={true}
