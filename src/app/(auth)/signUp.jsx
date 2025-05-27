@@ -5,7 +5,8 @@ import { Link, router } from 'expo-router'
 import { useState } from 'react'
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { createUserWithEmailAndPassword } from "firebase/auth"
-import { FIREBASE_AUTH } from '../../firebaseConfig'
+import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig'
+import { setDoc, doc } from 'firebase/firestore'
 import AuthButton from '../../components/AuthComponents/AuthButton'
 
 
@@ -35,8 +36,16 @@ const signUp = () => {
       return;
     }
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+     await createUserWithEmailAndPassword(auth, email, password)
+      .then(async cred => await setDoc(doc(FIREBASE_DATABASE, "userTackComponent", cred.user.uid), {
+        username: "",
+        colour: "Yellow",
+        eye: "Side_Eye",
+        mouth: "Side_Tongue",
+        accessory: "Heart_Doodle",
+      }));
       console.log("Welcome")
+      router.replace('/creation')
     } catch (error) {
         console.log("Error during sign up:", error.code, error.message);
     } finally {

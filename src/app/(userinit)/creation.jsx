@@ -5,6 +5,7 @@ import { Video } from 'expo-av';
 import { Asset } from 'expo-asset';
 import LoadingSplash from '../../components/LoadingSplash.jsx';
 
+
 const index = () => {
   let [isLoaded, setIsLoaded] = React.useState(false);
 
