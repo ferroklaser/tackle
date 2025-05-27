@@ -20,7 +20,7 @@ const login = () => {
     setSecureText(prevState => !prevState)
   };
 
-  const login = async () => {
+  const handleLogin = async () => {
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
         setEmail("");
@@ -105,7 +105,7 @@ const login = () => {
             style={{
               marginBottom: 50
             }} 
-            onPress={login}>
+            onPress={handleLogin}>
             <Text 
               style={{ 
                 fontWeight: 700, 

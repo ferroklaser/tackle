@@ -8,6 +8,8 @@ import MyButton from '../../components/MyButton.jsx';
 import GradientButton from '../../components/GradientButton.jsx';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig.js';
 import { getDoc, doc } from 'firebase/firestore';
+import { signOut } from 'firebase/auth';
+import { router } from 'expo-router';
 
 const index = () => {
   const [userName, setUserName] = useState(null);
@@ -18,6 +20,13 @@ const index = () => {
 
   let [isAvatarLoaded, setAvatarLoaded] = useState(false);
   let [isLoaded, setIsLoaded] = React.useState(false);
+
+  const handleSignOut = () => 
+    signOut(FIREBASE_AUTH).then(() => 
+      router.replace('/login'))
+    .catch((error) => 
+      console.log(error)
+    );
 
   useEffect(() => {
   const fetchAvatar = async () => {
@@ -109,7 +118,7 @@ const index = () => {
             <MyButton 
               title="SIGN OUT"
               textStyle={styles.signOut}
-              // onPress={() => router.replace('/home')}
+              onPress={handleSignOut}
             />
           </View>
     </ImageBackground>

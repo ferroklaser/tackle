@@ -29,7 +29,7 @@ const signUp = () => {
     setSecureConfirm(prevState => !prevState)
   };
 
-  const signUp = async () => {
+  const handleSignUp = async () => {
     setLoading(true);
 
     if (password != confirm) {
@@ -155,7 +155,7 @@ const signUp = () => {
           style={{
             marginBottom: 50
           }} 
-          onPress={signUp}>
+          onPress={handleSignUp}>
           <Text 
             style={{ 
               fontWeight: 700, 
