@@ -20,10 +20,11 @@ const login = () => {
     setSecureText(prevState => !prevState)
   };
 
-  const login = async () => {
+  const handleLogin = async () => {
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log("User sign in" + userCredential.user);
+      .then(() => {
+        setEmail("");
+        setPassword("");
         router.replace('/home');
       }).catch((error) => {
         console.log("Error during log in:", error.code, error.message)
@@ -31,41 +32,103 @@ const login = () => {
   }
 
   return (
-    <View style={{ flex: 1, justifyContent: 'space-between' }}>
+    <View 
+      style={{ 
+        flex: 1, 
+        justifyContent: 'space-between' 
+      }}>
       <View>
         <View style={ styles.title }>
-          <Text style={{ fontWeight: "bold", fontSize: 30, padding: 20}}>Log In</Text>
+          <Text 
+            style={{ 
+              fontWeight: "bold", 
+              fontSize: 30, 
+              padding: 20
+            }}>
+              Log In
+          </Text>
         </View>
-        <View style={{ alignItems: 'center' }}>
-          <ThemedInput placeholder='Email Address' value={email} onChangeText={setEmail}></ThemedInput>
-          <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+        <View 
+          style={{ 
+            alignItems: 'center' 
+          }}>
+          <ThemedInput 
+            placeholder='Email Address' 
+            value={email} 
+            onChangeText={setEmail}>
+          </ThemedInput>
+          <View 
+            style={{ 
+              flexDirection: 'row', 
+              alignItems: 'center'
+            }}>
             <ThemedInput placeholder='Password' 
               value={password} 
               onChangeText={setPassword} 
-              secureTextEntry={secureText}></ThemedInput>
-            <Pressable style={{ position: 'absolute', right: 20}} onPress={toggleSecureText}>
-              <MaterialCommunityIcons name={secureText ? "eye" : "eye-off"} size={25} color="black" />
+              secureTextEntry={secureText}>
+            </ThemedInput>
+            <Pressable 
+              style={{ 
+                position: 'absolute', 
+                right: 20
+              }} 
+              onPress={toggleSecureText}>
+              <MaterialCommunityIcons 
+                name={
+                  secureText 
+                  ? "eye" 
+                  : "eye-off"
+                  } 
+                size={25} 
+                color="black"/>
             </Pressable>
           </View>
         </View>
         <View style={ styles.forgot }>
-          <Text style={{ fontSize: 12,
-            fontWeight: 'bold', 
-            textDecorationLine: 'underline'}}>
+          <Text 
+            style={{ 
+              fontSize: 12,
+              fontWeight: 'bold', 
+              textDecorationLine: 'underline'
+            }}>
               Forgot Password?
           </Text>
         </View>
       </View>
-      <View style={{ alignItems: 'center', justifyContent: 'space-around' }}>
-          <AuthButton style={{marginBottom: 50}} onPress={login}>
-            <Text style={{ fontWeight: 700, fontSize: 17 }}>LOG IN</Text>
+
+      <View 
+        style={{ 
+          alignItems: 'center', 
+          justifyContent: 'space-around' 
+        }}>
+          <AuthButton 
+            style={{
+              marginBottom: 50
+            }} 
+            onPress={handleLogin}>
+            <Text 
+              style={{ 
+                fontWeight: 700, 
+                fontSize: 17 
+              }}>
+                LOG IN
+            </Text>
           </AuthButton>
-        <View style={[ styles.forgot, {marginBottom: 30} ]}>
+        <View 
+          style={[ 
+            styles.forgot, 
+            {marginBottom: 30} 
+          ]}>
           <Link href="/signUp" asChild>
             <Pressable>
-              <Text style={{ fontSize: 13,
-              fontWeight: 'bold', 
-              textDecorationLine: 'underline' }}>No account? Sign up here!</Text>
+              <Text 
+                style={{ 
+                  fontSize: 13,
+                  fontWeight: 'bold', 
+                  textDecorationLine: 'underline' 
+                }}>
+                  No account? Sign up here!
+              </Text>
             </Pressable>
           </Link>
         </View>
