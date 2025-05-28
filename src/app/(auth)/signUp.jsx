@@ -5,7 +5,7 @@ import { Link, router } from 'expo-router'
 import { useState } from 'react'
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import AuthButton from '../../components/AuthComponents/AuthButton'
-import { AuthContext } from '../../context/AuthContext'
+import { AuthContext } from '../../contexts/AuthContext'
 
 const signUp = () => {
   const authContext = useContext(AuthContext);
@@ -40,24 +40,6 @@ const signUp = () => {
       alert("Error during sign up, try again");
       console.log(error);
     }
-
-    // try {
-    //   await createUserWithEmailAndPassword(auth, email, password)
-    //     .then(async cred => await setDoc(
-    //       doc(FIREBASE_DATABASE, "userTackComponent", cred.user.uid), {
-    //         username: "",
-    //         colour: "Yellow",
-    //         eye: "Side_Eye",
-    //         mouth: "Side_Tongue",
-    //         accessory: "Heart_Doodle",
-    //       }));
-    //   setEmail("");
-    //   setPassword("");
-    //   setConfirm("");
-    //   router.replace('/creation');
-    // } catch (error) {
-    //   console.log("Error during sign up:", error.code, error.message);
-    // } 
   }
 
   return (
