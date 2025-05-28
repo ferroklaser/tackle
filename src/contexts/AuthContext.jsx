@@ -5,6 +5,7 @@ import {
     createUserWithEmailAndPassword,
     signOut,
     onAuthStateChanged,
+    sendEmailVerification,
 } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 import { router } from "expo-router";
@@ -17,28 +18,41 @@ export const AuthContext = createContext({
 });
 
 export function AuthProvider({ children }) {
+    const [user, setUser] = useState(null);
     const [isAuthReady, setAuthReady] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isEmailVerified, setEmailVerified] = useState(false);
 
     useEffect(()=> {
         const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
-            setIsLoggedIn(!!user);
+            if (user) {
+                setUser(user);
+                setEmailVerified(user.emailVerified);
+            } else {
+                setUser(null);
+                setEmailVerified(false);
+            }
             setAuthReady(true);
         })
         return unsubscribe;
     }, []);
 
     const login = async (email, password) => {
-        return signInWithEmailAndPassword(FIREBASE_AUTH, email, password)
-            .then(() => {
-                router.replace('/home');
-                console.log("User login");
-            })
+        try {
+            await signInWithEmailAndPassword(FIREBASE_AUTH, email, password).then(() => {
+                if (FIREBASE_AUTH.currentUser.emailVerified) {
+                    router.replace('/');
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const signUp = async (email, password) => {
-        return createUserWithEmailAndPassword(FIREBASE_AUTH, email, password)
-            .then(async cred => await setDoc(
+        try { 
+            const cred = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
+            await sendEmailVerification(FIREBASE_AUTH.currentUser);
+            await setDoc(
                 doc(FIREBASE_DATABASE, "userTackComponent", cred.user.uid), {
                 username: "",
                 colour: "Yellow",
@@ -46,21 +60,22 @@ export function AuthProvider({ children }) {
                 mouth: "Side_Tongue",
                 accessory: "Hashtag_Doodle",
             }
-            )).then(() => {
+            ).then(() => {
                 router.replace('/creation');
-                console.log("User sign up");
             })
+        } catch (error) {
+            console.log(error.code);
+        }
     }
 
     const logOut = async () => {
         return signOut(FIREBASE_AUTH).then(() => {
             router.replace('/login');
-            console.log("User log out")
         });
     }
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, login, signUp, logOut, isAuthReady }}>
+        <AuthContext.Provider value={{ login, signUp, logOut, isAuthReady, isEmailVerified, user }}>
             {children}
         </AuthContext.Provider>
     )

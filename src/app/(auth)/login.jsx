@@ -18,14 +18,9 @@ const login = () => {
   };
 
   const handleLogin = async () => {
-    try {
-      await authContext.login(email, password);
-      setEmail("");
-      setPassword("");
-    } catch (error) {
-      alert("Error during login, try again");
-      console.log(error);
-    }
+    await authContext.login(email, password);
+    setEmail("");
+    setPassword("");
   }
 
   return (
@@ -81,15 +76,19 @@ const login = () => {
             </Pressable>
           </View>
         </View>
-        <View style={ styles.forgot }>
-          <Text 
-            style={{ 
-              fontSize: 12,
-              fontWeight: 'bold', 
-              textDecorationLine: 'underline'
-            }}>
-              Forgot Password?
-          </Text>
+        <View style={styles.forgot}>
+          <Link href="/reset" asChild>
+            <Pressable>
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontWeight: 'bold',
+                  textDecorationLine: 'underline'
+                }}>
+                Forgot Password?
+              </Text>
+            </Pressable>
+          </Link>
         </View>
       </View>
 

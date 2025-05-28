@@ -9,7 +9,7 @@ import Tack from '../../../assets/Tack/index.js';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../../firebaseConfig.js';
 import { getDoc, doc } from 'firebase/firestore';
 
-const home = () => {
+const index = () => {
   const [userColour, setUserColor] = useState(null);
   const [userEyes, setUserEyes] = useState(null);
   const [userMouth, setUserMouth] = useState(null);
@@ -94,7 +94,7 @@ const home = () => {
   )
 }
 
-export default home
+export default index
 
 const styles = StyleSheet.create({
     container: {

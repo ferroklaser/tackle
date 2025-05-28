@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { AuthContext } from '../../contexts/AuthContext'
 import { useContext } from 'react'
 import { Redirect, Slot } from 'expo-router'
+import LoadingSplash from '../../components/LoadingSplash'
 
 const Protectedlayout = () => {
     const authContext = useContext(AuthContext);
@@ -10,7 +11,7 @@ const Protectedlayout = () => {
         return <LoadingSplash />
     }
 
-    if (!authContext.isLoggedIn) {
+    if (!authContext.user) {
         return <Redirect href="login" />
     }
 
