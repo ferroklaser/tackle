@@ -40,7 +40,7 @@ export function AuthProvider({ children }) {
         try {
             await signInWithEmailAndPassword(FIREBASE_AUTH, email, password).then(() => {
                 if (FIREBASE_AUTH.currentUser.emailVerified) {
-                    router.replace('/home');
+                    router.replace('/');
                 }
             });
         } catch (error) {

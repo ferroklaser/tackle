@@ -7,7 +7,7 @@ const TopNavBar = ( ) => {
   const pathname = usePathname();
 
    const handleBack = () => {
-    if (pathname === '/home') {
+    if (pathname === '/') {
       return;
     }
     router.back();
@@ -15,7 +15,7 @@ const TopNavBar = ( ) => {
 
   return (
     <View style={styles.container}>
-      {pathname !== '/home' && (
+      {pathname !== '/' && (
         <TouchableOpacity onPress={handleBack}>
           <Image 
             source={require('../assets/Icons/BackButton.png')}

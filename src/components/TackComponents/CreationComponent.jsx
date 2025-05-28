@@ -92,7 +92,7 @@ const CreationComponent = () => {
     } catch (error) {
       console.log(error);
     } finally {
-      router.replace('/home');
+      router.replace('/');
     }
   }
 
