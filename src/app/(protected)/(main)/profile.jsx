@@ -8,9 +8,7 @@ import MyButton from '../../../components/MyButton.jsx';
 import GradientButton from '../../../components/GradientButton.jsx';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../../firebaseConfig.js';
 import { getDoc, doc } from 'firebase/firestore';
-import { signOut } from 'firebase/auth';
-import { router } from 'expo-router';
-import { AuthContext } from '../../../context/AuthContext.jsx';
+import { AuthContext } from '../../../contexts/AuthContext.jsx';
 
 const index = () => {
   const authContext = useContext(AuthContext);

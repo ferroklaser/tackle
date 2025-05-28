@@ -1,23 +1,36 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from "../firebaseConfig";
 import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
-    signOut
+    signOut,
+    onAuthStateChanged,
 } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
-
 import { router } from "expo-router";
 
-export const AuthContext = createContext();
+export const AuthContext = createContext({
+    isLoggedIn: false,
+    login: () => {},
+    signUp: () => {},
+    logOut: () => {},
+});
 
 export function AuthProvider({ children }) {
+    const [isAuthReady, setAuthReady] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(()=> {
+        const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
+            setIsLoggedIn(!!user);
+            setAuthReady(true);
+        })
+        return unsubscribe;
+    }, []);
 
     const login = async (email, password) => {
         return signInWithEmailAndPassword(FIREBASE_AUTH, email, password)
             .then(() => {
-                setIsLoggedIn(true);
                 router.replace('/home');
                 console.log("User login");
             })
@@ -34,7 +47,6 @@ export function AuthProvider({ children }) {
                 accessory: "Hashtag_Doodle",
             }
             )).then(() => {
-                setIsLoggedIn(true);
                 router.replace('/creation');
                 console.log("User sign up");
             })
@@ -42,14 +54,13 @@ export function AuthProvider({ children }) {
 
     const logOut = async () => {
         return signOut(FIREBASE_AUTH).then(() => {
-            setIsLoggedIn(false);
             router.replace('/login');
             console.log("User log out")
         });
     }
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, login, signUp, logOut }}>
+        <AuthContext.Provider value={{ isLoggedIn, login, signUp, logOut, isAuthReady }}>
             {children}
         </AuthContext.Provider>
     )

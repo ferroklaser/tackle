@@ -5,7 +5,7 @@ import { Link } from 'expo-router'
 import { useState, useContext } from 'react'
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import AuthButton from '../../components/AuthComponents/AuthButton'
-import { AuthContext } from '../../context/AuthContext'
+import { AuthContext } from '../../contexts/AuthContext'
 
 const login = () => {
   const authContext = useContext(AuthContext);
