@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
 
-const ThemedInput = ({ onChangeText, value, placeholder, secureTextEntry, ...props}) => {
+const UnderlinedInput = ({ onChangeText, value, placeholder, ...props}) => {
   return (
     <View style={ styles.input }>
       <TextInput 
@@ -9,13 +9,15 @@ const ThemedInput = ({ onChangeText, value, placeholder, secureTextEntry, ...pro
         placeholder={placeholder} 
         onChangeText={onChangeText}
         autoCapitalize='none'
-        secureTextEntry={secureTextEntry}
+        autoComplete="off"
+        textContentType="none"
+        importantForAutofill="no"
         {...props}/>
     </View>
   )
 }
 
-export default ThemedInput
+export default UnderlinedInput
 
 const styles = StyleSheet.create({
     input: {
