@@ -57,9 +57,7 @@ const login = () => {
             <ThemedInput placeholder='Password' 
               value={password} 
               onChangeText={setPassword} 
-              secureTextEntry={secureText}
-              textContentType="oneTimeCode"   
-              autoComplete="off">
+              secureTextEntry={secureText}>
             </ThemedInput>
             <Pressable 
               style={{ 
