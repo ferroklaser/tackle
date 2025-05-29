@@ -117,7 +117,7 @@ const signUp = () => {
                     : "eye-off"
                 }
                 size={25}
-                color="black"
+                color="grey"
               />
             </Pressable>
           </View>
@@ -148,7 +148,7 @@ const signUp = () => {
                     : "eye-off"
                 }
                 size={25}
-                color="black" />
+                color="grey" />
             </Pressable>
           </View>
         </View>
@@ -195,7 +195,7 @@ const signUp = () => {
             <Pressable>
               <Text
                 style={{
-                  fontSize: 13,
+                  fontSize: 12,
                   fontWeight: 'bold',
                   textDecorationLine: 'underline'
                 }}
