@@ -18,9 +18,9 @@ const login = () => {
   };
 
   const handleLogin = async () => {
-    await authContext.login(email, password);
-    setEmail("");
-    setPassword("");
+      await authContext.login(email, password);
+      setEmail("");
+      setPassword("");
   }
 
   return (

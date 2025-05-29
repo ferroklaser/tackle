@@ -12,9 +12,9 @@ import { router } from "expo-router";
 
 export const AuthContext = createContext({
     isLoggedIn: false,
-    login: () => {},
-    signUp: () => {},
-    logOut: () => {},
+    login: () => { },
+    signUp: () => { },
+    logOut: () => { },
 });
 
 export function AuthProvider({ children }) {
@@ -22,7 +22,7 @@ export function AuthProvider({ children }) {
     const [isAuthReady, setAuthReady] = useState(false);
     const [isEmailVerified, setEmailVerified] = useState(false);
 
-    useEffect(()=> {
+    useEffect(() => {
         const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
             if (user) {
                 setUser(user);
@@ -49,7 +49,7 @@ export function AuthProvider({ children }) {
     }
 
     const signUp = async (email, password) => {
-        try { 
+        try {
             const cred = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
             await sendEmailVerification(FIREBASE_AUTH.currentUser);
             await setDoc(
@@ -60,9 +60,10 @@ export function AuthProvider({ children }) {
                 mouth: "Side_Tongue",
                 accessory: "Hashtag_Doodle",
             }
-            ).then(() => {
-                router.replace('/creation');
-            })
+            )
+            // .then(() => {
+            // //     router.replace('/creation');
+            // // })
         } catch (error) {
             console.log(error.code);
         }
