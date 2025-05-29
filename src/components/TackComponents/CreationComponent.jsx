@@ -27,6 +27,8 @@ const CreationComponent = () => {
   const [mouthIndex, setMouthIndex] = useState(0);
   const [accessoryIndex, setAccessoryIndex] = useState(0);
 
+  const [inputKey, setInputKey] = React.useState(0);
+
   useFonts({
     'Doodle': require('../../assets/fonts/doodle.ttf')});
 
@@ -108,11 +110,13 @@ const CreationComponent = () => {
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center'}}>
         <UnderlinedInput 
-        value={username}
-        onChangeText={setUsername}
-        placeholder="Enter your username here!"
-        maxLength={20} 
-        style={styles.Text}/>
+          value={username}
+          placeholderTextColor="rgba(0, 0, 0, 0.7)"
+          onChangeText={setUsername}
+          placeholder="Enter your username here!"
+          maxLength={20} 
+          style={styles.Text}
+        />
       </View>
       
 

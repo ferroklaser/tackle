@@ -37,7 +37,7 @@ const index = () => {
         const docSnap = await getDoc(doc(FIREBASE_DATABASE, "userTackComponent", user.uid));
         if (docSnap.exists()) {
           const data = docSnap.data();
-          setUserName(data.userName);
+          setUserName(data.username);
           setUserColor(data.colour);
           setUserEyes(data.eye);
           setUserMouth(data.mouth);

@@ -80,7 +80,9 @@ const signUp = () => {
               value={password}
               onChangeText={setPassword}
               placeholder='Password'
-              secureTextEntry={securePassword}>
+              secureTextEntry={securePassword}
+              textContentType="oneTimeCode"   
+              autoComplete="off">
             </ThemedInput>
             <Pressable
               style={{
@@ -109,7 +111,9 @@ const signUp = () => {
               value={confirm}
               onChangeText={setConfirm}
               placeholder='Confirm Password'
-              secureTextEntry={secureConfirm}>
+              secureTextEntry={secureConfirm}
+              textContentType="oneTimeCode"   
+              autoComplete="off">
             </ThemedInput>
             <Pressable
               style={{
