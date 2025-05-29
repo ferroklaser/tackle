@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, Modal, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Pressable, Modal, TouchableOpacity, Alert } from 'react-native'
 import React, { useContext } from 'react'
 import ThemedInput from '../../components/AuthComponents/ThemedInput'
 import { Link, router } from 'expo-router'
