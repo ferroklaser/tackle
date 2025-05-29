@@ -85,44 +85,49 @@ const index = () => {
       source={require('../../../assets/Backgrounds/ProfileBG.png')}
       style={styles.container}
       resizeMode="cover">
-      <View style={styles.tackContainer}>
-        <CombinedTackSprite
-          tackBaseOption={userColour}
-          eyesOption={userEyes}
-          mouthOption={userMouth}
-          accessoryOption={userAccessory}
-          size={250}
-        />
-
-        <Text style={styles.userName}>{userName}</Text>
-
-        <View style={styles.buttonsRow}>
-          <GradientButton
-            title="Edit Profile"
-            colours={['#58C7E5', '#8FBBF5']}
-            buttonStyle={styles.button}
-            textStyle={styles.buttonText}
+      <View style={styles.mainContainer}>
+        <View style={styles.tackContainer}>
+          <CombinedTackSprite
+            tackBaseOption={userColour}
+            eyesOption={userEyes}
+            mouthOption={userMouth}
+            accessoryOption={userAccessory}
+            size={250}
           />
-          <GradientButton
-            title="Add Friends"
-            colours={['#CBAADE', '#989FEF']}
-            buttonStyle={styles.button}
-            textStyle={styles.buttonText}
-          />
-        </View>
 
-        <View>
-          <Text>INFO</Text>
-          <Text>INFO</Text>
-          <Text>INFO</Text>
-        </View>
+          <Text style={styles.userName}>{userName}</Text>
 
+          <View style={styles.buttonsRow}>
+            <GradientButton
+              title="Edit Profile"
+              colours={['#58C7E5', '#8FBBF5']}
+              buttonStyle={styles.button}
+              textStyle={styles.buttonText}
+            />
+            <GradientButton
+              title="Add Friends"
+              colours={['#CBAADE', '#989FEF']}
+              buttonStyle={styles.button}
+              textStyle={styles.buttonText}
+            />
+          </View>
+
+          <View style={styles.infoContainer}>
+            {/* <Text>INFO</Text>
+            <Text>INFO</Text>
+            <Text>INFO</Text> */}
+          </View>
+        </View>
+      </View>
+
+      <View style={styles.signOutContainer}>
         <MyButton
           title="SIGN OUT"
           textStyle={styles.signOut}
           onPress={handleSignOut}
         />
       </View>
+      
     </ImageBackground>
   )
 }
@@ -132,6 +137,10 @@ export default index
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  mainContainer: {
+    flex: 1,
+    justifyContent: 'space-between',  // Pushes signout to bottom
   },
   tackContainer: {
     position: 'relative',
@@ -162,6 +171,14 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     fontSize: 12,
     color: 'white',
+  },
+  infoContainer: {
+    justifyContent: 'center',
+  },
+  signOutContainer: {
+    alignItems: 'center',
+    paddingVertical: 20,
+    marginBottom: '10%'
   },
   signOut: {
     fontWeight: 'extrabold',
