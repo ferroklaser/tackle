@@ -30,12 +30,15 @@ const index = () => {
       setUserAccessory(data.accessory);
       setAvatarLoaded(true);
     } else {
-      alert("User not found")
+      router.replace('/login');
+
     }
-   } catch (error) {
-    console.log(error)
-   }
-   }
+
+    } catch (error) {
+      console.log(error)
+    }
+   
+  }
     fetchAvatar();
   }, [])
 
