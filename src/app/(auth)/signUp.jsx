@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, Modal } from 'react-native'
+import { StyleSheet, Text, View, Pressable, Modal, TouchableOpacity } from 'react-native'
 import React, { useContext } from 'react'
 import ThemedInput from '../../components/AuthComponents/ThemedInput'
 import { Link, router } from 'expo-router'
@@ -7,6 +7,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons"
 import AuthButton from '../../components/AuthComponents/AuthButton'
 import { AuthContext } from '../../contexts/AuthContext'
 import { FIREBASE_AUTH } from '../../firebaseConfig'
+import { authErrorHandler } from '../../utilities/authErrorHandle'
 
 const signUp = () => {
   const authContext = useContext(AuthContext);
@@ -36,14 +37,14 @@ const signUp = () => {
 
     try {
       await authContext.signUp(email, password);
-      setModalVisible(!modalVisible);
       setEmail("");
       setPassword("");
       setConfirm("");
+      setModalVisible(!modalVisible);
     } catch (error) {
-      alert("Error during sign up, try again");
-      console.log(error);
-    }
+      authErrorHandler("Sign up", error);
+      console.log(error.code);
+    } 
   }
 
   const handleVerification = async () => {
@@ -57,7 +58,7 @@ const signUp = () => {
         alert("Email has not been verified");
       }
     } catch (error) {
-      console.log("Error checking email: " , error)
+      alert(error.message)
     }
   }
 
@@ -179,10 +180,10 @@ const signUp = () => {
         >
           <View style={styles.overlay}>
             <View style={styles.verification}>
-              <Text>Waiting for Verification. Check your Email!</Text>
-              <Pressable onPress={handleVerification}>
-                <Text style={{ marginTop: 20, color: 'blue' }}>I have verified</Text>
-              </Pressable>
+              <Text style={{ textAlign: 'center' }}>Waiting for Verification. Check your Email!</Text>
+              <TouchableOpacity style={styles.verify} onPress={handleVerification}>
+                <Text style={{ color: 'blue', fontWeight: 700 }}>I have verified</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </Modal>
@@ -227,10 +228,20 @@ const styles = StyleSheet.create({
     width: '90%',
     marginBottom: 30,
   },
+  verify:{
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+
+    backgroundColor: 'white',
+    padding: 15,
+    borderRadius: 10,
+  },
   verification: {
     padding: 20,
-    backgroundColor: 'white',
-    justifyContent: 'center',
+    backgroundColor: '#D9D9D9',
+    justifyContent: 'space-between',
     alignItems: 'center',
     width: 300,
     height: 150,

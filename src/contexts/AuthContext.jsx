@@ -9,6 +9,7 @@ import {
 } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 import { router } from "expo-router";
+import { authErrorHandler } from "../utilities/authErrorHandle";
 
 export const AuthContext = createContext({
     isLoggedIn: false,
@@ -41,32 +42,28 @@ export function AuthProvider({ children }) {
             await signInWithEmailAndPassword(FIREBASE_AUTH, email, password).then(() => {
                 if (FIREBASE_AUTH.currentUser.emailVerified) {
                     router.replace('/');
+                } else {
+                    alert("Email is not verified.")
                 }
             });
         } catch (error) {
-            console.log(error);
+            authErrorHandler("Login", error);
+            console.log(error.code);
         }
     }
 
     const signUp = async (email, password) => {
-        try {
-            const cred = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
-            await sendEmailVerification(FIREBASE_AUTH.currentUser);
-            await setDoc(
-                doc(FIREBASE_DATABASE, "userTackComponent", cred.user.uid), {
-                username: "",
-                colour: "Yellow",
-                eye: "Side_Eye",
-                mouth: "Side_Tongue",
-                accessory: "Hashtag_Doodle",
-            }
-            )
-            // .then(() => {
-            // //     router.replace('/creation');
-            // // })
-        } catch (error) {
-            console.log(error.code);
-        }
+      
+    const cred = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
+    await sendEmailVerification(FIREBASE_AUTH.currentUser);
+    await setDoc(
+        doc(FIREBASE_DATABASE, "userTackComponent", cred.user.uid), {
+        username: "",
+        colour: "Yellow",
+        eye: "Side_Eye",
+        mouth: "Side_Tongue",
+        accessory: "Hashtag_Doodle",
+    });
     }
 
     const logOut = async () => {
