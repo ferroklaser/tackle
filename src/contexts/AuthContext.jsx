@@ -60,9 +60,10 @@ export function AuthProvider({ children }) {
                 mouth: "Side_Tongue",
                 accessory: "Hashtag_Doodle",
             }
-            ).then(() => {
-                router.replace('/creation');
-            })
+            )
+            // .then(() => {
+            // //     router.replace('/creation');
+            // // })
         } catch (error) {
             console.log(error.code);
         }

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native'
+import { StyleSheet, Text, View, Pressable, Modal } from 'react-native'
 import React, { useContext } from 'react'
 import ThemedInput from '../../components/AuthComponents/ThemedInput'
 import { Link, router } from 'expo-router'
@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import AuthButton from '../../components/AuthComponents/AuthButton'
 import { AuthContext } from '../../contexts/AuthContext'
+import { FIREBASE_AUTH } from '../../firebaseConfig'
 
 const signUp = () => {
   const authContext = useContext(AuthContext);
@@ -15,6 +16,8 @@ const signUp = () => {
 
   const [securePassword, setSecurePassword] = useState(true);
   const [secureConfirm, setSecureConfirm] = useState(true);
+
+  const[modalVisible, setModalVisible] = useState(false);
 
 
   const toggleSecurePassword = () => {
@@ -33,12 +36,28 @@ const signUp = () => {
 
     try {
       await authContext.signUp(email, password);
+      setModalVisible(!modalVisible);
       setEmail("");
       setPassword("");
       setConfirm("");
     } catch (error) {
       alert("Error during sign up, try again");
       console.log(error);
+    }
+  }
+
+  const handleVerification = async () => {
+    try {
+      await FIREBASE_AUTH.currentUser.reload();
+
+      if (FIREBASE_AUTH.currentUser.emailVerified) {
+        setModalVisible(false);
+        router.replace('/creation');
+      } else {
+        alert("Email has not been verified");
+      }
+    } catch (error) {
+      console.log("Error checking email: " , error)
     }
   }
 
@@ -149,6 +168,20 @@ const signUp = () => {
             SIGN UP
           </Text>
         </AuthButton>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+        >
+          <View style={styles.overlay}>
+            <View style={styles.verification}>
+              <Text>Waiting for Verification. Check your Email!</Text>
+              <Pressable onPress={handleVerification}>
+                <Text style={{ marginTop: 20, color: 'blue' }}>I have verified</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
         <View
           style={
             styles.login
@@ -189,5 +222,20 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     width: '90%',
     marginBottom: 30,
-  }
+  },
+  verification: {
+    padding: 20,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 300,
+    height: 150,
+    borderRadius: 10,
+  },
+    overlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+},
 })
