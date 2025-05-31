@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, Modal, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Pressable, Modal, TouchableOpacity, Alert } from 'react-native'
 import React, { useContext } from 'react'
 import ThemedInput from '../../components/AuthComponents/ThemedInput'
 import { Link, router } from 'expo-router'
@@ -117,7 +117,7 @@ const signUp = () => {
                     : "eye-off"
                 }
                 size={25}
-                color="black"
+                color="grey"
               />
             </Pressable>
           </View>
@@ -148,7 +148,7 @@ const signUp = () => {
                     : "eye-off"
                 }
                 size={25}
-                color="black" />
+                color="grey" />
             </Pressable>
           </View>
         </View>
@@ -195,7 +195,7 @@ const signUp = () => {
             <Pressable>
               <Text
                 style={{
-                  fontSize: 13,
+                  fontSize: 12,
                   fontWeight: 'bold',
                   textDecorationLine: 'underline'
                 }}

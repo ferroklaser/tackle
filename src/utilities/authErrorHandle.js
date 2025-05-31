@@ -22,6 +22,12 @@ export function authErrorHandler(action, error) {
         case 'auth/invalid-email' :
             alert("Email is invalid. Please try again.");
             break;
+        case 'auth/weak-password' :
+            alert("Password must be at least 6 characters long.");
+            break;
+        case 'auth/missing-email' :
+            alert("Please fill in your email.")
+            break;
         default:
             alert(action + " failed. Please try again.")
     }

@@ -57,9 +57,7 @@ const login = () => {
             <ThemedInput placeholder='Password' 
               value={password} 
               onChangeText={setPassword} 
-              secureTextEntry={secureText}
-              textContentType="oneTimeCode"   
-              autoComplete="off">
+              secureTextEntry={secureText}>
             </ThemedInput>
             <Pressable 
               style={{ 
@@ -74,7 +72,7 @@ const login = () => {
                   : "eye-off"
                   } 
                 size={25} 
-                color="black"/>
+                color="grey"/>
             </Pressable>
           </View>
         </View>
@@ -121,7 +119,7 @@ const login = () => {
             <Pressable>
               <Text 
                 style={{ 
-                  fontSize: 13,
+                  fontSize: 12,
                   fontWeight: 'bold', 
                   textDecorationLine: 'underline' 
                 }}>
