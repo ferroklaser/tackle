@@ -53,7 +53,7 @@ const signUp = () => {
 
       if (FIREBASE_AUTH.currentUser.emailVerified) {
         setModalVisible(false);
-        router.replace('/creation');
+        router.replace('/creationTransition');
       } else {
         alert("Email has not been verified");
       }
