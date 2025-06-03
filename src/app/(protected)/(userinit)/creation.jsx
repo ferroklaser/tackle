@@ -20,7 +20,6 @@ const index = () => {
   React.useEffect(() => {
       const loadResources = async() => {
       await cacheResources();
-      setIsLoaded(true);
       };
 
       loadResources();
