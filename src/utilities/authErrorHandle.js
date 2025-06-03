@@ -4,6 +4,9 @@ export function authErrorHandler(action, error) {
         case 'auth/email-already-exists' :
             alert("Email already exists.");
             break;
+        case 'auth/email-already-in-use' :
+            alert("Account already exists.");
+            break;
         case 'auth/user-not-found' :
             alert("User not found.");
             break;
