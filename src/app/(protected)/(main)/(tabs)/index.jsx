@@ -1,13 +1,14 @@
-import { StyleSheet, Text, View, ImageBackground } from 'react-native'
-import React, { useState, useEffect } from 'react'
-import BGHomeDay from '../../../assets/Backgrounds/BGHomeDay/index.js';
-import BGHomeNight from '../../../assets/Backgrounds/BGHomeNight/index.js';
-import CombinedTackSprite from '../../../components/TackComponents/CombinedTackSprite.jsx';
-import LoadingSplash from '../../../components/LoadingSplash.jsx';
+import { StyleSheet, Text, View, ImageBackground, Pressable } from 'react-native'
+import React, { useState, useEffect, useRef } from 'react'
+import BGHomeDay from '../../../../assets/Backgrounds/BGHomeDay/index.js';
+import BGHomeNight from '../../../../assets/Backgrounds/BGHomeNight/index.js';
+import CombinedTackSprite from '../../../../components/TackComponents/CombinedTackSprite.jsx';
+import LoadingSplash from '../../../../components/LoadingSplash.jsx';
 import { Asset } from 'expo-asset';
-import Tack from '../../../assets/Tack/index.js';
-import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../../firebaseConfig.js';
+import Tack from '../../../../assets/Tack/index.js';
+import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../../../firebaseConfig.js';
 import { getDoc, doc } from 'firebase/firestore';
+import { Animated } from 'react-native';
 
 const index = () => {
   const [userColour, setUserColor] = useState(null);
@@ -16,6 +17,7 @@ const index = () => {
   const [userAccessory, setUserAccessory] = useState(null);
   let [isLoaded, setIsLoaded] = React.useState(false);
   let [isAvatarLoaded, setAvatarLoaded] = useState(false);
+  const widthAnime = useRef(new Animated.Value(60)).current;
 
   useEffect(() => {
   const fetchAvatar = async () => {
@@ -79,6 +81,15 @@ const index = () => {
       <LoadingSplash />
     );
   }
+
+  const handleMenuPress = () => {
+    console.log("Pressed");
+    Animated.timing(widthAnime, {
+      toValue: 330,
+      duration: 200, 
+      useNativeDriver: false,
+    }).start();
+  };
   
   return ( 
     <ImageBackground 
@@ -92,7 +103,12 @@ const index = () => {
              mouthOption={userMouth}
              accessoryOption={userAccessory}
              />
-          </View>
+      </View>
+      {/* <View style={{ alignItems: "flex-end" }}>
+        <Animated.View style={[styles.menuButton, {width: widthAnime}]}>
+          <Pressable style={{flex: 1}} onPress={handleMenuPress} />
+        </Animated.View>
+      </View>  */}
     </ImageBackground>
   )
 }
@@ -111,4 +127,11 @@ const styles = StyleSheet.create({
       width: '100%',
       marginTop: '90%',
     },
+    menuButton: {
+      padding: 20, 
+      backgroundColor: 'white',
+      height: 60,
+      margin: 30,
+      borderRadius: 60,
+    }
 })
