@@ -6,19 +6,35 @@ import BottomTabBar from '../../../../components/BottomTabBar'
 
 const Layout = () => {
   return (
-    <Tabs tabBar={props => <BottomTabBar {...props} />}>
-        <Tabs.Screen name = "index" options={{title: 'Home'}} />
-        <Tabs.Screen name = "store" options={{title: 'Store'}} />
-        <Tabs.Screen name = "timer" options={{title: 'Timer'}} />
-        <Tabs.Screen name = "manager" options={{title: 'Task Manager'}} />
-        <Tabs.Screen name = "inventory" options={{title: 'Inventory'}} />
-    </Tabs>
+	<View style={styles.container}>
+      <Tabs
+        tabBar={props => <BottomTabBar {...props} />}
+        screenOptions={{
+          tabBarStyle: {
+            position: 'absolute',
+          },
+          safeAreaInsets: { bottom: 0 },  // disables bottom padding on pages
+          headerShown: false,              // if you want header gone
+        }}
+      >
+        <Tabs.Screen name="index" options={{ title: 'Home' }} />
+        <Tabs.Screen name="store" options={{ title: 'Store' }} />
+        <Tabs.Screen name="timer" options={{ title: 'Timer' }} />
+        <Tabs.Screen name="manager" options={{ title: 'Task Manager' }} />
+        <Tabs.Screen name="inventory" options={{ title: 'Inventory' }} />
+      </Tabs>
+    </View>
+    
   )
 }
 
 export default Layout
 
 const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		position: 'relative',
+	},
 	tabList: {
 		position: "absolute",
 		bottom: 32,
