@@ -64,7 +64,7 @@ export default BottomTabBar
 
 const styles = StyleSheet.create({
     tabbar: {
-        position: 'absolute',
+        // position: 'absolute',
         bottom: 25,
         flexDirection: 'row',
         justifyContent: 'space-between',

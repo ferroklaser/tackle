@@ -103,7 +103,7 @@ const index = () => {
              mouthOption={userMouth}
              accessoryOption={userAccessory}
              />
-      </View>
+          </View>
       {/* <View style={{ alignItems: "flex-end" }}>
         <Animated.View style={[styles.menuButton, {width: widthAnime}]}>
           <Pressable style={{flex: 1}} onPress={handleMenuPress} />
