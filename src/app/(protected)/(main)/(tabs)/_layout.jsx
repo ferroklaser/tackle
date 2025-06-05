@@ -25,8 +25,8 @@ const Layout = () => {
 						tabBarStyle: {
 							position: 'absolute',
 						},
-						safeAareaInsets: { bottom: 0 },  // disables bottom padding on pages
-						headerShown: false,              // if you want header gone
+						safeAareaInsets: { bottom: 0 },  
+						headerShown: false,              
 					}}
 				>
 					<Tabs.Screen name="store" options={{ title: 'Store' }} />
