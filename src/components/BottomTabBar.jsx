@@ -3,6 +3,10 @@ import React from 'react'
 import { useLinkBuilder, useTheme } from '@react-navigation/native';
 import { PlatformPressable } from '@react-navigation/elements';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Feather from '@expo/vector-icons/Feather';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+
 
 const BottomTabBar = ({ state, descriptors, navigation }) => {
 const { colors } = useTheme();
@@ -33,6 +37,15 @@ const { colors } = useTheme();
           }
         };
 
+        const icons = {
+          store: (props) => <Feather name="shopping-cart" size={30} {...props} />,
+          timer: (props) => <MaterialCommunityIcons name="timer-outline" size={30} {...props} />,
+          index: (props) => <Feather name="home" size={30} {...props} />,
+          manager: (props) => <Feather name="check-square" size={30}  {...props} />,
+          inventory: (props) => <FontAwesome6 name="shirt" size={30}  {...props} />
+
+        }
+
         const onLongPress = () => {
           navigation.emit({
             type: 'tabLongPress',
@@ -50,9 +63,15 @@ const { colors } = useTheme();
             onPress={onPress}
             onLongPress={onLongPress}
           >
-            <Text style={{ color: isFocused ? colors.primary : colors.text }}>
+            {
+              icons[route.name]({
+                color: isFocused ? "#7F8B82" : "black"
+              })
+            }
+            {/* If we decide to add text below icons */}
+            {/* <Text style={{ color: isFocused ? colors.primary : colors.text, fontSize: 10}}>
               {label}
-            </Text>
+            </Text> */}
           </TouchableOpacity>
         );
       })}
