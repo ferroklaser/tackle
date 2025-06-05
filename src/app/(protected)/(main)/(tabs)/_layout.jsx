@@ -1,31 +1,42 @@
 import { View, Text, StyleSheet } from 'react-native'
 import { Tabs } from 'expo-router'
-import React from 'react'
+import React, { useState } from 'react'
 import BottomTabBar from '../../../../components/BottomTabBar'
+import ToggleMenuButton from '../../../../components/ToggleMenuButton'
 
 
 const Layout = () => {
-  return (
-	<View style={styles.container}>
-      <Tabs
-        tabBar={props => <BottomTabBar {...props} />}
-        screenOptions={{
-          tabBarStyle: {
-            position: 'absolute',
-          },
-          safeAreaInsets: { bottom: 0 },  // disables bottom padding on pages
-          headerShown: false,              // if you want header gone
-        }}
-      >
-		<Tabs.Screen name="store" options={{ title: 'Store' }} />
-		<Tabs.Screen name="timer" options={{ title: 'Timer' }} />
-        <Tabs.Screen name="index" options={{ title: 'Home' }} />
-        <Tabs.Screen name="manager" options={{ title: 'Task Manager' }} />
-        <Tabs.Screen name="inventory" options={{ title: 'Inventory' }} />
-      </Tabs>
-    </View>
-    
-  )
+	const [isExpanded, setIsExpanded] = useState(false);
+
+	function toggleExpandHandler() {
+		setIsExpanded(!isExpanded);
+	}
+
+	return (
+		<View style={styles.container}>
+			<Tabs
+				tabBar={props => isExpanded ? <BottomTabBar {...props} /> : null}
+				screenOptions={{
+					tabBarStyle: {
+						position: 'absolute',
+					},
+					safeAreaInsets: { bottom: 0 },  // disables bottom padding on pages
+					headerShown: false,              // if you want header gone
+				}}
+			>
+				<Tabs.Screen name="store" options={{ title: 'Store' }} />
+				<Tabs.Screen name="timer" options={{ title: 'Timer' }} />
+				<Tabs.Screen name="index" options={{ title: 'Home' }} />
+				<Tabs.Screen name="manager" options={{ title: 'Task Manager' }} />
+				<Tabs.Screen name="inventory" options={{ title: 'Inventory' }} />
+			</Tabs>
+							<ToggleMenuButton
+					onPress={toggleExpandHandler}
+					isExpanded={isExpanded}
+				/>
+		</View>
+
+	)
 }
 
 export default Layout

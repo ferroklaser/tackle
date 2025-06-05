@@ -8,7 +8,6 @@ import { Asset } from 'expo-asset';
 import Tack from '../../../../assets/Tack/index.js';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../../../firebaseConfig.js';
 import { getDoc, doc } from 'firebase/firestore';
-import { Animated } from 'react-native';
 
 const index = () => {
   const [userColour, setUserColor] = useState(null);
@@ -17,7 +16,6 @@ const index = () => {
   const [userAccessory, setUserAccessory] = useState(null);
   let [isLoaded, setIsLoaded] = React.useState(false);
   let [isAvatarLoaded, setAvatarLoaded] = useState(false);
-  const widthAnime = useRef(new Animated.Value(60)).current;
 
   useEffect(() => {
   const fetchAvatar = async () => {
@@ -82,15 +80,6 @@ const index = () => {
     );
   }
 
-  const handleMenuPress = () => {
-    console.log("Pressed");
-    Animated.timing(widthAnime, {
-      toValue: 330,
-      duration: 200, 
-      useNativeDriver: false,
-    }).start();
-  };
-  
   return ( 
     <ImageBackground 
         source = {backgroundImage}
@@ -104,11 +93,6 @@ const index = () => {
              accessoryOption={userAccessory}
              />
           </View>
-      {/* <View style={{ alignItems: "flex-end" }}>
-        <Animated.View style={[styles.menuButton, {width: widthAnime}]}>
-          <Pressable style={{flex: 1}} onPress={handleMenuPress} />
-        </Animated.View>
-      </View>  */}
     </ImageBackground>
   )
 }
