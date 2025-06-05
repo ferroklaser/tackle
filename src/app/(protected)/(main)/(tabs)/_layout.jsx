@@ -20,12 +20,12 @@ const Layout = () => {
 		<TouchableWithoutFeedback onPress={toggleCloseHandler}>
 			<View style={styles.container}>
 				<Tabs
-					tabBar={props => isExpanded ? <BottomTabBar {...props} isExpanded={isExpanded} /> : null}
+					tabBar={props => <BottomTabBar {...props} isExpanded={isExpanded} />}
 					screenOptions={{
 						tabBarStyle: {
 							position: 'absolute',
 						},
-						safeAreaInsets: { bottom: 0 },  // disables bottom padding on pages
+						safeAareaInsets: { bottom: 0 },  // disables bottom padding on pages
 						headerShown: false,              // if you want header gone
 					}}
 				>

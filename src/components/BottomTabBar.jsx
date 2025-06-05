@@ -7,18 +7,34 @@ import Feather from '@expo/vector-icons/Feather';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useRef, useEffect } from 'react';
-import Animated from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 
 
 const BottomTabBar = ({ state, descriptors, navigation, isExpanded }) => {
+  const translateX = useSharedValue(100);
+  const opacity = useSharedValue(0);
+
+  useEffect(() => {
+    if (isExpanded) {
+      translateX.value = withTiming(0, { duration: 300 });  // Slide out to the right
+      opacity.value = withTiming(1, { duration: 300});
+    } else {
+      translateX.value = withTiming(1000, { duration: 300 });   // Slide back to button
+      opacity.value = withTiming(0, {duration: 300});
+    }
+  }, [isExpanded]);
 
 
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform:[{ translateX: translateX.value }],
+      opacity: opacity.value,
+    }
+  })
 
-  const { colors } = useTheme();
-  const { buildHref } = useLinkBuilder();
   return (
-    <View style={[styles.tabbar]
+    <Animated.View style={[styles.tabbar, animatedStyle]
     }>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
@@ -82,7 +98,7 @@ const BottomTabBar = ({ state, descriptors, navigation, isExpanded }) => {
           </TouchableOpacity>
         );
       })}
-    </View>
+    </Animated.View>
   )
 }
 
