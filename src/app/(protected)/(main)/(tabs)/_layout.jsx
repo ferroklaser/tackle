@@ -17,9 +17,9 @@ const Layout = () => {
           headerShown: false,              // if you want header gone
         }}
       >
+		<Tabs.Screen name="store" options={{ title: 'Store' }} />
+		<Tabs.Screen name="timer" options={{ title: 'Timer' }} />
         <Tabs.Screen name="index" options={{ title: 'Home' }} />
-        <Tabs.Screen name="store" options={{ title: 'Store' }} />
-        <Tabs.Screen name="timer" options={{ title: 'Timer' }} />
         <Tabs.Screen name="manager" options={{ title: 'Task Manager' }} />
         <Tabs.Screen name="inventory" options={{ title: 'Inventory' }} />
       </Tabs>
