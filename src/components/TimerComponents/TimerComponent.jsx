@@ -1,15 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, Feather } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import { useFonts } from 'expo-font';
+import { TimerPickerModal } from "react-native-timer-picker";
+import { LinearGradient } from "expo-linear-gradient";
+import { CancelButton } from 'react-native-modal-datetime-picker';
 
-export default function TimerScreen() {
+const Timer = ({startingDuration = 0}) => {
+  const [isPickerVisible, setPickerVisible] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
-  const [duration, setDuration] = useState(360);
+  const [duration, setDuration] = useState(startingDuration);
   const [seconds, setSeconds] = useState(duration);
-  const [isDuration, setIsDuration] = useState(true);
+  // const [isDuration, setIsDuration] = useState(true);
 
   const intervalRef = useRef(null);
 
@@ -38,6 +42,11 @@ export default function TimerScreen() {
     setSeconds(duration);
   };
 
+  const handleTimer = (selectedTime) => {
+    setTime(selectedTime);
+    setPickerVisible(false);
+  };
+
   const formatTime = (sec) => {
     const hrs = String(Math.floor(sec / 3600)).padStart(2, '0');
     const mins = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
@@ -45,8 +54,14 @@ export default function TimerScreen() {
     return `${hrs}:${mins}:${secs}`;
   };
 
-  const fill = isDuration ? (seconds / duration * 100) : 100;
-//   console.log(fill); 
+  const changeToSec = ({ hours, minutes }) => {
+    const totalSecs = hours * 3600 + minutes * 60;
+
+    return totalSecs;
+  };
+
+  const fill = duration == 0 ? 0 : seconds / duration * 100;
+  console.log(fill); 
 
   return (
     <View style={styles.container}>
@@ -66,25 +81,62 @@ export default function TimerScreen() {
 
                     <View style={styles.controls}>
                         { isRunning ? (
-                            <TouchableOpacity onPress={handlePause}>
-                                <Ionicons name="pause" size={32} color="#7F8B82" />
-                            </TouchableOpacity>
+                          <TouchableOpacity onPress={handlePause}>
+                            <Ionicons name="pause" size={32} color="#7F8B82" />
+                          </TouchableOpacity>
                         ) : (
-                            <TouchableOpacity onPress={handlePlay}>
-                                <Ionicons name="play" size={32} color="#7F8B82" />
-                            </TouchableOpacity>
+                          <TouchableOpacity onPress={handlePlay}>
+                            <Ionicons name="play" size={32} color="#7F8B82" />
+                          </TouchableOpacity>
                         )}
 
                         <TouchableOpacity onPress={handleStop}>
-                            <Ionicons name="stop" size={32} color="#7F8B82" />
+                          <Ionicons name="stop" size={32} color={isRunning ? "#7F8B82" : "#e0e0e0"} />
                         </TouchableOpacity>
+
+                        { isRunning ? (
+                            <TouchableOpacity>
+                               <Feather name="clock" size={32} color="#e0e0e0" />
+                            </TouchableOpacity>
+                        ) : (
+                            <TouchableOpacity onPress={() => setPickerVisible(true)}>
+                              <Feather name="clock" size={32} color="#7F8B82" />
+                            </TouchableOpacity>
+                        )}
                     </View>
                 </View>
             )}
         </AnimatedCircularProgress>
+        <TimerPickerModal
+            visible={isPickerVisible}
+            setIsVisible={setPickerVisible}
+            onConfirm={(pickedDuration) => {
+                setDuration(changeToSec(pickedDuration));
+                setSeconds(changeToSec(pickedDuration));
+                setPickerVisible(false);
+            }}
+            hideSeconds
+            modalTitle="Set Timer"
+            onCancel={() => setPickerVisible(false)}
+            closeOnOverlayPress
+            LinearGradient={LinearGradient}
+            maximumSeconds={0}
+            minuteInterval={5}
+            maximumHours={8}
+            hideCancelButton
+            styles={{
+                confirmButton: styles.confirmButton,
+                // cancelButton: styles.cancelButton,
+            }}
+            modalProps={{
+                overlayOpacity: 0.2,
+            }}
+        />
     </View>
   );
 }
+
+export default Timer;
 
 const styles = StyleSheet.create({
   container: {
@@ -109,4 +161,14 @@ const styles = StyleSheet.create({
     gap: 30,
     marginTop: 30,
   },
+  confirmButton: {
+    backgroundColor: '#4db8ff',
+    borderColor: '#4db8ff',
+    color: 'white'
+  },
+  cancelButton: {
+    backgroundColor: '#e0e0e0',
+    borderColor: '#e0e0e0',
+    color: 'black',
+  }
 });
