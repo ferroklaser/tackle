@@ -1,28 +1,33 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { router } from 'expo-router';
+import { useState } from 'react';
 import { usePathname } from 'expo-router';
 
 const TopNavBar = ( ) => {
+  const [isBackable, setIsBackable] = useState(false);
   const pathname = usePathname();
 
    const handleBack = () => {
-    if (pathname === '/') {
-      return;
-    }
+    setIsBackable(false);
     router.back();
   };
 
+  const handleProfile = () => {
+    setIsBackable(true);
+    router.push('/profile');
+  }
+
   return (
     <View style={styles.container}>
-      { pathname == '/profile' ?
+      { isBackable ?
         <TouchableOpacity onPress={handleBack}>
           <Image 
             source={require('../assets/Icons/BackButton.png')}
             style={[styles.Button, {width: 35}, {height: 35}]}
           />
         </TouchableOpacity> :
-        <TouchableOpacity onPress={() => router.push('/profile')}>
+        <TouchableOpacity onPress={handleProfile}>
           <Image 
             source={require('../assets/Icons/ProfileIcon.png')}
             style={styles.Button}

@@ -9,14 +9,13 @@ import { LinearGradient } from "expo-linear-gradient";
 import { CancelButton } from 'react-native-modal-datetime-picker';
 import { useNavigation } from 'expo-router';
 
-const Timer = ({startingDuration = 0}) => {
+const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
   const [isPickerVisible, setPickerVisible] = useState(false);
-  const [isRunning, setIsRunning] = useState(false);
   const [duration, setDuration] = useState(startingDuration);
   const [seconds, setSeconds] = useState(duration);
   const navigation = useNavigation();
-
   const intervalRef = useRef(null);
+  
   const [fontsLoaded] = useFonts({
     RobotoMono: require('../../assets/fonts/RobotoMono.ttf'),
   });
@@ -36,31 +35,6 @@ const Timer = ({startingDuration = 0}) => {
     }
     return () => clearInterval(intervalRef.current);
   }, [isRunning]);
-
-  //effect for trying to navigate to different page in app while timer is running
-  useEffect(() => {
-    const tryLeave = navigation.addListener('beforeRemove', (e) => {
-      if (!isRunning) {
-        return;
-      } else {
-        e.preventDefault();
-        Alert.alert(
-          'Timer is running',
-          'Are you sure you want to leave? The timer will stop and you will not receive any rewards for this session.',
-          [
-            { text: "Stay", style: 'cancel', onPress: () => {} },
-            {
-              text: 'Leave anyway',
-              style: 'destructive',
-              onPress: () => {
-                setIsRunning(false); // Optional: stop the timer
-                navigation.dispatch(e.data.action); // Allow navigation
-              },
-            },
-          ]
-        )}})
-      return tryLeave;
-  }, [navigation, isRunning]);
 
   const handlePause = () => setIsRunning(false);
   const handlePlay = () => setIsRunning(true);
