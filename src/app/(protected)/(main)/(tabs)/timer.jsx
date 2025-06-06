@@ -1,8 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, Alert } from 'react-native'
+import { useEffect, useState } from 'react';
+import { useNavigation } from 'expo-router';
 import TimerComponent from '../../../../components/TimerComponents/TimerComponent'
 
 const timer = () => {
+  const navigation = useNavigation();
+  const [isRunning, setIsRunning] = useState(false);
+
   return (
     <View style={styles.container}>
       {/* <Video
@@ -17,7 +21,7 @@ const timer = () => {
       /> */}
 
       <View style={ styles.component }>
-        <TimerComponent />
+        <TimerComponent isRunning={isRunning} setIsRunning={setIsRunning} />
       </View>
     </View>
   )
