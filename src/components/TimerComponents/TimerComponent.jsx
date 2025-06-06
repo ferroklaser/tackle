@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import * as Font from 'expo-font';
@@ -7,13 +7,14 @@ import { useFonts } from 'expo-font';
 import { TimerPickerModal } from "react-native-timer-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import { CancelButton } from 'react-native-modal-datetime-picker';
+import { useNavigation } from 'expo-router';
 
 const Timer = ({startingDuration = 0}) => {
   const [isPickerVisible, setPickerVisible] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [duration, setDuration] = useState(startingDuration);
   const [seconds, setSeconds] = useState(duration);
-  // const [isDuration, setIsDuration] = useState(true);
+  const navigation = useNavigation();
 
   const intervalRef = useRef(null);
   const [fontsLoaded] = useFonts({
@@ -36,16 +37,36 @@ const Timer = ({startingDuration = 0}) => {
     return () => clearInterval(intervalRef.current);
   }, [isRunning]);
 
+  //effect for trying to navigate to different page in app while timer is running
+  useEffect(() => {
+    const tryLeave = navigation.addListener('beforeRemove', (e) => {
+      if (!isRunning) {
+        return;
+      } else {
+        e.preventDefault();
+        Alert.alert(
+          'Timer is running',
+          'Are you sure you want to leave? The timer will stop and you will not receive any rewards for this session.',
+          [
+            { text: "Stay", style: 'cancel', onPress: () => {} },
+            {
+              text: 'Leave anyway',
+              style: 'destructive',
+              onPress: () => {
+                setIsRunning(false); // Optional: stop the timer
+                navigation.dispatch(e.data.action); // Allow navigation
+              },
+            },
+          ]
+        )}})
+      return tryLeave;
+  }, [navigation, isRunning]);
+
   const handlePause = () => setIsRunning(false);
   const handlePlay = () => setIsRunning(true);
   const handleStop = () => {
     setIsRunning(false);
     setSeconds(duration);
-  };
-
-  const handleTimer = (selectedTime) => {
-    setTime(selectedTime);
-    setPickerVisible(false);
   };
 
   const formatTime = (sec) => {
@@ -81,7 +102,6 @@ const Timer = ({startingDuration = 0}) => {
                         {formatTime(seconds)}
                     </Text>
                   )}
-                   
 
                     <View style={styles.controls}>
                         { isRunning ? (
@@ -95,7 +115,7 @@ const Timer = ({startingDuration = 0}) => {
                         )}
 
                         <TouchableOpacity onPress={handleStop}>
-                          <Ionicons name="stop" size={32} color={isRunning ? "#7F8B82" : "#e0e0e0"} />
+                          <Ionicons name="stop" size={32} color="#7F8B82" />
                         </TouchableOpacity>
 
                         { isRunning ? (

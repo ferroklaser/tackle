@@ -15,23 +15,20 @@ const TopNavBar = ( ) => {
 
   return (
     <View style={styles.container}>
-      {pathname !== '/' && (
+      { pathname == '/profile' ?
         <TouchableOpacity onPress={handleBack}>
           <Image 
             source={require('../assets/Icons/BackButton.png')}
             style={[styles.Button, {width: 35}, {height: 35}]}
           />
+        </TouchableOpacity> :
+        <TouchableOpacity onPress={() => router.push('/profile')}>
+          <Image 
+            source={require('../assets/Icons/ProfileIcon.png')}
+            style={styles.Button}
+          />
         </TouchableOpacity>
-      )}
-
-      <View style={{flex: 1}}/>
-
-      <TouchableOpacity onPress={() => router.push('/profile')}>
-        <Image 
-          source={require('../assets/Icons/ProfileIcon.png')}
-          style={styles.Button}
-        />
-      </TouchableOpacity>
+      }
     </View>
   );
 };
@@ -51,8 +48,8 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   Button: {
-    marginRight: 10,
     marginTop: 30,
+    marginLeft: 10,
     alignItems: 'center',
     width: 40,
     height: 40,
