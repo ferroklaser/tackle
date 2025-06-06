@@ -16,8 +16,9 @@ const Timer = ({startingDuration = 0}) => {
   // const [isDuration, setIsDuration] = useState(true);
 
   const intervalRef = useRef(null);
-
-  useFonts({RobotoMono: require('../../assets/fonts/RobotoMono.ttf')});
+  const [fontsLoaded] = useFonts({
+    RobotoMono: require('../../assets/fonts/RobotoMono.ttf'),
+  });
 
   useEffect(() => {
     if (isRunning) {
@@ -74,10 +75,13 @@ const Timer = ({startingDuration = 0}) => {
         rotation={360}
         >
             {() => (
-                <View style={styles.innerContent}>
+                <View key={seconds} style={styles.innerContent}>
+                  {fontsLoaded && (
                     <Text style={styles.timeText}>
                         {formatTime(seconds)}
                     </Text>
+                  )}
+                   
 
                     <View style={styles.controls}>
                         { isRunning ? (
