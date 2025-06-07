@@ -1,17 +1,16 @@
-import { StyleSheet, Text, TouchableOpacity, View} from 'react-native'
-import React from 'react'
+import { StyleSheet, TouchableOpacity, Alert} from 'react-native'
 import { useLinkBuilder, useTheme } from '@react-navigation/native';
 import { PlatformPressable } from '@react-navigation/elements';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Feather from '@expo/vector-icons/Feather';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { useRef, useEffect } from 'react';
+import { useEffect } from 'react';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-
-
+import { useTimer } from '../contexts/TimerContext';
 
 const BottomTabBar = ({ state, descriptors, navigation, isExpanded }) => {
+  const {isRunning, setIsRunning} = useTimer();
   const translateX = useSharedValue(100);
   const opacity = useSharedValue(0);
 
@@ -55,7 +54,12 @@ const BottomTabBar = ({ state, descriptors, navigation, isExpanded }) => {
             canPreventDefault: true,
           });
 
-          if (!isFocused && !event.defaultPrevented) {
+          if (isRunning) {
+            Alert.alert(
+                    "Timer is running",
+                    "You can't switch tabs while the timer is active."
+            );
+          } else if (!isFocused && !event.defaultPrevented) {
             navigation.navigate(route.name, route.params);
           }
         };

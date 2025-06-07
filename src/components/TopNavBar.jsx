@@ -1,14 +1,20 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { usePathname } from 'expo-router';
+import { useTimer } from '../contexts/TimerContext';
 
 const TopNavBar = ( ) => {
   const [isBackable, setIsBackable] = useState(false);
-  const pathname = usePathname();
+  const {isRunning, setIsRunning} = useTimer();
+  
+  function handleWhileRunning() {
+    Alert.alert(
+        "Timer is running",
+        "You can't switch tabs while the timer is active."
+    );
+  }
 
-   const handleBack = () => {
+  const handleBack = () => {
     setIsBackable(false);
     router.back();
   };
@@ -27,7 +33,7 @@ const TopNavBar = ( ) => {
             style={[styles.Button, {width: 35}, {height: 35}]}
           />
         </TouchableOpacity> :
-        <TouchableOpacity onPress={handleProfile}>
+        <TouchableOpacity onPress={isRunning ? handleWhileRunning : handleProfile}>
           <Image 
             source={require('../assets/Icons/ProfileIcon.png')}
             style={styles.Button}
@@ -46,6 +52,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,
+    zIndex: 20,
 
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },

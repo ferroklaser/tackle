@@ -1,11 +1,9 @@
-import { StyleSheet, Text, View, Alert } from 'react-native'
-import { useEffect, useState } from 'react';
-import { useNavigation } from 'expo-router';
+import { StyleSheet, View } from 'react-native'
 import TimerComponent from '../../../../components/TimerComponents/TimerComponent'
+import { useTimer } from '../../../../contexts/TimerContext';
 
 const timer = () => {
-  const navigation = useNavigation();
-  const [isRunning, setIsRunning] = useState(false);
+  const { isRunning, setIsRunning } = useTimer();
 
   return (
     <View style={styles.container}>
@@ -34,9 +32,9 @@ const styles = StyleSheet.create({
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
+      position: 'relative',
     },
     container: {
       flex: 1,
-      backgroundColor: 'black',
     },
 })

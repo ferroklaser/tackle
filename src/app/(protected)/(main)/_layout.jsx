@@ -1,11 +1,14 @@
-import { ImageBackground, StyleSheet, View } from 'react-native'
-import { Slot, Stack } from 'expo-router';
+import { StyleSheet, View } from 'react-native'
+import { Stack } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import TopNavBar from '../../../components/TopNavBar.jsx';
+import { TimerProvider } from '../../../contexts/TimerContext.jsx';
 
 export default function Layout() {
+  
   return (
-    <SafeAreaProvider>
+    <TimerProvider>
+      <SafeAreaProvider>
         <View style={styles.mainContent}>
           <View style={styles.slotWrapper}>
             <Stack screenOptions={{ headerShown: false }} />
@@ -15,7 +18,9 @@ export default function Layout() {
             <TopNavBar />
           </View>
         </View>
-    </SafeAreaProvider>
+      </SafeAreaProvider>
+    </TimerProvider>
+    
   );
 }
 
