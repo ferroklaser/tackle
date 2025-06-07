@@ -10,7 +10,7 @@ const TopNavBar = ( ) => {
   function handleWhileRunning() {
     Alert.alert(
         "Timer is running",
-        "You can't switch tabs while the timer is active."
+        "You can't switch tabs while the timer is active"
     );
   }
 

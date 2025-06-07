@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
 import { Asset } from 'expo-asset';
 import Tack from '../../assets/Tack';
 import CombinedTackSprite from './CombinedTackSprite';
@@ -82,19 +82,23 @@ const CreationComponent = () => {
   }
 
   const storeData = async () => {
-    try {
-      await setDoc(doc(FIREBASE_DATABASE, "userTackComponent", FIREBASE_AUTH.currentUser.uid), {
-        username: username,
-        colour: currentColour,
-        eye: currentEyes,
-        mouth: currentMouth,
-        accessory: currentAccessory,
-      })
-    
-    } catch (error) {
-      console.log(error);
-    } finally {
-      router.replace('/');
+    if (username == '') {
+      Alert.alert('Reminder', 'Username cannot be empty')
+    } else {
+      try {
+        await setDoc(doc(FIREBASE_DATABASE, "userTackComponent", FIREBASE_AUTH.currentUser.uid), {
+          username: username,
+          colour: currentColour,
+          eye: currentEyes,
+          mouth: currentMouth,
+          accessory: currentAccessory,
+        })
+      
+      } catch (error) {
+        console.log(error);
+      } finally {
+        router.replace('/');
+      }
     }
   }
 
