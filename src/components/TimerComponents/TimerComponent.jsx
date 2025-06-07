@@ -6,14 +6,14 @@ import * as Font from 'expo-font';
 import { useFonts } from 'expo-font';
 import { TimerPickerModal } from "react-native-timer-picker";
 import { LinearGradient } from "expo-linear-gradient";
-import { CancelButton } from 'react-native-modal-datetime-picker';
-import { useNavigation } from 'expo-router';
+import RewardModal from '../Modals/RewardModal';
+import { CancelButton } from 'react-native-modal-datetime-picker'; //if we want a cancel button on timer modal
 
 const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
   const [isPickerVisible, setPickerVisible] = useState(false);
   const [duration, setDuration] = useState(startingDuration);
   const [seconds, setSeconds] = useState(duration);
-  const navigation = useNavigation();
+  const [isRewardVisible, setRewardVisible] = useState(false);
   const intervalRef = useRef(null);
   
   const [fontsLoaded] = useFonts({
@@ -27,6 +27,7 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
           if (prev <= 1) {
             clearInterval(intervalRef.current);
             setIsRunning(false);
+            handleReward();
             return 0;
           }
           return prev - 1;
@@ -37,11 +38,22 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
   }, [isRunning]);
 
   const handlePause = () => setIsRunning(false);
-  const handlePlay = () => setIsRunning(true);
+  const handlePlay = () => {
+    if (duration !== 0 && seconds != 0) {
+      setIsRunning(true);
+    } else {
+      Alert.alert(
+        'Warning',
+        'Input a valid duration to start the timer.')
+    }
+  }
   const handleStop = () => {
     setIsRunning(false);
     setSeconds(duration);
   };
+  const handleReward = () => {
+    setRewardVisible(true);
+  }
 
   const formatTime = (sec) => {
     const hrs = String(Math.floor(sec / 3600)).padStart(2, '0');
@@ -61,77 +73,96 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
 
   return (
     <View style={styles.container}>
-        <View style={styles.circle} />
-        <AnimatedCircularProgress
-        size={300}
-        width={18}
-        fill={fill}
-        tintColor="#4db8ff"
-        backgroundColor="#e0e0e0"
-        rotation={360}
-        style={styles.progress}
-        >
-            {() => (
-                <View key={seconds} style={styles.innerContent}>
-                  {fontsLoaded && (
-                    <Text style={styles.timeText}>
-                        {formatTime(seconds)}
-                    </Text>
-                  )}
+      <RewardModal 
+      isModalVisible={isRewardVisible} 
+      setModalVisible={setRewardVisible}
+      />
+      
+      <View style={styles.circle} />
 
-                    <View style={styles.controls}>
-                        { isRunning ? (
-                          <TouchableOpacity onPress={handlePause}>
-                            <Ionicons name="pause" size={32} color="#7F8B82" />
-                          </TouchableOpacity>
-                        ) : (
-                          <TouchableOpacity onPress={handlePlay}>
-                            <Ionicons name="play" size={32} color="#7F8B82" />
-                          </TouchableOpacity>
-                        )}
+      <AnimatedCircularProgress
+      size={300}
+      width={18}
+      fill={fill}
+      tintColor="#4db8ff"
+      backgroundColor="#e0e0e0"
+      rotation={360}
+      style={styles.progress}
+      >
+          {() => (
+              <View key={seconds} style={styles.innerContent}>
+                {fontsLoaded && (
+                  <Text style={styles.timeText}>
+                      {formatTime(seconds)}
+                  </Text>
+                )}
 
-                        <TouchableOpacity onPress={handleStop}>
-                          <Ionicons name="stop" size={32} color="#7F8B82" />
+                  <View style={styles.controls}>
+                      { isRunning ? (
+                        <TouchableOpacity onPress={handlePause}>
+                          <Ionicons name="pause" size={32} color="#7F8B82" />
                         </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity onPress={handlePlay}>
+                          <Ionicons name="play" size={32} color="#7F8B82" />
+                        </TouchableOpacity>
+                      )}
 
-                        { isRunning ? (
-                            <TouchableOpacity>
-                               <Feather name="clock" size={32} color="#e0e0e0" />
-                            </TouchableOpacity>
-                        ) : (
-                            <TouchableOpacity onPress={() => setPickerVisible(true)}>
-                              <Feather name="clock" size={32} color="#7F8B82" />
-                            </TouchableOpacity>
-                        )}
-                    </View>
-                </View>
-            )}
-        </AnimatedCircularProgress>
-        <TimerPickerModal
-            visible={isPickerVisible}
-            setIsVisible={setPickerVisible}
-            onConfirm={(pickedDuration) => {
-                setDuration(changeToSec(pickedDuration));
-                setSeconds(changeToSec(pickedDuration));
-                setPickerVisible(false);
-            }}
-            hideSeconds
-            modalTitle="Set Timer"
-            onCancel={() => setPickerVisible(false)}
-            closeOnOverlayPress
-            LinearGradient={LinearGradient}
-            maximumSeconds={0}
-            minuteInterval={5}
-            maximumHours={8}
-            hideCancelButton
-            styles={{
-                confirmButton: styles.confirmButton,
-                // cancelButton: styles.cancelButton,
-            }}
-            modalProps={{
-                overlayOpacity: 0.2,
-            }}
-        />
+                      <TouchableOpacity onPress={handleStop}>
+                        <Ionicons name="stop" size={32} color="#7F8B82" />
+                      </TouchableOpacity>
+
+                      { isRunning ? (
+                          <TouchableOpacity>
+                            <Feather name="clock" size={32} color="#e0e0e0" />
+                          </TouchableOpacity>
+                      ) : (
+                          <TouchableOpacity onPress={() => setPickerVisible(true)}>
+                            <Feather name="clock" size={32} color="#7F8B82" />
+                          </TouchableOpacity>
+                      )}
+                  </View>
+              </View>
+          )}
+      </AnimatedCircularProgress>
+
+      <TimerPickerModal
+          padWithNItems={2}
+          visible={isPickerVisible}
+          setIsVisible={setPickerVisible}
+          onConfirm={(pickedDuration) => {
+              setDuration(changeToSec(pickedDuration));
+              setSeconds(changeToSec(pickedDuration));
+              setPickerVisible(false);
+          }}
+          hideSeconds
+          modalTitle="Set Timer:"
+          onCancel={() => setPickerVisible(false)}
+          closeOnOverlayPress
+          LinearGradient={LinearGradient}
+          maximumSeconds={0}
+          minuteInterval={1}
+          maximumHours={8}
+          styles={{
+              confirmButton: styles.confirmButton,
+              cancelButton: styles.cancelButton,
+              pickerItem: {
+                  fontSize: 34,
+              },
+              pickerLabel: {
+                  fontSize: 26,
+                  right: -30,
+              },
+              pickerLabelContainer: {
+                  width: 60,
+              },
+          }}
+          modalProps={{
+              overlayOpacity: 0.2,
+          }}
+      >
+        <View style={styles.circle} />
+      </TimerPickerModal>
     </View>
   );
 }
@@ -178,11 +209,21 @@ const styles = StyleSheet.create({
   confirmButton: {
     backgroundColor: '#4db8ff',
     borderColor: '#4db8ff',
-    color: 'white'
+    color: 'white',
+    fontWeight: 'extrabold',
+    fontWeight: 700, 
+    fontSize: 17,
+    width: 120,
+    textAlign: 'center',
   },
   cancelButton: {
     backgroundColor: '#e0e0e0',
     borderColor: '#e0e0e0',
-    color: 'black',
-  }
+    color: '#7F8B82',
+    fontWeight: 'extrabold',
+    fontWeight: 700, 
+    fontSize: 17,
+    width: 120,
+    textAlign: 'center',
+  },
 });

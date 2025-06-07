@@ -57,7 +57,7 @@ const BottomTabBar = ({ state, descriptors, navigation, isExpanded }) => {
           if (isRunning) {
             Alert.alert(
                     "Timer is running",
-                    "You can't switch tabs while the timer is active."
+                    "You can't switch tabs while the timer is active"
             );
           } else if (!isFocused && !event.defaultPrevented) {
             navigation.navigate(route.name, route.params);
