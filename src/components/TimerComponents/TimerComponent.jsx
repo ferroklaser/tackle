@@ -61,6 +61,7 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
 
   return (
     <View style={styles.container}>
+        <View style={styles.circle} />
         <AnimatedCircularProgress
         size={300}
         width={18}
@@ -68,6 +69,7 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
         tintColor="#4db8ff"
         backgroundColor="#e0e0e0"
         rotation={360}
+        style={styles.progress}
         >
             {() => (
                 <View key={seconds} style={styles.innerContent}>
@@ -139,9 +141,23 @@ export default Timer;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
     alignItems: 'center',
-    paddingTop: '50%',
+    marginTop: '50%'
+  },
+  circle: {
+    position: 'absolute',
+    width: 320,
+    height: 320,
+    borderRadius: 160, 
+    backgroundColor: 'white',
+    zIndex: 0,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+  },
+  progress: {
+    marginTop: 10,
   },
   innerContent: {
     alignItems: 'center',

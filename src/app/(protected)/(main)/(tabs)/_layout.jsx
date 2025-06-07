@@ -1,15 +1,17 @@
-import { View, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native'
+import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import { Tabs } from 'expo-router'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import BottomTabBar from '../../../../components/BottomTabBar'
 import ToggleMenuButton from '../../../../components/ToggleMenuButton'
-
 
 const Layout = () => {
 	const [isExpanded, setIsExpanded] = useState(false);
 
 	function toggleExpandHandler() {
 		setIsExpanded(true);
+		setTimeout(() => {
+			toggleCloseHandler();
+		}, 20000)
 	}
 
 	function toggleCloseHandler() {
@@ -35,6 +37,7 @@ const Layout = () => {
 					<Tabs.Screen name="manager" options={{ title: 'Task Manager' }} />
 					<Tabs.Screen name="inventory" options={{ title: 'Inventory' }} />
 				</Tabs>
+
 				{!isExpanded && ( 
 					<ToggleMenuButton
 					onPress={toggleExpandHandler}
