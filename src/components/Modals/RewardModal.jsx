@@ -1,39 +1,38 @@
-import { StyleSheet, Text, View, Button } from 'react-native'
+import { StyleSheet, Text, View, Image } from 'react-native'
 import React from 'react'
 import Modal from 'react-native-modal'
-import { Video } from 'expo-av'
 import GradientButton from '../GradientButton'
 
-const RewardModal = ({isModalVisible = false, setModalVisible}) => {
+const RewardModal = ({isModalVisible = false, setModalVisible, reward = 100}) => {
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
     };
 
     return (
-        <View style={{flex: 1, position: 'absolute'}}>
-
-        <Modal isVisible={isModalVisible}>
-            <View style={styles.modalContainer}>
-                <GradientButton 
-                title="Confirm"
-                colours={['#58C7E5', '#8FBBF5']}
-                buttonStyle={styles.button}
-                textStyle={styles.buttonText}
-                onPress={toggleModal}
-                ></GradientButton>
-            </View>
-            {/* <Video
-                source={require('../../assets/videos/creationBackground.mp4')}
-                rate={1.0}
-                volume={1.0}
-                isMuted={true}
-                resizeMode="cover"
-                shouldPlay
-                isLooping
-                style={StyleSheet.absoluteFill}
-            /> */}
-        </Modal>
+        <View style={styles.container}>
+            <Modal 
+            isVisible={isModalVisible}
+            style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <Image
+                    source={require('../../assets/gifs/Reward.gif')}
+                    style={styles.gif}
+                />
+                
+                <View style={styles.modalContainer}>
+                    <View style={styles.textContainer}>
+                        <Text style={styles.title}>Congratulations!</Text>
+                        <Text style={styles.body}>You have been awarded {reward} coins for this focus session.</Text>
+                    </View>
+                    <GradientButton 
+                    title="Confirm"
+                    colours={['#58C7E5', '#58C7E5']}
+                    buttonStyle={styles.button}
+                    textStyle={styles.buttonText}
+                    onPress={toggleModal}
+                    ></GradientButton>
+                </View>
+            </Modal>
         </View>
     );
 }
@@ -41,10 +40,18 @@ const RewardModal = ({isModalVisible = false, setModalVisible}) => {
 export default RewardModal
 
 const styles = StyleSheet.create({
-    modalContainer : {
+    container : {
         flex: 1,
+        position: 'absolute',
+    },
+    modalContainer : {
         alignItems: 'center',
         justifyContent: 'center', 
+        backgroundColor: 'white',
+        borderRadius: 10,
+        height: 170,
+        width: 300,
+        marginTop: "50%",
     },
     button: {
         padding: 15,
@@ -52,10 +59,29 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
     },
+    textContainer: {
+        alignItems: 'center',
+        justifyContent: 'center', 
+        backgroundColor: 'white',
+        paddingBottom: 10,
+    },
+    title: {
+        fontWeight: 700, 
+        fontSize: 17,
+    },
+    body: {
+        textAlign: 'center',
+        padding: 10,
+    },
     buttonText: {
         fontWeight: 'extrabold',
         fontWeight: 700,
         fontSize: 12,
         color: 'white',
     },
+     gif: {
+        width: 350, 
+        height: 750,
+        position: 'absolute',
+    }
 })
