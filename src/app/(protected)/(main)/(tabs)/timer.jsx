@@ -1,27 +1,47 @@
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, ImageBackground } from 'react-native'
 import TimerComponent from '../../../../components/TimerComponents/TimerComponent'
 import { useTimer } from '../../../../contexts/TimerContext';
+import { useState, useEffect } from 'react';
+import { Asset } from 'expo-asset';
+import LoadingSplash from '../../../../components/LoadingSplash.jsx';
 
 const timer = () => {
   const { isRunning, setIsRunning } = useTimer();
+  let [isLoaded, setIsLoaded] = useState(false);
+
+  
+    let cacheResources = async() => {
+      const promiseReward = Asset.fromModule(require('../../../../assets/gifs/Reward.gif')).downloadAsync();
+      const promiseBG = Asset.fromModule(require('../../../../assets/Backgrounds/TimerBG.png')).downloadAsync();
+  
+      await Promise.all([promiseReward, promiseBG]);
+      setIsLoaded(true);
+    }
+    
+    useEffect(() => {
+        const loadResources = async() => {
+        await cacheResources();
+        };
+  
+        loadResources();
+    }, [])
+  
+    if (!isLoaded) {
+        return (
+        <LoadingSplash />
+        );
+    }
 
   return (
-    <View style={styles.container}>
-      {/* <Video
-        source={require('../../../assets/videos/creationBackground.mp4')}
-        rate={1.0}
-        volume={1.0}
-        isMuted={true}
-        resizeMode="cover"
-        shouldPlay
-        isLooping
-        style={StyleSheet.absoluteFill}
-      /> */}
-
-      <View style={ styles.component }>
-        <TimerComponent isRunning={isRunning} setIsRunning={setIsRunning} />
-      </View>
-    </View>
+    <ImageBackground 
+            source = {require('../../../../assets/Backgrounds/TimerBG.png')}
+            style={styles.container}
+            resizeMode="cover">
+              <View style={ styles.component }>
+                <TimerComponent isRunning={isRunning} setIsRunning={setIsRunning} />
+              </View>
+            </ImageBackground>
+    
   )
 }
 

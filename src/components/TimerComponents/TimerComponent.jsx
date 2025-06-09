@@ -1,25 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, AppState} from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { Ionicons, Feather } from '@expo/vector-icons';
-import * as Font from 'expo-font';
 import { useFonts } from 'expo-font';
 import { TimerPickerModal } from "react-native-timer-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import RewardModal from '../Modals/RewardModal';
-import { CancelButton } from 'react-native-modal-datetime-picker'; //if we want a cancel button on timer modal
 
 const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
   const [isPickerVisible, setPickerVisible] = useState(false);
   const [duration, setDuration] = useState(startingDuration);
   const [seconds, setSeconds] = useState(duration);
   const [isRewardVisible, setRewardVisible] = useState(false);
+  const [reward, setReward] = useState(0);
   const intervalRef = useRef(null);
+  const appState = useRef(AppState.currentState || "active");
   
   const [fontsLoaded] = useFonts({
     RobotoMono: require('../../assets/fonts/RobotoMono.ttf'),
   });
 
+  //timer function
   useEffect(() => {
     if (isRunning) {
       intervalRef.current = setInterval(() => {
@@ -27,7 +28,7 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
           if (prev <= 1) {
             clearInterval(intervalRef.current);
             setIsRunning(false);
-            handleReward();
+            handleRewardBonus();
             return 0;
           }
           return prev - 1;
@@ -35,6 +36,31 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
       }, 1000);
     }
     return () => clearInterval(intervalRef.current);
+  }, [isRunning]);
+
+  //pause alert when leaving the app
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      console.log(isRunning);
+      if (!isRunning) return;
+      if (appState.current == "active" && nextAppState.match(/inactive|background/)) {
+        handlePause();
+        Alert.alert(
+          "Timer paused", 
+          "The timer was paused while you were away. Stay on the app to keep it running",
+          [
+            {
+              text: "Resume",
+              onPress: () => {},
+              style: "cancel", 
+            },
+          ]
+        )
+        handlePlay();
+      }
+      appState.current = nextAppState;
+    });
+    return () => subscription.remove();
   }, [isRunning]);
 
   const handlePause = () => setIsRunning(false);
@@ -48,10 +74,45 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
     }
   }
   const handleStop = () => {
-    setIsRunning(false);
-    setSeconds(duration);
+    if (duration != 0 && seconds != 0 && duration != seconds) {
+      Alert.alert(
+        "Warning",
+        "Are you sure you want to stop the timer? You will not receive any bonus rewards from this focus session",
+        [
+          {
+            text: "Resume",
+            onPress: () => {},
+            style: "cancel", 
+          },
+          {
+            text: "Stop",
+            onPress: () => {
+              handleRewardNoBonus();
+              setIsRunning(false);
+              setSeconds(duration);
+            },
+            style: "destructive",
+          },
+        ]
+      );
+    } else {
+      Alert.alert(
+        'Warning',
+        'The timer is not running.')
+    }
   };
-  const handleReward = () => {
+
+  //adjust coins calculations here
+  //Bonus is 20% of coins earned for now
+  const handleRewardBonus = () => {
+    const coins = duration/100 * 0.2 + duration/100;
+    setReward(Math.floor(coins));
+    setRewardVisible(true);
+  }
+
+  const handleRewardNoBonus = () => {
+    const coins = (duration - seconds)/100;
+    setReward(Math.floor(coins));
     setRewardVisible(true);
   }
 
@@ -69,13 +130,13 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
   };
 
   const fill = duration == 0 ? 0 : seconds / duration * 100;
-  console.log(fill); 
 
   return (
     <View style={styles.container}>
       <RewardModal 
       isModalVisible={isRewardVisible} 
       setModalVisible={setRewardVisible}
+      reward={reward}
       />
       
       <View style={styles.circle} />
@@ -147,11 +208,11 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
               confirmButton: styles.confirmButton,
               cancelButton: styles.cancelButton,
               pickerItem: {
-                  fontSize: 34,
+                  fontSize: 28,
               },
               pickerLabel: {
-                  fontSize: 26,
-                  right: -30,
+                  fontSize: 22,
+                  right: -35,
               },
               pickerLabelContainer: {
                   width: 60,
@@ -173,7 +234,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    marginTop: '50%'
+    marginTop: '45%'
   },
   circle: {
     position: 'absolute',
