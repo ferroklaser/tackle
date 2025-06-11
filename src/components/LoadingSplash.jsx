@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { Link } from 'expo-router'
 
-const index = () => {
+const LoadingSplash = () => {
   return (
     <View style={ styles.title }>
       <Text>Loading...</Text>
@@ -10,7 +10,7 @@ const index = () => {
   )
 }
 
-export default index
+export default LoadingSplash
 
 const styles = StyleSheet.create({
     title: {

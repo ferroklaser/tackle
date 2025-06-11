@@ -201,8 +201,7 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
           onCancel={() => setPickerVisible(false)}
           closeOnOverlayPress
           LinearGradient={LinearGradient}
-          maximumSeconds={0}
-          minuteInterval={1}
+          minuteInterval={5}
           maximumHours={8}
           styles={{
               confirmButton: styles.confirmButton,

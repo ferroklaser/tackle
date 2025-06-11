@@ -54,10 +54,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     zIndex: 20,
 
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 4 },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 4,
   },
   Button: {
     marginTop: 30,
