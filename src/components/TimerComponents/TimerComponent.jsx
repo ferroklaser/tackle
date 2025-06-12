@@ -43,7 +43,6 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
     const subscription = AppState.addEventListener('change', nextAppState => {
       if (!isRunning) return;
       else {
-        console.log('successfully entered');
         handlePause();
         Alert.alert(
           "Timer paused", 
@@ -271,23 +270,21 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   confirmButton: {
-    backgroundColor: '#4db8ff',
-    borderColor: '#4db8ff',
+    backgroundColor: '#58C7E5',
+    borderWidth: 0,
     color: 'white',
-    fontWeight: 'extrabold',
     fontWeight: 700, 
-    fontSize: 17,
-    width: 120,
+    fontSize: 15,
+    width: 110,
     textAlign: 'center',
   },
   cancelButton: {
     backgroundColor: '#e0e0e0',
-    borderColor: '#e0e0e0',
+    borderWidth: 0,
     color: '#7F8B82',
-    fontWeight: 'extrabold',
     fontWeight: 700, 
-    fontSize: 17,
-    width: 120,
+    fontSize: 15,
+    width: 110,
     textAlign: 'center',
   },
 });

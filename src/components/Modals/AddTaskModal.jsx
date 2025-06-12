@@ -1,30 +1,33 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native'
 import {useState} from 'react'
 import Modal from 'react-native-modal'
 import GradientButton from '../GradientButton'
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig'
-import { collection, addDoc} from 'firebase/firestore';
+import { collection, addDoc } from 'firebase/firestore';
+import PillInput from '../PillInput'
 
 const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
     const currentUser = FIREBASE_AUTH.currentUser;
-    const [title, setTitle] = useState('Read a book');
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const [duration, setDuration] = useState(3600);
     const [priority, setPriority] = useState('High');
-    const [deadline, setDeadline] = useState('2025-06-15');
+    const [deadline, setDeadline] = useState('2025-06-11');
     const [color, setColor] = useState('#BBE9FB');
 
     // test task
     const task = {
         title,
+        description,
         duration,
-        completed: 600,
+        completed: 0,
         priority,
         deadline,
         color,
         createdAt: new Date(),
     };
 
-    const toggleModal = async () => {
+    const addTask = async () => {
         try {
             setModalVisible(false);
             await addDoc(
@@ -42,23 +45,51 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
         }
     };
 
+    const cancelAddTask = () => {
+        setModalVisible(false);
+    }
+
     return (
         <View style={styles.container}>
-            <Modal 
-            isVisible={isModalVisible}
-            style={{ justifyContent: 'center', alignItems: 'center' }}>
-                
-                <View style={styles.modalContainer}>
-                    <GradientButton 
-                    title="Confirm"
-                    colours={['#58C7E5', '#58C7E5']}
-                    buttonStyle={styles.button}
-                    textStyle={styles.buttonText}
-                    onPress={toggleModal}
-                    ></GradientButton>
-                </View>
-            </Modal>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <Modal 
+                isVisible={isModalVisible}
+                avoidKeyboard={true}>
+                    <View style={[styles.modalContainer, { backgroundColor: color }]}>
+                        <PillInput 
+                        value={title}
+                        onChangeText={setTitle}
+                        prompt="Title"/>
+
+                        <PillInput
+                        value={description}
+                        onChangeText={setDescription}
+                        prompt="Description"
+                        height={100}/>
+
+                        <View style={styles.buttonsRow}>
+                            <GradientButton
+                            title="Cancel"
+                            colours={['#F5F5F5', '#F5F5F5']}
+                            buttonStyle={styles.button}
+                            textStyle={styles.cancelText}
+                            onPress={cancelAddTask}
+                            />
+
+                            <GradientButton
+                            title="Confirm"
+                            colours={['#58C7E5', '#58C7E5']}
+                            buttonStyle={styles.button}
+                            textStyle={styles.confirmText}
+                            onPress={addTask}
+                            />
+                        </View>
+                            
+                    </View>
+                </Modal>
+            </TouchableWithoutFeedback>
         </View>
+        
     );
 }
 
@@ -71,10 +102,16 @@ const styles = StyleSheet.create({
     },
     modalContainer : {
         alignItems: 'center',
-        justifyContent: 'center', 
-        backgroundColor: 'white',
-        height: 170,
-        width: 300,
+        justifyContent: 'space-between',
+        width: '100%',
+        paddingVertical: 20,
+        
+        paddingHorizontal: 15,
+    },
+    buttonsRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 10,
     },
     button: {
         padding: 15,
@@ -82,10 +119,14 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
     },
-    buttonText: {
-        fontWeight: 'extrabold',
+    confirmText: {
         fontWeight: 700,
         fontSize: 12,
         color: 'white',
     },
+    cancelText: {
+        fontWeight: 700,
+        fontSize: 12,
+        color: '#7F8B82',
+    }
 })
