@@ -13,7 +13,7 @@ const TaskList = () => {
 
         const tasksRef = collection(
         FIREBASE_DATABASE,
-        'userTackComponent',
+        'userTasks',
         user.uid,
         'tasks'
         );

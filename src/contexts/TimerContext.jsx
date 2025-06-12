@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from 'react';
 
 const TimerContext = createContext({
   isRunning: false,
-  setIsRunning: () => {},
+  setIsRunning: () => {console.log('wrong function used')},
 });
 
 export const useTimer = () => useContext(TimerContext);
