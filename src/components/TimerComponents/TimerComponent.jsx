@@ -41,9 +41,9 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
   //pause alert when leaving the app
   useEffect(() => {
     const subscription = AppState.addEventListener('change', nextAppState => {
-      console.log(isRunning);
       if (!isRunning) return;
-      if (appState.current == "active" && nextAppState.match(/inactive|background/)) {
+      else {
+        console.log('successfully entered');
         handlePause();
         Alert.alert(
           "Timer paused", 
@@ -51,17 +51,21 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
           [
             {
               text: "Resume",
-              onPress: () => {},
+              onPress: () => { handlePlay(); },
               style: "cancel", 
             },
           ]
         )
-        handlePlay();
       }
       appState.current = nextAppState;
     });
     return () => subscription.remove();
   }, [isRunning]);
+
+  // //debugging purposes -> check if running
+  // useEffect(() => {
+  //   console.log('isRunning changed:', isRunning);
+  // }, [isRunning]);
 
   const handlePause = () => setIsRunning(false);
   const handlePlay = () => {

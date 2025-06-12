@@ -30,7 +30,7 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
             await addDoc(
             collection(
                 FIREBASE_DATABASE,
-                'userTackComponent',
+                'userTasks',
                 currentUser.uid,
                 'tasks' // 👈 subcollection
             ),
