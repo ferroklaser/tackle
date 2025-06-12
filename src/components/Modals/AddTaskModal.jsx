@@ -5,6 +5,7 @@ import GradientButton from '../GradientButton'
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig'
 import { collection, addDoc } from 'firebase/firestore';
 import PillInput from '../PillInput'
+import ColorPicker from '../ColorPicker'
 
 const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
     const currentUser = FIREBASE_AUTH.currentUser;
@@ -66,6 +67,8 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
                         onChangeText={setDescription}
                         prompt="Description"
                         height={100}/>
+
+                        <ColorPicker setColor={setColor}/>
 
                         <View style={styles.buttonsRow}>
                             <GradientButton
