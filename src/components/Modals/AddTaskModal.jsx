@@ -55,6 +55,7 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <Modal 
                 isVisible={isModalVisible}
+                onBackdropPress={Keyboard.dismiss}
                 avoidKeyboard={true}>
                     <View style={[styles.modalContainer, { backgroundColor: color }]}>
                         <PillInput 
