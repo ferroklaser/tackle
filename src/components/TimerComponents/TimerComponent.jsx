@@ -3,7 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert, AppState} from 'react-
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
-import { TimerPickerModal } from "react-native-timer-picker";
+// import { TimerPickerModal } from "react-native-timer-picker"; //delete later
+import DurationPicker from '../Modals/DurationPicker';
 import { LinearGradient } from "expo-linear-gradient";
 import RewardModal from '../Modals/RewardModal';
 
@@ -126,12 +127,6 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
     return `${hrs}:${mins}:${secs}`;
   };
 
-  const changeToSec = ({ hours, minutes }) => {
-    const totalSecs = hours * 3600 + minutes * 60;
-
-    return totalSecs;
-  };
-
   const fill = duration == 0 ? 0 : seconds / duration * 100;
 
   return (
@@ -189,43 +184,12 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
               </View>
           )}
       </AnimatedCircularProgress>
-
-      <TimerPickerModal
-          padWithNItems={2}
-          visible={isPickerVisible}
-          setIsVisible={setPickerVisible}
-          onConfirm={(pickedDuration) => {
-              setDuration(changeToSec(pickedDuration));
-              setSeconds(changeToSec(pickedDuration));
-              setPickerVisible(false);
-          }}
-          hideSeconds
-          modalTitle="Set Timer:"
-          onCancel={() => setPickerVisible(false)}
-          closeOnOverlayPress
-          LinearGradient={LinearGradient}
-          minuteInterval={5}
-          maximumHours={8}
-          styles={{
-              confirmButton: styles.confirmButton,
-              cancelButton: styles.cancelButton,
-              pickerItem: {
-                  fontSize: 28,
-              },
-              pickerLabel: {
-                  fontSize: 22,
-                  right: -35,
-              },
-              pickerLabelContainer: {
-                  width: 60,
-              },
-          }}
-          modalProps={{
-              overlayOpacity: 0.2,
-          }}
-      >
-        <View style={styles.circle} />
-      </TimerPickerModal>
+      
+      <DurationPicker 
+      isModalVisible={isPickerVisible} 
+      setModalVisible={setPickerVisible}
+      setSeconds={setSeconds}
+      setDuration={setDuration}/>
     </View>
   );
 }
