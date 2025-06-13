@@ -5,7 +5,7 @@ import GradientButton from '../GradientButton'
 import { Picker } from '@react-native-picker/picker';
 
 
-const DurationPicker = ({isModalVisible = false, setModalVisible, setDuration, setSeconds}) => {
+const TaskDurationPicker = ({isModalVisible = false, setModalVisible, setDuration}) => {
     const [selectedHour, setSelectedHour] = useState(0);
     const [selectedMinute, setSelectedMinute] = useState(0);
 
@@ -18,7 +18,6 @@ const DurationPicker = ({isModalVisible = false, setModalVisible, setDuration, s
     const handleConfirm = () => {
         const sec = changeToSec(selectedHour, selectedMinute);
         setDuration(sec);
-        setSeconds(sec);
         setModalVisible(!isModalVisible);
     };
 
@@ -42,20 +41,33 @@ const DurationPicker = ({isModalVisible = false, setModalVisible, setDuration, s
                             style={styles.picker}
                             onValueChange={(itemValue) => setSelectedHour(itemValue)}
                             >
-                            {[...Array(8)].map((_, i) => (
-                                <Picker.Item key={i} label={`${i} h`} value={i} />
-                            ))}
+                                {[...Array(25)].map((_, i) => (
+                                    <Picker.Item key={i} label={`${i} h`} value={i} />
+                                ))}
                             </Picker>
 
+                            {selectedHour == 24 ?
                             <Picker
                             selectedValue={selectedMinute}
                             style={styles.picker}
                             onValueChange={(itemValue) => setSelectedMinute(itemValue)}
                             >
-                            {Array.from({ length: 12 }, (_, i) => i * 5).map((min) => (
-                                <Picker.Item key={min} label={`${min} min`} value={min} />
-                            ))}
+                                {[0].map((min) => (
+                                    <Picker.Item key={min} label={`${min} min`} value={min} />
+                                ))}
                             </Picker>
+                            :
+                            <Picker
+                            selectedValue={selectedMinute}
+                            style={styles.picker}
+                            onValueChange={(itemValue) => setSelectedMinute(itemValue)}
+                            >
+                                {[0, 15, 30, 45].map((min) => (
+                                    <Picker.Item key={min} label={`${min} min`} value={min} />
+                                ))}
+                            </Picker>
+                            }
+
                         </View>
                         
                         <GradientButton 
@@ -73,7 +85,7 @@ const DurationPicker = ({isModalVisible = false, setModalVisible, setDuration, s
     );
 }
 
-export default DurationPicker
+export default TaskDurationPicker
 
 const styles = StyleSheet.create({
     container : {

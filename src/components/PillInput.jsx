@@ -1,23 +1,40 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
+import { StyleSheet, Text, TextInput, Touchable, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import { AntDesign } from '@expo/vector-icons';
 
-const PillInput = ({ onChangeText, value, placeholder, prompt = 'Title', height, haveInput = true, ...props}) => {
+const PillInput = ({ 
+  onChangeText, 
+  value, 
+  placeholder, 
+  prompt = 'Title',
+  height,
+  width,
+  textDropdown,
+  handleDropdown,
+  haveDropdown = false,
+  ...props}) => {
   return (
     <View style={styles.container}>
       <Text style={{fontWeight: 'bold'}}>{prompt}:</Text>
-      {haveInput &&
-        <View style={ styles.input }>
+        <View style={[ styles.input, {width: width} ]}>
+          {haveDropdown ?
+          <TouchableOpacity onPress={handleDropdown}>
+            <View style={styles.row}>
+              <Text>{textDropdown}</Text>
+              <AntDesign name={'caretdown'} size={20} color={'#D9D9D9'}></AntDesign>
+            </View>
+          </TouchableOpacity>
+          :
           <TextInput 
             value={value} 
             placeholder={placeholder} 
             onChangeText={onChangeText}
             autoCapitalize='none'
             height={height}
-            multiline
-            numberOfLines={4}
             {...props}/>
+          }
+          
         </View>
-      }
     </View>
     
   )
@@ -36,5 +53,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
     borderRadius: 15,
     textAlignVertical: 'top',
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 })

@@ -3,9 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert, AppState} from 'react-
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
-// import { TimerPickerModal } from "react-native-timer-picker"; //delete later
 import DurationPicker from '../Modals/DurationPicker';
-import { LinearGradient } from "expo-linear-gradient";
 import RewardModal from '../Modals/RewardModal';
 
 const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
