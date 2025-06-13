@@ -34,7 +34,7 @@ const DeadlinePicker = ({isModalVisible = false, setModalVisible, setDeadline}) 
     }, [selectedMonth, selectedYear]);
 
     const handleConfirm = () => {
-        const selectedDate = new Date(selectedYear, selectedMonth - 1, selectedDay);
+        const selectedDate = new Date(selectedYear, selectedMonth - 1, selectedDay + 1);
         const now = new Date();
 
         if (selectedDate >= now.setHours(0, 0, 0, 0)) {

@@ -8,6 +8,7 @@ import PillInput from '../PillInput'
 import ColorPicker from '../ColorPicker'
 import TaskDurationPicker from './TaskDurationPicker'
 import DeadlinePicker from './DeadlinePicker'
+import PriorityModal from './PriorityModal'
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -23,11 +24,12 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [duration, setDuration] = useState(0);
-    const [priority, setPriority] = useState('High');
+    const [priority, setPriority] = useState('Low');
     const [deadline, setDeadline] = useState(new Date().toISOString().split('T')[0]);
-    const [color, setColor] = useState('#BBE9FB');
+    const [color, setColor] = useState('#FFEA8A');
     const [durationModal, setDurationModal] = useState(false);
     const [deadlineModal, setDeadlineModal] = useState(false);
+    const [priorityModal, setPriorityModal] = useState(false);
 
     // test task
     const task = {
@@ -41,9 +43,20 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
         createdAt: new Date(),
     };
 
+    const reset = () => {
+        setTitle('');
+        setDescription('');
+        setDuration(0);
+        setPriority('Low')
+        setDeadline(new Date().toISOString().split('T')[0]);
+        setColor('#BBE9FB');
+    }
+
     const addTask = async () => {
         if (duration == 0) {
             Alert.alert('Warning', 'The estimated duration of your task cannot be 0')
+        } else if (title == '') {
+            Alert.alert('Warning', 'Title cannot be empty')
         } else {
             try {
                 setModalVisible(false);
@@ -57,6 +70,7 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
                 task
                 );
                 console.log('Task added');
+                reset();
             } catch (error) {
                 console.error('Error adding task:', error);
             }
@@ -64,6 +78,7 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
     };
 
     const cancelAddTask = () => {
+        reset();
         setModalVisible(false);
     }
 
@@ -83,8 +98,7 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <Modal 
                 isVisible={isModalVisible}
-                onBackdropPress={Keyboard.dismiss}
-                avoidKeyboard={true}>
+                onBackdropPress={Keyboard.dismiss}>
                     <TaskDurationPicker
                     isModalVisible={durationModal}
                     setModalVisible={setDurationModal}
@@ -94,6 +108,11 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
                     isModalVisible={deadlineModal}
                     setModalVisible={setDeadlineModal}
                     setDeadline={setDeadline}/>
+                    
+                    <PriorityModal
+                    isModalVisible={priorityModal}
+                    setModalVisible={setPriorityModal}
+                    setPriority={setPriority}/>
 
                     <View style={[styles.modalContainer, { backgroundColor: color }]}>
                         <PillInput 
@@ -105,6 +124,7 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
                         value={description}
                         onChangeText={setDescription}
                         prompt="Description"
+                        multiline={true}
                         height={60}/>
 
                         <PillInput
@@ -117,6 +137,12 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
                         prompt='Deadline'
                         textDropdown={formatDate(deadline)}
                         handleDropdown={() => setDeadlineModal(true)}
+                        haveDropdown={true}/>
+
+                        <PillInput
+                        prompt='Priority'
+                        textDropdown={priority}
+                        handleDropdown={() => setPriorityModal(true)}
                         haveDropdown={true}/>
 
                         <ColorPicker setColor={setColor}/>
