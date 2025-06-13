@@ -10,6 +10,10 @@ const TabContainer = () => {
             'Doodle': require('../../assets/fonts/doodle.ttf')
         });
     const [activeTab, setActiveTab] = useState('Pattern');
+
+    const handleTabPress = (title) => {
+        setActiveTab(title);
+    }
     
     if (!fontsLoaded) {
         return <LoadingSplash />
@@ -18,16 +22,16 @@ const TabContainer = () => {
     return (
         <View style={styles.container}>
             <View style={{ flexDirection: 'row' }}>
-                <TouchableOpacity title='Pattern' style={[styles.tabHeader, styles.pattern]} onPress={() => setActiveTab('Pattern')}>
+                <TouchableOpacity title='Pattern' style={[styles.tabHeader, styles.pattern, activeTab === "Pattern" && styles.shadow]} onPress={() => handleTabPress("Pattern")} activeOpacity={0.6}>
                     <Text style={styles.header}>Pattern</Text>
                 </TouchableOpacity>
-                <TouchableOpacity title='Eyes' style={[styles.tabHeader, styles.eyes]} onPress={() => setActiveTab('Eyes')}>
+                <TouchableOpacity title='Eyes' style={[styles.tabHeader, styles.eyes, activeTab === "Eyes" && styles.shadow]} onPress={() => handleTabPress("Eyes")} activeOpacity={0.6}>
                     <Text style={styles.header}>Eyes</Text>
                 </TouchableOpacity>
-                <TouchableOpacity title='Mouth' style={[styles.tabHeader, styles.mouth]} onPress={() => setActiveTab('Mouth')}>
+                <TouchableOpacity title='Mouth' style={[styles.tabHeader, styles.mouth, activeTab === "Mouth" && styles.shadow]} onPress={() => handleTabPress("Mouth")} activeOpacity={0.6}>
                     <Text style={styles.header}>Mouth</Text>
                 </TouchableOpacity>
-                <TouchableOpacity title='Accessories' style={[styles.tabHeader, styles.accessories]} onPress={() => setActiveTab('Accessories')}>
+                <TouchableOpacity title='Accessories' style={[styles.tabHeader, styles.accessories, activeTab === "Accessories" && styles.shadow]} onPress={() => handleTabPress("Accessories")} activeOpacity={0.6}>
                     <Text style={styles.header}>Accessories</Text>
                 </TouchableOpacity>
             </View>
@@ -47,12 +51,12 @@ const styles = StyleSheet.create({
     },
     tabHeader: {
         flex: 1,
-        backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
         padding: 10,
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
+        marginHorizontal: 2,
     },
     header: {
         fontFamily: 'Doodle',
@@ -69,5 +73,12 @@ const styles = StyleSheet.create({
     },
     accessories: {
         backgroundColor: '#CBFAB5'
+    },
+    shadow: {
+        shadowColor: '#000',
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+        elevation: 5, 
     }
 })
