@@ -1,10 +1,51 @@
-import { StyleSheet, Text, View, TouchableOpacity, Touchable } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native'
+import { useState } from 'react'
 import ProgressBar from '../ProgressBar'
 import { FontAwesome, MaterialIcons, Fontisto, MaterialCommunityIcons } from '@expo/vector-icons';
+import { doc, deleteDoc } from 'firebase/firestore';
+import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig';
+import EditTaskModal from '../Modals/EditTaskModal';
 
 const TaskComponent = ({task}) => {
   const isOverdue = new Date(task.deadline) < new Date();
+  const [editModal, setEditModal] = useState(false);
+
+  const handleEdit = () => {
+    setEditModal(true);
+  }
+
+  const handleDelete = () => {
+    Alert.alert('Warning', 'You are about to delete a task. Would you like to proceed?',
+      [
+        {
+          text: "Cancel",
+          onPress: () => {},
+          style: "cancel", 
+        },
+        {
+          text: "Delete",
+          onPress: async() => {
+            try {
+              const user = FIREBASE_AUTH.currentUser;
+              if (!user) return;
+
+              const taskRef = doc(
+                FIREBASE_DATABASE,
+                'userTasks',
+                user.uid,
+                'tasks',
+                task.id
+              );
+              await deleteDoc(taskRef);
+            } catch (error) {
+              console.error('Failed to delete task:', error);
+            }
+          },
+          style: "destructive",
+        }
+      ]
+    )
+  };
   
   return (
     <View 
@@ -20,6 +61,12 @@ const TaskComponent = ({task}) => {
       shadowRadius: 4,
       justifyContent: 'space-between',
       backgroundColor: task.color}}>
+
+      <EditTaskModal
+      taskRef={task}
+      isModalVisible={editModal} 
+      setModalVisible={setEditModal}/>
+
       <Text style={styles.title}>Title: {task.title}</Text>
       <View style={styles.line} />
       <ProgressBar total={task.duration} completed={task.completed}/>
@@ -33,10 +80,10 @@ const TaskComponent = ({task}) => {
           <TouchableOpacity>
             <FontAwesome name="clock-o" size={20} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleEdit}>
             <MaterialIcons name="edit" size={20} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleDelete}>
             <FontAwesome name="trash" size={20} />
           </TouchableOpacity>
         </View>

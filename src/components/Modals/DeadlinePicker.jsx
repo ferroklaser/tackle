@@ -17,7 +17,10 @@ const getToday = () => {
   }
 }
 
-const DeadlinePicker = ({isModalVisible = false, setModalVisible, setDeadline}) => {
+const DeadlinePicker = ({
+    isModalVisible = false, 
+    setModalVisible, 
+    setDeadline}) => {
     const today = getToday();
 
     const [selectedYear, setSelectedYear] = useState(today.year);

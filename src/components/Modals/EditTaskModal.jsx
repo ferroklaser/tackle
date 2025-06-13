@@ -3,7 +3,7 @@ import {useState} from 'react'
 import Modal from 'react-native-modal'
 import GradientButton from '../GradientButton'
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig'
-import { collection, addDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import PillInput from '../PillInput'
 import ColorPicker from '../ColorPicker'
 import TaskDurationPicker from './TaskDurationPicker'
@@ -11,12 +11,11 @@ import DeadlinePicker from './DeadlinePicker'
 import PriorityModal from './PriorityModal'
 
 const formatDate = (dateString) => {
-  const [year, month, day] = dateString.split('-');
-  const date = new Date(year, month - 1, day); // JS months are 0-indexed
+  const date = new Date(dateString);
   return date.toLocaleDateString(undefined, {
     day: 'numeric',
     month: 'long',
-    year: 'numeric',
+    year: 'numeric'
   });
 };
 
@@ -30,38 +29,29 @@ const formatSeconds = (seconds) => {
     return '0 min';
 }
 
-const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
+const EditTaskModal = ({isModalVisible = false, setModalVisible, taskRef}) => {
     const currentUser = FIREBASE_AUTH.currentUser;
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [duration, setDuration] = useState(0);
-    const [priority, setPriority] = useState('Low');
-    const [deadline, setDeadline] = useState(new Date().toISOString().split('T')[0]);
-    const [color, setColor] = useState('#FFEA8A');
+    const [title, setTitle] = useState(taskRef.title);
+    const [description, setDescription] = useState(taskRef.description);
+    const [duration, setDuration] = useState(taskRef.duration);
+    const [priority, setPriority] = useState(taskRef.priority);
+    const [deadline, setDeadline] = useState(taskRef.deadline);
+    const [color, setColor] = useState(taskRef.color);
     const [durationModal, setDurationModal] = useState(false);
     const [deadlineModal, setDeadlineModal] = useState(false);
     const [priorityModal, setPriorityModal] = useState(false);
 
-    const task = {
+    const newTask = {
         title,
         description,
         duration,
-        completed: 0,
+        completed: taskRef.completed,
         priority,
         deadline,
         color,
-        createdAt: new Date(),
+        createdAt: taskRef.createdAt,
         lastEdited: new Date(),
     };
-
-    const reset = () => {
-        setTitle('');
-        setDescription('');
-        setDuration(0);
-        setPriority('Low')
-        setDeadline(new Date().toISOString().split('T')[0]);
-        setColor('#FFEA8A');
-    }
 
     const addTask = async () => {
         if (duration == 0) {
@@ -71,25 +61,32 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
         } else {
             try {
                 setModalVisible(false);
-                await addDoc(
-                collection(
+
+                if (!currentUser) return;
+                const ref = doc(
                     FIREBASE_DATABASE,
                     'userTasks',
                     currentUser.uid,
-                    'tasks' 
-                ),
-                task);
-                console.log('Task added');
-                reset();
+                    'tasks',
+                    taskRef.id
+                );
+
+                await updateDoc(ref, newTask);
+                console.log('Task editted');
             } catch (error) {
-                console.error('Failed to add task:', error);
+                console.error('Failed to edit task:', error);
             }
         }
     };
 
     const cancelAddTask = () => {
         setModalVisible(false);
-        reset();
+        setTitle(taskRef.title);
+        setDescription(taskRef.description);
+        setDuration(taskRef.duration);
+        setPriority(taskRef.priority)
+        setDeadline(taskRef.deadline);
+        setColor(taskRef.color);
     }
 
     return (
@@ -173,7 +170,7 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
     );
 }
 
-export default AddTaskModal
+export default EditTaskModal
 
 const styles = StyleSheet.create({
     container : {
