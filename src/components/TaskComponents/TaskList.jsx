@@ -30,7 +30,9 @@ const TaskList = () => {
     }, []);
 
     return (
-        <ScrollView style = {styles.scroll}>
+        <ScrollView style = {styles.scroll} 
+        showsVerticalScrollIndicator={true}
+        contentContainerStyle={{ flexGrow: 1 }}>
             {tasks.map(task => (
                 <TaskComponent key={task.id} task={task} />
             ))}

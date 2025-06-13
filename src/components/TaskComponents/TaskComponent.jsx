@@ -1,13 +1,15 @@
 import { StyleSheet, Text, View, TouchableOpacity, Touchable } from 'react-native'
 import React from 'react'
 import ProgressBar from '../ProgressBar'
-import { FontAwesome, MaterialIcons, Fontisto, MaterialCommunityIcons} from '@expo/vector-icons';
+import { FontAwesome, MaterialIcons, Fontisto, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const TaskComponent = ({task}) => {
   const isOverdue = new Date(task.deadline) < new Date();
   
   return (
-    <View style = {{
+    <View 
+      pointerEvents="box-none"
+      style = {{
       height: 170,
       marginHorizontal: 15,
       marginTop: 20,
@@ -16,7 +18,6 @@ const TaskComponent = ({task}) => {
       shadowOffset: { width: 0, height: 4 },
       shadowOpacity: 0.15,
       shadowRadius: 4,
-      // borderWidth: 1,
       justifyContent: 'space-between',
       backgroundColor: task.color}}>
       <Text style={styles.title}>Title: {task.title}</Text>
