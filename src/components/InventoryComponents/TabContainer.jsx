@@ -23,16 +23,16 @@ const TabContainer = () => {
         <View style={styles.container}>
             <View style={{ flexDirection: 'row' }}>
                 <TouchableOpacity title='Pattern' style={[styles.tabHeader, styles.pattern, activeTab === "Pattern" && styles.shadow]} onPress={() => handleTabPress("Pattern")} activeOpacity={0.6}>
-                    <Text style={styles.header}>Pattern</Text>
+                    <Text style={styles.header} numberOfLines={1} adjustsFontSizeToFit>Pattern</Text>
                 </TouchableOpacity>
                 <TouchableOpacity title='Eyes' style={[styles.tabHeader, styles.eyes, activeTab === "Eyes" && styles.shadow]} onPress={() => handleTabPress("Eyes")} activeOpacity={0.6}>
-                    <Text style={styles.header}>Eyes</Text>
+                    <Text style={styles.header} numberOfLines={1} adjustsFontSizeToFit>Eyes</Text>
                 </TouchableOpacity>
                 <TouchableOpacity title='Mouth' style={[styles.tabHeader, styles.mouth, activeTab === "Mouth" && styles.shadow]} onPress={() => handleTabPress("Mouth")} activeOpacity={0.6}>
-                    <Text style={styles.header}>Mouth</Text>
+                    <Text style={styles.header} numberOfLines={1} adjustsFontSizeToFit>Mouth</Text>
                 </TouchableOpacity>
                 <TouchableOpacity title='Accessories' style={[styles.tabHeader, styles.accessories, activeTab === "Accessories" && styles.shadow]} onPress={() => handleTabPress("Accessories")} activeOpacity={0.6}>
-                    <Text style={styles.header}>Accessories</Text>
+                    <Text style={styles.header} numberOfLines={1} adjustsFontSizeToFit>Accessories</Text>
                 </TouchableOpacity>
             </View>
             {activeTab == 'Pattern' && <ContentTab style={styles.pattern}></ContentTab>}
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     },
     header: {
         fontFamily: 'Doodle',
-        fontSize: 18
+        fontSize: 18,
     },
     pattern: {
         backgroundColor: '#FFEA8A'
