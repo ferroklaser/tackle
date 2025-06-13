@@ -7,6 +7,8 @@ import { FIREBASE_DATABASE, FIREBASE_AUTH } from '../../../../firebaseConfig'
 import Tack from '../../../../assets/Tack/index.js';
 import { Asset } from 'expo-asset';
 import { doc, getDoc } from 'firebase/firestore';
+import ContentTab from '../../../../components/InventoryComponents/ContentTab.jsx'
+import TabContainer from '../../../../components/InventoryComponents/TabContainer.jsx'
 
 const inventory = () => {
   const [userColour, setUserColor] = useState(null);
@@ -74,8 +76,7 @@ const inventory = () => {
           mouthOption={userMouth}
           accessoryOption={userAccessory}></CombinedTackAnimation>
       </View>
-      <View style={{ flex: 1 }}>
-      </View>
+      <TabContainer />
     </View>
   )
 }
