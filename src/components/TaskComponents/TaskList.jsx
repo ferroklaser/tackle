@@ -47,5 +47,6 @@ export default TaskList
 const styles = StyleSheet.create({
     list: {
         width: '100%',
+        zIndex: 100,
     },
 })

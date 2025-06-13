@@ -2,12 +2,15 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 const ProgressBar = ({ total, completed }) => {
-    const formatTime = (sec) => {
-        const hrs = String(Math.floor(sec / 3600)).padStart(2, '0');
-        const mins = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
-        const secs = String(sec % 60).padStart(2, '0');
-        return `${hrs}:${mins}:${secs}`;
-    };
+    const formatTime = (seconds) => {
+      const hrs = Math.floor(seconds / 3600);
+      const mins = Math.floor((seconds % 3600) / 60);
+
+      if (hrs > 0 && mins > 0) return `${hrs} hr ${mins} min`;
+      if (hrs > 0) return `${hrs} h`;
+      if (mins > 0) return `${mins} min`;
+      return '0 min';
+    }
 
     const durationFormat = formatTime(total);
     const completedFormat = formatTime(completed);
