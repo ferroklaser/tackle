@@ -2,12 +2,18 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import ContentTab from './ContentTab';
 import { useFonts } from 'expo-font';
+import LoadingSplash from '../LoadingSplash';
 
 const TabContainer = () => {
-    useFonts({
-        'Doodle': require('../../assets/fonts/doodle.ttf')});
-
+    const [fontsLoaded] =
+        useFonts({
+            'Doodle': require('../../assets/fonts/doodle.ttf')
+        });
     const [activeTab, setActiveTab] = useState('Pattern');
+    
+    if (!fontsLoaded) {
+        return <LoadingSplash />
+    }
 
     return (
         <View style={styles.container}>
