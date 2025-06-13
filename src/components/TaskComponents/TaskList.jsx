@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, FlatList } from 'react-native'
 import { useState, useEffect } from 'react'
 import TaskComponent from './TaskComponent'
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig'
@@ -30,20 +30,22 @@ const TaskList = () => {
     }, []);
 
     return (
-        <ScrollView style = {styles.scroll} 
+        <FlatList
+        style={styles.list}
+        data={tasks}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <TaskComponent task={item} />}
         showsVerticalScrollIndicator={true}
-        contentContainerStyle={{ flexGrow: 1 }}>
-            {tasks.map(task => (
-                <TaskComponent key={task.id} task={task} />
-            ))}
-        </ScrollView>
+        scrollEventThrottle={16}
+        contentContainerStyle={{ paddingBottom: 90 }}
+        />
     )
 }
 
 export default TaskList
 
 const styles = StyleSheet.create({
-    scroll: {
+    list: {
         width: '100%',
     },
 })

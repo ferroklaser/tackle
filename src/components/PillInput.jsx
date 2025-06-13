@@ -9,6 +9,7 @@ const PillInput = ({
   prompt = 'Title',
   height,
   width,
+  multiline = false,
   textDropdown,
   handleDropdown,
   haveDropdown = false,
@@ -31,6 +32,7 @@ const PillInput = ({
             onChangeText={onChangeText}
             autoCapitalize='none'
             height={height}
+            multiline={multiline}
             {...props}/>
           }
           
