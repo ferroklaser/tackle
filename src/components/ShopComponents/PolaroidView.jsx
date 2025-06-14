@@ -13,8 +13,11 @@ export default PolaroidView
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        flexWrap: "wrap",
-        padding: 20,
+        backgroundColor: "yellow",
+        borderWidth: 2,
+        borderColor: 'black',
+        height: '90%',
+        width: '30%',
+        margin: 20
     }
 })
