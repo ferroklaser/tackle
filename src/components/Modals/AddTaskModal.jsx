@@ -3,7 +3,7 @@ import {useState} from 'react'
 import Modal from 'react-native-modal'
 import GradientButton from '../GradientButton'
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig'
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import PillInput from '../PillInput'
 import ColorPicker from '../ColorPicker'
 import TaskDurationPicker from './TaskDurationPicker'
@@ -47,11 +47,12 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
         description,
         duration,
         completed: 0,
+        isComplete: false,
         priority,
         deadline,
+        deadlineStamp : Timestamp.fromDate(new Date(deadline)),
         color,
-        createdAt: new Date(),
-        lastEdited: new Date(),
+        createdAt: Timestamp.now(),
     };
 
     const reset = () => {

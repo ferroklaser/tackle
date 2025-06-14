@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native'
 import { useState } from 'react'
 import ProgressBar from '../ProgressBar'
 import { FontAwesome, MaterialIcons, Fontisto, MaterialCommunityIcons } from '@expo/vector-icons';
-import { doc, deleteDoc } from 'firebase/firestore';
+import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig';
 import EditTaskModal from '../Modals/EditTaskModal';
 
@@ -46,6 +46,30 @@ const TaskComponent = ({task}) => {
       ]
     )
   };
+
+  const toggleComplete = async () => {
+    if (task.completed == -1) {
+        Alert.alert('Warning', 'You have not started on this task yet. Press the timer button to begin.')
+    } else {
+        try {
+            const currentUser = FIREBASE_AUTH.currentUser;
+            const temp = task.isComplete;
+            if (!currentUser) return;
+            const ref = doc(
+                FIREBASE_DATABASE,
+                'userTasks',
+                currentUser.uid,
+                'tasks',
+                task.id
+            );
+
+            await updateDoc(ref, {isComplete : !temp});
+            console.log('Task complete toggled');
+        } catch (error) {
+            console.error('Failed to toggle complete task:', error);
+        }
+    }
+  }
   
   return (
     <View 
@@ -53,26 +77,28 @@ const TaskComponent = ({task}) => {
       style = {{
       height: 170,
       marginHorizontal: 15,
-      marginTop: 20,
+      marginTop: 5,
+      marginBottom: 10,
       padding: 12,
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 4 },
       shadowOpacity: 0.15,
       shadowRadius: 4,
       justifyContent: 'space-between',
-      backgroundColor: task.color}}>
+      backgroundColor: task.isComplete ? '#C7C7C7' : task.color
+      }}>
 
       <EditTaskModal
       taskRef={task}
       isModalVisible={editModal} 
       setModalVisible={setEditModal}/>
 
-      <Text style={styles.title}>Title: {task.title}</Text>
+      <Text style={task.isComplete ? styles.completeTitle : styles.title}>Title: {task.title}</Text>
       <View style={styles.line} />
       <ProgressBar total={task.duration} completed={task.completed}/>
       <View style={{flex: 1}}/>
-      <Text style={styles.body}>Priority: {task.priority}</Text>
-      <Text style={styles.body}>Deadline: {task.deadline}</Text>
+      <Text style={task.isComplete ? styles.completeBody : styles.body}>Priority: {task.priority}</Text>
+      <Text style={task.isComplete ? styles.completeBody : styles.body}>Deadline: {task.deadline}</Text>
 
       <View style={styles.iconRow}>
         <View style={styles.iconGroup}>
@@ -87,9 +113,15 @@ const TaskComponent = ({task}) => {
             <FontAwesome name="trash" size={20} />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity>
+
+        {task.isComplete ? 
+        <TouchableOpacity onPress={toggleComplete}>
+          <Fontisto name="checkbox-active" size={20}/>
+        </TouchableOpacity> :
+        <TouchableOpacity onPress={toggleComplete}>
           <Fontisto name="checkbox-passive" size={20}/>
         </TouchableOpacity>
+        }
       </View>
     </View>
   )
@@ -119,8 +151,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14, 
   },
+  completeTitle: {
+    color: "black",
+    textDecorationLine: "line-through",
+    fontWeight: 'bold',
+    fontSize: 14, 
+  },
   body: {
     marginTop: 7,
+    color: "black",
+    fontWeight: 'bold',
+    fontSize: 12, 
+  },
+  completeBody: {
+    marginTop: 7,
+    textDecorationLine: "line-through",
     color: "black",
     fontWeight: 'bold',
     fontSize: 12, 
