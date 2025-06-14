@@ -1,11 +1,31 @@
-import { View, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Image, Alert, Text } from 'react-native';
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTimer } from '../contexts/TimerContext';
+import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../firebaseConfig';
+import { doc, onSnapshot } from 'firebase/firestore';
 
 const TopNavBar = ( ) => {
   const [isBackable, setIsBackable] = useState(false);
   const {isRunning, setIsRunning} = useTimer();
+  const [numCoins, setNumCoins] = useState(0);
+
+  useEffect(() => {
+    const user = FIREBASE_AUTH.currentUser;
+    if (!user) return;
+
+    const docRef = doc(FIREBASE_DATABASE, 'userStats', user.uid);
+
+    const unsubscribe = onSnapshot(docRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.data();
+        console.log('Coins amount:', data.coins);
+        setNumCoins(data.coins)
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
   
   function handleWhileRunning() {
     Alert.alert(
@@ -40,6 +60,10 @@ const TopNavBar = ( ) => {
           />
         </TouchableOpacity>
       }
+      <View style={styles.pill}>
+        <Text style={styles.coin}>Coins: </Text>
+        <Text style={styles.coin}>{numCoins}</Text>
+      </View>
     </View>
   );
 };
@@ -51,6 +75,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFEA8A',
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 10,
     zIndex: 20,
 
@@ -67,6 +92,22 @@ const styles = StyleSheet.create({
     height: 40,
     resizeMode: 'contain',
   },
+  pill: {
+    marginTop: 30,
+    marginRight: 10,
+    backgroundColor: 'white',
+    padding: 10,
+    width: 125,
+    height: 40,
+    borderRadius: 62,
+    textAlignVertical: 'top',
+    justifyContent: 'space-between',
+    flexDirection: 'row'
+  },
+  coin: {
+    color: '#A8B7AB',
+    fontWeight: 'bold',
+  }
 });
 
 export default TopNavBar;

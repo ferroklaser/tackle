@@ -93,6 +93,10 @@ const CreationComponent = () => {
           mouth: currentMouth,
           accessory: currentAccessory,
         })
+
+        await setDoc(doc(FIREBASE_DATABASE, "userStats", FIREBASE_AUTH.currentUser.uid), {
+          coins: 0,
+        })
       
       } catch (error) {
         console.log(error);
