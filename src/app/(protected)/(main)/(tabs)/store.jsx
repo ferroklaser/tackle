@@ -1,10 +1,16 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import PolaroidView from '../../../../components/ShopComponents/PolaroidView'
 
 const store = () => {
   return (
     <View>
-      <Text>store</Text>
+      <PolaroidView/>
+      <PolaroidView/>
+      <PolaroidView/>
+      <PolaroidView/>
+      <PolaroidView/>
+      <PolaroidView/>
     </View>
   )
 }
