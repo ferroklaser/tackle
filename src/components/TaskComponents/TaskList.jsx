@@ -2,9 +2,9 @@ import { StyleSheet, Text, View, FlatList } from 'react-native'
 import { useState, useEffect } from 'react'
 import TaskComponent from './TaskComponent'
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig'
-import { collection, onSnapshot } from 'firebase/firestore'
+import { collection, query, where, onSnapshot, orderBy } from 'firebase/firestore'
 
-const TaskList = () => {
+const TaskList = ({ filter = {}, sort = 'createdAt' }) => {
     const [tasks, setTasks] = useState([]);
 
     useEffect(() => {
@@ -12,13 +12,30 @@ const TaskList = () => {
         if (!user) return;
 
         const tasksRef = collection(
-        FIREBASE_DATABASE,
-        'userTasks',
-        user.uid,
-        'tasks'
+            FIREBASE_DATABASE,
+            'userTasks',
+            user.uid,
+            'tasks'
         );
 
-        const unsubscribe = onSnapshot(tasksRef, snapshot => {
+        const filters = [];
+
+        if (filter.color) {
+            filters.push(where('color', '==', filter.color));
+        }
+        if (filter.priority) {
+            filters.push(where('priority', '==', filter.priority));
+        }
+        if (typeof filter.isComplete === 'boolean') {
+            filters.push(where('isComplete', '==', filter.isComplete));
+        }
+        if (sort) {
+            filters.push(orderBy(sort));
+        }
+
+        const q = query(tasksRef, ...filters);
+        
+        const unsubscribe = onSnapshot(q, (snapshot) => {
             const data = snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data(),
@@ -27,10 +44,11 @@ const TaskList = () => {
         });
 
         return () => unsubscribe();
-    }, []);
+    }, [filter, sort]);
 
     return (
         <FlatList
+        pointerEvents="auto"
         style={styles.list}
         data={tasks}
         keyExtractor={(item) => item.id}

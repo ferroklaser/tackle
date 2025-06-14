@@ -6,7 +6,9 @@ import TaskBar from '../../../../components/TaskComponents/TaskBar'
 import LoadingSplash from '../../../../components/LoadingSplash';
 
 const manager = () => {
-  let [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [filter, setFilter] = useState({});
+  const [sort, setSort] = useState('createdAt');
 
   let cacheResources = async() => {
     const promiseBG = Asset.fromModule(require('../../../../assets/Backgrounds/PaperTexture.png')).downloadAsync();
@@ -33,8 +35,8 @@ const manager = () => {
       <ImageBackground 
           source={require('../../../../assets/Backgrounds/PaperTexture.png')}
           style={ styles.background }>
-            <TaskBar/>
-            <TaskList/>
+            <TaskBar setFilter={setFilter} setSort={setSort}/>
+            <TaskList filter={filter} sort={sort}/>
       </ImageBackground>
   )
 }

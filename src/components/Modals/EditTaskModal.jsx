@@ -45,15 +45,12 @@ const EditTaskModal = ({isModalVisible = false, setModalVisible, taskRef}) => {
         title,
         description,
         duration,
-        completed: taskRef.completed,
         priority,
         deadline,
         color,
-        createdAt: taskRef.createdAt,
-        lastEdited: new Date(),
     };
 
-    const addTask = async () => {
+    const editTask = async () => {
         if (duration == 0) {
             Alert.alert('Warning', 'The estimated duration of your task cannot be 0')
         } else if (title == '') {
@@ -79,7 +76,7 @@ const EditTaskModal = ({isModalVisible = false, setModalVisible, taskRef}) => {
         }
     };
 
-    const cancelAddTask = () => {
+    const cancelEditTask = () => {
         setModalVisible(false);
         setTitle(taskRef.title);
         setDescription(taskRef.description);
@@ -150,7 +147,7 @@ const EditTaskModal = ({isModalVisible = false, setModalVisible, taskRef}) => {
                             colours={['#F5F5F5', '#F5F5F5']}
                             buttonStyle={styles.button}
                             textStyle={styles.cancelText}
-                            onPress={cancelAddTask}
+                            onPress={cancelEditTask}
                             />
 
                             <GradientButton
@@ -158,7 +155,7 @@ const EditTaskModal = ({isModalVisible = false, setModalVisible, taskRef}) => {
                             colours={['#58C7E5', '#58C7E5']}
                             buttonStyle={styles.button}
                             textStyle={styles.confirmText}
-                            onPress={addTask}
+                            onPress={editTask}
                             />
                         </View>
                             

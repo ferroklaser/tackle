@@ -6,6 +6,7 @@ const PillInput = ({
   onChangeText, 
   value, 
   placeholder, 
+  promptPresent = true,
   prompt = 'Title',
   height,
   width,
@@ -16,27 +17,28 @@ const PillInput = ({
   ...props}) => {
   return (
     <View style={styles.container}>
-      <Text style={{fontWeight: 'bold'}}>{prompt}:</Text>
-        <View style={[ styles.input, {width: width} ]}>
-          {haveDropdown ?
-          <TouchableOpacity onPress={handleDropdown}>
-            <View style={styles.row}>
-              <Text>{textDropdown}</Text>
-              <AntDesign name={'caretdown'} size={20} color={'#D9D9D9'}></AntDesign>
-            </View>
-          </TouchableOpacity>
-          :
-          <TextInput 
-            value={value} 
-            placeholder={placeholder} 
-            onChangeText={onChangeText}
-            autoCapitalize='none'
-            height={height}
-            multiline={multiline}
-            {...props}/>
-          }
-          
-        </View>
+      {promptPresent && <Text style={{fontWeight: 'bold'}}>{prompt}:</Text>}
+
+      <View style={[ styles.input, {width: width} ]}>
+        {haveDropdown ?
+        <TouchableOpacity onPress={handleDropdown}>
+          <View style={styles.row}>
+            <Text style={!promptPresent && styles.boldText}>{textDropdown}</Text>
+            <AntDesign name={'caretdown'} size={20} color={'#D9D9D9'}></AntDesign>
+          </View>
+        </TouchableOpacity>
+        :
+        <TextInput 
+          value={value} 
+          placeholder={placeholder} 
+          onChangeText={onChangeText}
+          autoCapitalize='none'
+          height={height}
+          multiline={multiline}
+          {...props}/>
+        }
+        
+      </View>
     </View>
     
   )
@@ -60,4 +62,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  boldText: {
+    color: '#BABABA',
+    fontWeight: 'bold',
+  }
 })
