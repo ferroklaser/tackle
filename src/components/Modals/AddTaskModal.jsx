@@ -12,7 +12,7 @@ import PriorityModal from './PriorityModal'
 
 const formatDate = (dateString) => {
   const [year, month, day] = dateString.split('-');
-  const date = new Date(year, month - 1, day); // JS months are 0-indexed
+  const date = new Date(year, month - 1, day);
   return date.toLocaleDateString(undefined, {
     day: 'numeric',
     month: 'long',
@@ -151,7 +151,7 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
                         <View style={styles.buttonsRow}>
                             <GradientButton
                             title="Cancel"
-                            colours={['#F5F5F5', '#F5F5F5']}
+                            colours={['white', 'white']}
                             buttonStyle={styles.button}
                             textStyle={styles.cancelText}
                             onPress={cancelAddTask}
