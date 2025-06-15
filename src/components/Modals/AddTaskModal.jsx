@@ -9,6 +9,7 @@ import ColorPicker from '../ColorPicker'
 import TaskDurationPicker from './TaskDurationPicker'
 import DeadlinePicker from './DeadlinePicker'
 import PriorityModal from './PriorityModal'
+import { useTask } from '../../contexts/TaskContext';
 
 const formatDate = (dateString) => {
   const [year, month, day] = dateString.split('-');
@@ -30,8 +31,9 @@ const formatSeconds = (seconds) => {
     return '0 min';
 }
 
-const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
+const AddTaskModal = ({isModalVisible = false, setModalVisible, isTimer = false}) => {
     const currentUser = FIREBASE_AUTH.currentUser;
+    const { setTaskId } = useTask();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [duration, setDuration] = useState(0);
@@ -72,14 +74,19 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible}) => {
         } else {
             try {
                 setModalVisible(false);
-                await addDoc(
-                collection(
-                    FIREBASE_DATABASE,
-                    'userTasks',
-                    currentUser.uid,
-                    'tasks' 
-                ),
-                task);
+                const docRef = await addDoc(
+                    collection(
+                        FIREBASE_DATABASE,
+                        'userTasks',
+                        currentUser.uid,
+                        'tasks' 
+                    ),
+                    task
+                );
+
+                if (isTimer) {
+                    setTaskId(docRef.id);
+                };
                 console.log('Task added');
                 reset();
             } catch (error) {

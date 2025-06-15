@@ -34,13 +34,12 @@ const timer = () => {
 
   return (
     <ImageBackground 
-            source = {require('../../../../assets/Backgrounds/TimerBG.png')}
-            style={styles.container}
-            resizeMode="cover">
-              <View style={ styles.component }>
-                <TimerComponent isRunning={isRunning} setIsRunning={setIsRunning} />
-              </View>
-            </ImageBackground>
+      source = {require('../../../../assets/Backgrounds/TimerBG.png')}
+      style={styles.container}>
+      <View style={ styles.component }>
+        <TimerComponent isRunning={isRunning} setIsRunning={setIsRunning} />
+      </View>
+    </ImageBackground>
     
   )
 }

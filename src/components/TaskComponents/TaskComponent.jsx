@@ -5,10 +5,14 @@ import { FontAwesome, MaterialIcons, Fontisto, MaterialCommunityIcons } from '@e
 import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig';
 import EditTaskModal from '../Modals/EditTaskModal';
+import { useRouter } from 'expo-router';
+import { useTask } from '../../contexts/TaskContext';
 
 const TaskComponent = ({task}) => {
   const isOverdue = new Date(task.deadline) < new Date();
   const [editModal, setEditModal] = useState(false);
+  const router = useRouter();
+  const { setTaskId } = useTask();
 
   const handleEdit = () => {
     setEditModal(true);
@@ -46,6 +50,11 @@ const TaskComponent = ({task}) => {
       ]
     )
   };
+
+  const handleTimer = () => {
+    setTaskId(task.id);
+    router.push('/timer');
+  }
 
   const toggleComplete = async () => {
     if (task.completed == -1) {
@@ -103,7 +112,7 @@ const TaskComponent = ({task}) => {
       <View style={styles.iconRow}>
         <View style={styles.iconGroup}>
           {isOverdue && <MaterialCommunityIcons name="alert-circle" size={20} color="red"/>}
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleTimer}>
             <FontAwesome name="clock-o" size={20} />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleEdit}>
