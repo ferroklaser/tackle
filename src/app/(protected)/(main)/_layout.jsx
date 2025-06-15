@@ -3,24 +3,26 @@ import { Stack } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import TopNavBar from '../../../components/TopNavBar.jsx';
 import { TimerProvider } from '../../../contexts/TimerContext.jsx';
+import { TaskProvider } from '../../../contexts/TaskContext.jsx';
 
 export default function Layout() {
   
   return (
-    <TimerProvider>
-      <SafeAreaProvider>
-        <View style={styles.mainContent}>
-          <View style={styles.slotWrapper}>
-            <Stack screenOptions={{ headerShown: false }} />
-          </View>
+    <TaskProvider>
+      <TimerProvider>
+        <SafeAreaProvider>
+          <View style={styles.mainContent}>
+            <View style={styles.slotWrapper}>
+              <Stack screenOptions={{ headerShown: false }} />
+            </View>
 
-          <View style={styles.navWrapper}>
-            <TopNavBar />
+            <View style={styles.navWrapper}>
+              <TopNavBar />
+            </View>
           </View>
-        </View>
-      </SafeAreaProvider>
-    </TimerProvider>
-    
+        </SafeAreaProvider>
+      </TimerProvider>
+    </TaskProvider>
   );
 }
 

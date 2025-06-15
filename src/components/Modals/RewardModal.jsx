@@ -1,25 +1,12 @@
 import { StyleSheet, Text, View, Image } from 'react-native'
-import { useEffect } from 'react'
 import Modal from 'react-native-modal'
 import GradientButton from '../GradientButton'
-import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig'
-import { doc, updateDoc, increment } from 'firebase/firestore'
 
 const RewardModal = ({isModalVisible = false, setModalVisible, reward = 100}) => {
 
     const toggleModal = () => {
-        addCoins();
         setModalVisible(!isModalVisible);
     };
-
-    const addCoins = async () => {
-        const currentUser = FIREBASE_AUTH.currentUser;
-        const docRef = doc(FIREBASE_DATABASE, 'userStats', currentUser.uid);
-
-        await updateDoc(docRef, {
-            coins: increment(reward)
-        });
-    } 
 
     return (
         <View style={styles.container}>

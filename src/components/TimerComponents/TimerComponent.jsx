@@ -5,8 +5,24 @@ import { Ionicons, Feather } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import DurationPicker from '../Modals/DurationPicker';
 import RewardModal from '../Modals/RewardModal';
+import NoTimerTask from '../TaskComponents/NoTimerTask.jsx'
+import TimerTask from '../TaskComponents/TimerTask.jsx';
+import { useTask } from '../../contexts/TaskContext.jsx';
+import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig'
+import { doc, updateDoc, increment } from 'firebase/firestore'
+
+const formatTime = (sec) => {
+  const hrs = String(Math.floor(sec / 3600)).padStart(2, '0');
+  const mins = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
+  const secs = String(sec % 60).padStart(2, '0');
+  return `${hrs}:${mins}:${secs}`;
+};
 
 const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
+  const { taskId, taskData } = useTask();
+  const currentUser = FIREBASE_AUTH.currentUser;
+  const docRefReward = doc(FIREBASE_DATABASE, 'userStats', currentUser.uid);
+  const docRefComplete = doc(FIREBASE_DATABASE, 'userTasks', currentUser.uid, 'tasks', taskId);
   const [isPickerVisible, setPickerVisible] = useState(false);
   const [duration, setDuration] = useState(startingDuration);
   const [seconds, setSeconds] = useState(duration);
@@ -24,7 +40,7 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
     if (isRunning) {
       intervalRef.current = setInterval(() => {
         setSeconds((prev) => {
-          if (prev <= 1) {
+          if (prev < 1) {
             clearInterval(intervalRef.current);
             setIsRunning(false);
             handleRewardBonus();
@@ -66,8 +82,11 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
   // }, [isRunning]);
 
   const handlePause = () => setIsRunning(false);
+
   const handlePlay = () => {
-    if (duration !== 0 && seconds != 0) {
+    if (!taskId) {
+      Alert.alert('Warning', 'No task selected.')
+    } else if (duration !== 0 && seconds != 0) {
       setIsRunning(true);
     } else {
       Alert.alert(
@@ -106,24 +125,32 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
 
   //adjust coins calculations here
   //Bonus is 20% of coins earned for now
-  const handleRewardBonus = () => {
+  const handleRewardBonus = async () => {
     const coins = duration/100 * 0.2 + duration/100;
     setReward(Math.floor(coins));
     setRewardVisible(true);
+    await updateDoc(docRefReward, {
+      coins: increment(reward)
+    });
+
+    await updateDoc(docRefComplete, {
+      completed: increment(duration)
+    });
+
   }
 
-  const handleRewardNoBonus = () => {
+  const handleRewardNoBonus = async () => {
     const coins = (duration - seconds)/100;
     setReward(Math.floor(coins));
     setRewardVisible(true);
-  }
+    await updateDoc(docRefReward, {
+      coins: increment(reward)
+    });
 
-  const formatTime = (sec) => {
-    const hrs = String(Math.floor(sec / 3600)).padStart(2, '0');
-    const mins = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
-    const secs = String(sec % 60).padStart(2, '0');
-    return `${hrs}:${mins}:${secs}`;
-  };
+    await updateDoc(docRefComplete, {
+      completed: increment(duration - seconds)
+    });
+  }
 
   const fill = duration == 0 ? 0 : seconds / duration * 100;
 
@@ -188,6 +215,8 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
       setModalVisible={setPickerVisible}
       setSeconds={setSeconds}
       setDuration={setDuration}/>
+
+      {taskId ? <TimerTask currentTask={taskData}/> : <NoTimerTask />}
     </View>
   );
 }
@@ -198,7 +227,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    marginTop: '45%'
+    marginTop: '45%',
+    width: '100%',
   },
   circle: {
     position: 'absolute',
@@ -214,6 +244,7 @@ const styles = StyleSheet.create({
   },
   progress: {
     marginTop: 10,
+    marginBottom: 60,
   },
   innerContent: {
     alignItems: 'center',
