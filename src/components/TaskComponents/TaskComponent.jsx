@@ -49,25 +49,25 @@ const TaskComponent = ({task}) => {
 
   const toggleComplete = async () => {
     if (task.completed == -1) {
-        Alert.alert('Warning', 'You have not started on this task yet. Press the timer button to begin.')
+      Alert.alert('Warning', 'You have not started on this task yet. Press the timer button to begin.')
     } else {
-        try {
-            const currentUser = FIREBASE_AUTH.currentUser;
-            const temp = task.isComplete;
-            if (!currentUser) return;
-            const ref = doc(
-                FIREBASE_DATABASE,
-                'userTasks',
-                currentUser.uid,
-                'tasks',
-                task.id
-            );
+      try {
+          const currentUser = FIREBASE_AUTH.currentUser;
+          const temp = task.isComplete;
+          if (!currentUser) return;
+          const ref = doc(
+              FIREBASE_DATABASE,
+              'userTasks',
+              currentUser.uid,
+              'tasks',
+              task.id
+          );
 
-            await updateDoc(ref, {isComplete : !temp});
-            console.log('Task complete toggled');
-        } catch (error) {
-            console.error('Failed to toggle complete task:', error);
-        }
+          await updateDoc(ref, {isComplete : !temp});
+          console.log('Task complete toggled');
+      } catch (error) {
+          console.error('Failed to toggle complete task:', error);
+      }
     }
   }
   
