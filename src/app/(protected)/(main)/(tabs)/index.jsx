@@ -48,8 +48,8 @@ const index = () => {
         resizeMode="cover">
         <View style={styles.tackContainer}>
           <CombinedTackSprite
-            tackBaseOption={avatar.colour}
-            eyesOption={avatar.eye}
+            tackBaseOption={avatar.base}
+            eyesOption={avatar.eyes}
             mouthOption={avatar.mouth}
             accessoryOption={avatar.accessory}
           />

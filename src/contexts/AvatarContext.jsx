@@ -30,14 +30,15 @@ export const AvatarProvider = ({ children }) => {
         const fetchAvatar = async () => {
             const user = FIREBASE_AUTH.currentUser;
             try {
-                const docSnap = await getDoc(doc(FIREBASE_DATABASE, "userTackComponent", user.uid));
+                const docSnap = await getDoc(doc(FIREBASE_DATABASE, "users", user.uid));
                 if (docSnap.exists()) {
                     const data = docSnap.data();
+                    const avatar = data.avatar;
                     setAvatar({
-                        colour: data.colour,
-                        eye: data.eye,
-                        mouth: data.mouth,
-                        accessory: data.accessory,
+                        base: avatar.base,
+                        eyes: avatar.eyes,
+                        mouth: avatar.mouth,
+                        accessory: avatar.accessory,
                     });
                     setAvatarLoaded(true);
                 }
@@ -54,8 +55,8 @@ export const AvatarProvider = ({ children }) => {
                 if (!isAvatarLoaded) { return }
                 
                 try {
-                    const colourPromise = Asset.fromModule(Tack.TackBase[avatar.colour]).downloadAsync();
-                    const eyesPromise = Asset.fromModule(Tack.Eyes[avatar.eye]).downloadAsync();
+                    const colourPromise = Asset.fromModule(Tack.TackBase[avatar.base]).downloadAsync();
+                    const eyesPromise = Asset.fromModule(Tack.Eyes[avatar.eyes]).downloadAsync();
                     const mouthPromise = Asset.fromModule(Tack.Mouth[avatar.mouth]).downloadAsync();
                     const accessoryPromise = Asset.fromModule(Tack.Accessory[avatar.accessory]).downloadAsync();
                     const delayPromise = new Promise((resolve) => setTimeout(resolve, 0));
