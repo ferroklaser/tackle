@@ -1,17 +1,16 @@
-import React, { useState } from 'react'
-import { AuthContext } from '../../contexts/AuthContext'
-import { useContext } from 'react'
+import React from 'react'
 import { Redirect, Slot } from 'expo-router'
 import LoadingSplash from '../../components/LoadingSplash'
+import { useAuth } from '../../contexts/AuthContext'
 
 const Protectedlayout = () => {
-    const authContext = useContext(AuthContext);
+    const { isAuthReady, user } = useAuth();
 
-    if (!authContext.isAuthReady) {
+    if (!isAuthReady) {
         return <LoadingSplash />
     }
 
-    if (!authContext.user) {
+    if (!user) {
         return <Redirect href="login" />
     }
 

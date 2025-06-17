@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from "../firebaseConfig";
 import {
     signInWithEmailAndPassword,
@@ -10,6 +10,8 @@ import {
 import { setDoc, doc } from "firebase/firestore";
 import { router } from "expo-router";
 import { authErrorHandler } from "../utilities/authErrorHandle";
+
+export const useAuth =  () => useContext(AuthContext);
 
 export const AuthContext = createContext({
     isLoggedIn: false,

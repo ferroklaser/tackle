@@ -3,16 +3,15 @@ import React, { useContext } from 'react'
 import CombinedTackSprite from '../../../components/TackComponents/CombinedTackSprite.jsx';
 import MyButton from '../../../components/MyButton.jsx';
 import GradientButton from '../../../components/GradientButton.jsx';
-import { AuthContext } from '../../../contexts/AuthContext.jsx';
 import { useAvatar } from '../../../contexts/AvatarContext.jsx';
 
 const index = () => {
-  const authContext = useContext(AuthContext);
+  const { logOut } = useAuth();
   const { avatar } = useAvatar();
 
   const handleSignOut = async () => {
     try {
-      await authContext.logOut();
+      await logOut();
     } catch (error) {
       console.log(error);
       alert("Error logging out");
