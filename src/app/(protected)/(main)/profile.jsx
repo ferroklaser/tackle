@@ -1,25 +1,14 @@
 import { StyleSheet, Text, View, ImageBackground } from 'react-native'
-import React, { useState, useEffect, useContext } from 'react'
-import { Asset } from 'expo-asset';
-import LoadingSplash from '../../../components/LoadingSplash.jsx';
-import Tack from '../../../assets/Tack/index.js';
+import React, { useContext } from 'react'
 import CombinedTackSprite from '../../../components/TackComponents/CombinedTackSprite.jsx';
 import MyButton from '../../../components/MyButton.jsx';
 import GradientButton from '../../../components/GradientButton.jsx';
-import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../../firebaseConfig.js';
-import { getDoc, doc } from 'firebase/firestore';
 import { AuthContext } from '../../../contexts/AuthContext.jsx';
+import { useAvatar } from '../../../contexts/AvatarContext.jsx';
 
 const index = () => {
   const authContext = useContext(AuthContext);
-  const [userName, setUserName] = useState(null);
-  const [userColour, setUserColor] = useState(null);
-  const [userEyes, setUserEyes] = useState(null);
-  const [userMouth, setUserMouth] = useState(null);
-  const [userAccessory, setUserAccessory] = useState(null);
-
-  let [isAvatarLoaded, setAvatarLoaded] = useState(false);
-  let [isLoaded, setIsLoaded] = React.useState(false);
+  const { avatar } = useAvatar();
 
   const handleSignOut = async () => {
     try {
@@ -30,56 +19,6 @@ const index = () => {
     }
   }
 
-  useEffect(() => {
-    const fetchAvatar = async () => {
-      const user = FIREBASE_AUTH.currentUser;
-      try {
-        const docSnap = await getDoc(doc(FIREBASE_DATABASE, "userTackComponent", user.uid));
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          setUserName(data.username);
-          setUserColor(data.colour);
-          setUserEyes(data.eye);
-          setUserMouth(data.mouth);
-          setUserAccessory(data.accessory);
-          setAvatarLoaded(true);
-        } else {
-          router.replace('/login');
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    fetchAvatar();
-  }, [])
-
-  let cacheResources = async () => {
-    const bgPromise = Asset.fromModule(require('../../../assets/Backgrounds/ProfileBG.png')).downloadAsync();
-    const eyesPromise = Asset.fromModule(Tack.Eyes[userEyes]).downloadAsync();
-    const colourPromise = Asset.fromModule(Tack.TackBase[userColour]).downloadAsync();
-    const mouthPromise = Asset.fromModule(Tack.Mouth[userMouth]).downloadAsync();
-    const accessoryPromise = Asset.fromModule(Tack.Accessory[userAccessory]).downloadAsync();
-    const delayPromise = new Promise((resolve) => setTimeout(resolve, 0));
-
-    await Promise.all([bgPromise, delayPromise, eyesPromise, mouthPromise, colourPromise, accessoryPromise]);
-    setIsLoaded(true);
-  }
-
-  React.useEffect(() => {
-    const loadResources = async () => {
-      await cacheResources();
-      setIsLoaded(true);
-    };
-
-    loadResources();
-  }, [])
-
-  if (!isLoaded && !isAvatarLoaded) {
-    return (
-      <LoadingSplash />
-    );
-  }
-
   return (
     <ImageBackground
       source={require('../../../assets/Backgrounds/ProfileBG.png')}
@@ -88,14 +27,14 @@ const index = () => {
       <View style={styles.mainContainer}>
         <View style={styles.tackContainer}>
           <CombinedTackSprite
-            tackBaseOption={userColour}
-            eyesOption={userEyes}
-            mouthOption={userMouth}
-            accessoryOption={userAccessory}
+            tackBaseOption={avatar.colour}
+            eyesOption={avatar.eye}
+            mouthOption={avatar.mouth}
+            accessoryOption={avatar.accessory}
             size={250}
           />
 
-          <Text style={styles.userName}>{userName}</Text>
+          <Text style={styles.userName}>Test</Text>
 
           <View style={styles.buttonsRow}>
             <GradientButton

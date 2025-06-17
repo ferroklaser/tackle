@@ -4,25 +4,28 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import TopNavBar from '../../../components/TopNavBar.jsx';
 import { TimerProvider } from '../../../contexts/TimerContext.jsx';
 import { TaskProvider } from '../../../contexts/TaskContext.jsx';
+import { AvatarProvider } from '../../../contexts/AvatarContext.jsx';
 
 export default function Layout() {
   
   return (
-    <TaskProvider>
-      <TimerProvider>
-        <SafeAreaProvider>
-          <View style={styles.mainContent}>
-            <View style={styles.slotWrapper}>
-              <Stack screenOptions={{ headerShown: false }} />
-            </View>
+    <AvatarProvider>
+      <TaskProvider>
+        <TimerProvider>
+          <SafeAreaProvider>
+            <View style={styles.mainContent}>
+              <View style={styles.slotWrapper}>
+                <Stack screenOptions={{ headerShown: false }} />
+              </View>
 
-            <View style={styles.navWrapper}>
-              <TopNavBar />
+              <View style={styles.navWrapper}>
+                <TopNavBar />
+              </View>
             </View>
-          </View>
-        </SafeAreaProvider>
-      </TimerProvider>
-    </TaskProvider>
+          </SafeAreaProvider>
+        </TimerProvider>
+      </TaskProvider>
+    </AvatarProvider>
   );
 }
 

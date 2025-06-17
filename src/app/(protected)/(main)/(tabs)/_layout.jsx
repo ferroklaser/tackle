@@ -4,6 +4,7 @@ import { useState } from 'react'
 import BottomTabBar from '../../../../components/BottomTabBar'
 import ToggleMenuButton from '../../../../components/ToggleMenuButton'
 
+
 const Layout = () => {
 	const [isExpanded, setIsExpanded] = useState(false);
 
@@ -27,8 +28,8 @@ const Layout = () => {
 						tabBarStyle: {
 							position: 'absolute',
 						},
-						safeAareaInsets: { bottom: 0 },  
-						headerShown: false,              
+						safeAareaInsets: { bottom: 0 },
+						headerShown: false,
 					}}
 				>
 					<Tabs.Screen name="store" options={{ title: 'Store' }} />
@@ -38,11 +39,11 @@ const Layout = () => {
 					<Tabs.Screen name="inventory" options={{ title: 'Inventory' }} />
 				</Tabs>
 
-				{!isExpanded && ( 
+				{!isExpanded && (
 					<ToggleMenuButton
-					onPress={toggleExpandHandler}
-					isExpanded={isExpanded}
-				/>
+						onPress={toggleExpandHandler}
+						isExpanded={isExpanded}
+					/>
 				)}
 			</View>
 		</TouchableWithoutFeedback>

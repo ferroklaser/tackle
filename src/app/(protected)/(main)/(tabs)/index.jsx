@@ -1,47 +1,15 @@
-import { StyleSheet, Text, View, ImageBackground, Pressable } from 'react-native'
-import React, { useState, useEffect, useRef } from 'react'
+import { StyleSheet, Text, View, ImageBackground } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import BGHomeDay from '../../../../assets/Backgrounds/BGHomeDay/index.js';
 import BGHomeNight from '../../../../assets/Backgrounds/BGHomeNight/index.js';
 import CombinedTackSprite from '../../../../components/TackComponents/CombinedTackSprite.jsx';
 import LoadingSplash from '../../../../components/LoadingSplash.jsx';
 import { Asset } from 'expo-asset';
-import Tack from '../../../../assets/Tack/index.js';
-import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../../../firebaseConfig.js';
-import { getDoc, doc } from 'firebase/firestore';
+import { useAvatar } from '../../../../contexts/AvatarContext.jsx';
 
 const index = () => {
-  const [userColour, setUserColor] = useState(null);
-  const [userEyes, setUserEyes] = useState(null);
-  const [userMouth, setUserMouth] = useState(null);
-  const [userAccessory, setUserAccessory] = useState(null);
-  let [isLoaded, setIsLoaded] = React.useState(false);
-  let [isAvatarLoaded, setAvatarLoaded] = useState(false);
-
-  useEffect(() => {
-  const fetchAvatar = async () => {
-  const user = FIREBASE_AUTH.currentUser;
-  try {
-    const docSnap = await getDoc(doc(FIREBASE_DATABASE, "userTackComponent", user.uid));
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      setUserColor(data.colour);
-      setUserEyes(data.eye);
-      setUserMouth(data.mouth);
-      setUserAccessory(data.accessory);
-      setAvatarLoaded(true);
-    } else {
-      router.replace('/login');
-
-    }
-
-    } catch (error) {
-      console.log(error)
-    }
-   
-  }
-    fetchAvatar();
-  }, [])
-
+  const { avatar, isAssetsLoaded, isAvatarLoaded } = useAvatar();
+  const [isBackgroundLoaded, setBackgroundLoaded] = useState(false);
 
   const getIsNight = () => {
     const hour = new Date().getHours();
@@ -53,47 +21,40 @@ const index = () => {
     ? BGHomeNight["Basic"]
     : BGHomeDay["Basic"];
 
-  let cacheResources = async() => {
-    const bgPromise = Asset.fromModule(backgroundImage).downloadAsync();
-    const eyesPromise = Asset.fromModule(Tack.Eyes[userEyes]).downloadAsync();
-    const colourPromise = Asset.fromModule(Tack.TackBase[userColour]).downloadAsync();
-    const mouthPromise = Asset.fromModule(Tack.Mouth[userMouth]).downloadAsync();
-    const accessoryPromise = Asset.fromModule(Tack.Accessory[userAccessory]).downloadAsync();
-    const delayPromise = new Promise((resolve) => setTimeout(resolve, 0));
+  useEffect(() => {
+    const loadBackground = async () => {
+      try {
+        await Asset.fromModule(backgroundImage).downloadAsync();
+        setBackgroundLoaded(true);
+      } catch (error) {
+        console.log("Error rendering background: ", error);
+      }
+    }
+    loadBackground();
+  }, []);
 
-    await Promise.all([bgPromise, eyesPromise, colourPromise, mouthPromise, accessoryPromise, delayPromise]);
-    setIsLoaded(true);
-  }
+  const fullyLoaded = isAvatarLoaded && isAssetsLoaded && isBackgroundLoaded;
 
-  React.useEffect(() => {
-    const loadResources = async() => {
-      await cacheResources();
-      setIsLoaded(true);
-    };
-
-    loadResources();
-  }, [])
-
-  if (!isLoaded && !isAvatarLoaded) {
+  if (!fullyLoaded) {
     return (
       <LoadingSplash />
-    );
+    )
   }
 
-  return ( 
-    <ImageBackground 
-        source = {backgroundImage}
+  return (
+      <ImageBackground
+        source={backgroundImage}
         style={styles.container}
         resizeMode="cover">
-          <View style={styles.tackContainer}>
-            <CombinedTackSprite
-             tackBaseOption={userColour}
-             eyesOption={userEyes}
-             mouthOption={userMouth}
-             accessoryOption={userAccessory}
-             />
-          </View>
-    </ImageBackground>
+        <View style={styles.tackContainer}>
+          <CombinedTackSprite
+            tackBaseOption={avatar.colour}
+            eyesOption={avatar.eye}
+            mouthOption={avatar.mouth}
+            accessoryOption={avatar.accessory}
+          />
+        </View>
+      </ImageBackground>
   )
 }
 
