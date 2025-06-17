@@ -55,17 +55,25 @@ export function AuthProvider({ children }) {
     }
 
     const signUp = async (email, password) => {
-      
-    const cred = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
-    await sendEmailVerification(FIREBASE_AUTH.currentUser);
-    await setDoc(
-        doc(FIREBASE_DATABASE, "userTackComponent", cred.user.uid), {
-        username: "",
-        colour: "Yellow",
-        eye: "Side_Eye",
-        mouth: "Side_Tongue",
-        accessory: "Hashtag_Doodle",
-    });
+        const cred = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
+        await sendEmailVerification(FIREBASE_AUTH.currentUser);
+        await setDoc(
+            doc(FIREBASE_DATABASE, "users", cred.user.uid), {
+            username: "",
+            avatar: {
+                base: "Yellow",
+                eyes: "Side_Eye",
+                mouth: "Side_Tongue",
+                accessory: "Hashtag_Doodle",
+            },
+            coins: 0,
+        });
+        await setDoc(doc(FIREBASE_DATABASE, "users", cred.user.uid, "inventory", "_init"), {
+            placeholder: true
+        });
+        await setDoc(doc(FIREBASE_DATABASE, "users", cred.user.uid, "tasks", "_init"), {
+            placeholder: true
+        });
     }
 
     const logOut = async () => {

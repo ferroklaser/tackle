@@ -3,6 +3,7 @@ import React, { useContext } from 'react'
 import CombinedTackSprite from '../../../components/TackComponents/CombinedTackSprite.jsx';
 import MyButton from '../../../components/MyButton.jsx';
 import GradientButton from '../../../components/GradientButton.jsx';
+import { useAuth } from '../../../contexts/AuthContext.jsx';
 import { useAvatar } from '../../../contexts/AvatarContext.jsx';
 
 const index = () => {
@@ -26,8 +27,8 @@ const index = () => {
       <View style={styles.mainContainer}>
         <View style={styles.tackContainer}>
           <CombinedTackSprite
-            tackBaseOption={avatar.colour}
-            eyesOption={avatar.eye}
+            tackBaseOption={avatar.base}
+            eyesOption={avatar.eyes}
             mouthOption={avatar.mouth}
             accessoryOption={avatar.accessory}
             size={250}

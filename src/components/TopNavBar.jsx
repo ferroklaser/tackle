@@ -14,7 +14,7 @@ const TopNavBar = ( ) => {
     const user = FIREBASE_AUTH.currentUser;
     if (!user) return;
 
-    const docRef = doc(FIREBASE_DATABASE, 'userStats', user.uid);
+    const docRef = doc(FIREBASE_DATABASE, 'users', user.uid);
 
     const unsubscribe = onSnapshot(docRef, (snapshot) => {
       if (snapshot.exists()) {

@@ -21,7 +21,7 @@ const formatTime = (sec) => {
 const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
   const { taskId, taskData } = useTask();
   const currentUser = FIREBASE_AUTH.currentUser;
-  const docRefReward = doc(FIREBASE_DATABASE, 'userStats', currentUser.uid);
+  const docRefReward = doc(FIREBASE_DATABASE, 'users', currentUser.uid);
   const docRefComplete = doc(FIREBASE_DATABASE, 'userTasks', currentUser.uid, 'tasks', taskId);
   const [isPickerVisible, setPickerVisible] = useState(false);
   const [duration, setDuration] = useState(startingDuration);

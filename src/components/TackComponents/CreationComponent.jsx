@@ -9,7 +9,7 @@ import UnderlinedInput from '../UnderlinedInput';
 import { useFonts } from 'expo-font';
 
 import { FIREBASE_DATABASE, FIREBASE_AUTH } from '../../firebaseConfig.js';
-import { doc, setDoc} from 'firebase/firestore';
+import { doc, setDoc, updateDoc} from 'firebase/firestore';
 
 // only add those available for users into these arrays
 const colourOptions = ['Yellow', 'Blue'];
@@ -86,18 +86,15 @@ const CreationComponent = () => {
       Alert.alert('Reminder', 'Username cannot be empty')
     } else {
       try {
-        await setDoc(doc(FIREBASE_DATABASE, "userTackComponent", FIREBASE_AUTH.currentUser.uid), {
+        await updateDoc(doc(FIREBASE_DATABASE, "users", FIREBASE_AUTH.currentUser.uid), {
           username: username,
-          colour: currentColour,
-          eye: currentEyes,
-          mouth: currentMouth,
-          accessory: currentAccessory,
+          avatar: {
+            base: currentColour,
+            eyes: currentEyes,
+            mouth: currentMouth,
+            accessory: currentAccessory
+          }
         })
-
-        await setDoc(doc(FIREBASE_DATABASE, "userStats", FIREBASE_AUTH.currentUser.uid), {
-          coins: 0,
-        })
-      
       } catch (error) {
         console.log(error);
       } finally {

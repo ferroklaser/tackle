@@ -12,8 +12,8 @@ const inventory = () => {
     <View style={styles.container}>
       <View style={styles.tackContainer}>
         <CombinedTackAnimation
-          tackBaseOption={avatar.colour}
-          eyesOption={avatar.eye}
+          tackBaseOption={avatar.base}
+          eyesOption={avatar.eyes}
           mouthOption={avatar.mouth}
           accessoryOption={avatar.accessory}>
         </CombinedTackAnimation>
