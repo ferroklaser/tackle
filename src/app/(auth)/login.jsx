@@ -2,13 +2,13 @@ import { StyleSheet, Text, View, Pressable } from 'react-native'
 import React from 'react'
 import ThemedInput from '../../components/AuthComponents/ThemedInput'
 import { Link } from 'expo-router'
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import AuthButton from '../../components/AuthComponents/AuthButton'
-import { AuthContext } from '../../contexts/AuthContext'
+import { useAuth } from '../../contexts/AuthContext'
 
 const login = () => {
-  const authContext = useContext(AuthContext);
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [secureText, setSecureText] = useState(true);
@@ -18,7 +18,7 @@ const login = () => {
   };
 
   const handleLogin = async () => {
-      await authContext.login(email, password);
+      await login(email, password);
       setEmail("");
       setPassword("");
   }

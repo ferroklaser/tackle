@@ -1,16 +1,16 @@
 import { StyleSheet, Text, View, Pressable, Modal, TouchableOpacity, Alert } from 'react-native'
-import React, { useContext } from 'react'
+import React from 'react'
 import ThemedInput from '../../components/AuthComponents/ThemedInput'
 import { Link, router } from 'expo-router'
 import { useState } from 'react'
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import AuthButton from '../../components/AuthComponents/AuthButton'
-import { AuthContext } from '../../contexts/AuthContext'
+import { useAuth } from '../../contexts/AuthContext'
 import { FIREBASE_AUTH } from '../../firebaseConfig'
 import { authErrorHandler } from '../../utilities/authErrorHandle'
 
 const signUp = () => {
-  const authContext = useContext(AuthContext);
+  const { signUp } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
@@ -36,7 +36,7 @@ const signUp = () => {
     }
 
     try {
-      await authContext.signUp(email, password);
+      await signUp(email, password);
       setEmail("");
       setPassword("");
       setConfirm("");
