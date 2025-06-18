@@ -94,7 +94,7 @@ const CreationComponent = () => {
             mouth: currentMouth,
             accessory: currentAccessory
           }
-        })
+        });
       } catch (error) {
         console.log(error);
       } finally {

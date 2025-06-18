@@ -18,7 +18,7 @@ export const useAvatar = () => useContext(AvatarContext);
 
 export const AvatarProvider = ({ children }) => {
     const [avatar, setAvatar] = useState({
-        colour: null,
+        base: null,
         eyes: null,
         mouth: null, 
         accessory: null,
@@ -49,28 +49,48 @@ export const AvatarProvider = ({ children }) => {
         fetchAvatar();
     }, [])
 
-    useEffect(() => {
-        const loadResources = async () => {
-            let cacheResources = async () => {
-                if (!isAvatarLoaded) { return }
+    // useEffect(() => {
+    //     const loadResources = async () => {
+    //         let cacheResources = async () => {
+    //             if (!isAvatarLoaded) { return }
                 
-                try {
-                    const colourPromise = Asset.fromModule(Tack.TackBase[avatar.base]).downloadAsync();
-                    const eyesPromise = Asset.fromModule(Tack.Eyes[avatar.eyes]).downloadAsync();
-                    const mouthPromise = Asset.fromModule(Tack.Mouth[avatar.mouth]).downloadAsync();
-                    const accessoryPromise = Asset.fromModule(Tack.Accessory[avatar.accessory]).downloadAsync();
-                    const delayPromise = new Promise((resolve) => setTimeout(resolve, 0));
+    //             try {
+    //                 const colourPromise = Asset.fromModule(Tack.TackBase[avatar.base]).downloadAsync();
+    //                 const eyesPromise = Asset.fromModule(Tack.Eyes[avatar.eyes]).downloadAsync();
+    //                 const mouthPromise = Asset.fromModule(Tack.Mouth[avatar.mouth]).downloadAsync();
+    //                 const accessoryPromise = Asset.fromModule(Tack.Accessory[avatar.accessory]).downloadAsync();
+    //                 const delayPromise = new Promise((resolve) => setTimeout(resolve, 0));
 
-                    await Promise.all([colourPromise, eyesPromise, mouthPromise, accessoryPromise, delayPromise]);
-                    setAssetsLoaded(true)
-                } catch (error) {
-                    console.log(error);
-                }
+    //                 await Promise.all([colourPromise, eyesPromise, mouthPromise, accessoryPromise, delayPromise]);
+    //                 setAssetsLoaded(true)
+    //             } catch (error) {
+    //                 console.log(error);
+    //             }
+    //         }
+    //         await cacheResources();
+    //     }
+    //     loadResources();
+    // }, [isAvatarLoaded])
+
+    useEffect(() => {
+        const loadAllAssets = async () => {
+            try {
+                const allAssets = [
+                    ...Object.values(Tack.TackBase),
+                    ...Object.values(Tack.Eyes),
+                    ...Object.values(Tack.Mouth),
+                    ...Object.values(Tack.Accessory),
+                ];
+                const promises = allAssets.map(asset => Asset.fromModule(asset).downloadAsync());
+                await Promise.all(promises);
+                setAssetsLoaded(true);
+            } catch (error) {
+                console.log('Asset loading error:', error);
             }
-            await cacheResources();
-        }
-        loadResources();
-    }, [isAvatarLoaded])
+        };
+        loadAllAssets();
+    }, []);
+
 
     if (!isAssetsLoaded || !isAvatarLoaded) {
         return (
