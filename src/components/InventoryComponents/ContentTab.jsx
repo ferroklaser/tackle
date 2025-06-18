@@ -4,14 +4,15 @@ import ItemComponent from './ItemComponent'
 
 const ContentTab = ({items, style, ...props}) => {
   return (
-    <FlatList 
-    pointerEvents="auto"
-    data={items}
-    keyExtractor={item => item.id}
-    renderItem={({ item }) => <ItemComponent item={item} />}
-    style={[style, {width: '100%', zIndex: 100}]}
-    contentContainerStyle={{ paddingBottom: 90 }}>
-    </FlatList>
+      <FlatList
+        showsVerticalScrollIndicator={true}
+        data={items}
+        keyExtractor={item => item.itemID}
+        renderItem={({ item }) => <ItemComponent item={item} />}
+        style={[style, {paddingTop: 10, width: '100%', zIndex: 100}]}
+        numColumns={2}
+        contentContainerStyle={{}}>
+      </FlatList>
   )
 }
 

@@ -2,8 +2,12 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import SingleFrameSprite from '../SingleFrameSprite'
 import Tack from '../../assets/Tack'
+import { useFonts } from 'expo-font';
 
 const ItemComponent = ({item}) => {
+    useFonts({
+        'Doodle': require('../../assets/fonts/doodle.ttf')
+    });
     const getData = () => {
         switch(item.type){
             case "base":
@@ -17,9 +21,9 @@ const ItemComponent = ({item}) => {
             case "eyes":
                 return {
                     spriteSheet: Tack.Eyes[item.itemID],
-                    frameWidth: 299,
-                    frameHeight: 260,
-                    scale: 0.5,
+                    frameWidth: 300,
+                    frameHeight: 263,
+                    scale: 1,
                     rowIndex: 0,
                 }
             case "mouth":
@@ -27,7 +31,7 @@ const ItemComponent = ({item}) => {
                     spriteSheet: Tack.Mouth[item.itemID],
                     frameWidth: 299,
                     frameHeight: 260,
-                    scale: 0.5,
+                    scale: 1,
                     rowIndex: 0,
                 }
             case "accessory":
@@ -35,7 +39,7 @@ const ItemComponent = ({item}) => {
                     spriteSheet: Tack.Accessory[item.itemID],
                     frameWidth: 299,
                     frameHeight: 260,
-                    scale: 0.5,
+                    scale: 0.6,
                     rowIndex: 0,
                 }
             default:
@@ -46,11 +50,11 @@ const ItemComponent = ({item}) => {
     const data = getData();   
 
     return (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={styles.item} pointerEvents='none'>
             <View style={styles.square}>
                 <SingleFrameSprite {...data}/>
             </View>
-            <Text>{item.name}</Text>
+            <Text style={styles.text}>{item.name}</Text>
         </View>
   )
 }
@@ -59,11 +63,22 @@ export default ItemComponent
 
 const styles = StyleSheet.create({
     square: {
-        width: 100,
-        height: 100,
+        width: 120,
+        height: 120,
         backgroundColor: 'white',
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        borderWidth: 2,
+        marginVertical: 5,
+    },
+    item: {
+        justifyContent: "center",
+        alignItems: "center",
+        flex: 0.5,
+    },
+    text:{
+        fontFamily: "Doodle",
+        fontSize: 16,
+        textAlign: 'center'
     }
 })
