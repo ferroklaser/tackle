@@ -1,44 +1,84 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ContentTab from './ContentTab';
 import { useFonts } from 'expo-font';
 import LoadingSplash from '../LoadingSplash';
+import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig';
+import { getDocs, collection } from 'firebase/firestore';
 
 const TabContainer = () => {
     const [fontsLoaded] =
         useFonts({
             'Doodle': require('../../assets/fonts/doodle.ttf')
         });
-    const [activeTab, setActiveTab] = useState('Pattern');
+    const [activeTab, setActiveTab] = useState('Base');
+    const [inventory, setInventory] = useState([]);
 
     const handleTabPress = (title) => {
         setActiveTab(title);
     }
-    
+
+    const fetchInventory = async () => {
+        const uid = FIREBASE_AUTH.currentUser.uid;
+        const snapshot = await getDocs(collection(FIREBASE_DATABASE, 'users', uid, 'inventory'));
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    };
+
+    useEffect(() => {
+        const loadInventory = async () => {
+            const items = await fetchInventory()
+            setInventory(items);
+        }
+        loadInventory();
+    }, []);
+
     if (!fontsLoaded) {
         return <LoadingSplash />
     }
 
+    const baseItems = inventory.filter(item => item.type === 'base');
+    const eyesItems = inventory.filter(item => item.type === 'eyes');
+    const mouthItems = inventory.filter(item => item.type === 'mouth');
+    const accessoryItems = inventory.filter(item => item.type === 'accessory');
+
     return (
         <View style={styles.container}>
             <View style={{ flexDirection: 'row' }}>
-                <TouchableOpacity title='Pattern' style={[styles.tabHeader, styles.pattern, activeTab === "Pattern" && styles.shadow]} onPress={() => handleTabPress("Pattern")} activeOpacity={0.6}>
-                    <Text style={styles.header} numberOfLines={1} adjustsFontSizeToFit>Pattern</Text>
+                <TouchableOpacity
+                    title='Base'
+                    style={[styles.tabHeader, styles.base, activeTab === "Base" && styles.shadow]}
+                    onPress={() => handleTabPress("Base")}
+                    activeOpacity={0.6}>
+                    <Text style={styles.header} numberOfLines={1} adjustsFontSizeToFit>Base</Text>
                 </TouchableOpacity>
-                <TouchableOpacity title='Eyes' style={[styles.tabHeader, styles.eyes, activeTab === "Eyes" && styles.shadow]} onPress={() => handleTabPress("Eyes")} activeOpacity={0.6}>
+
+                <TouchableOpacity
+                    title='Eyes'
+                    style={[styles.tabHeader, styles.eyes, activeTab === "Eyes" && styles.shadow]}
+                    onPress={() => handleTabPress("Eyes")}
+                    activeOpacity={0.6}>
                     <Text style={styles.header} numberOfLines={1} adjustsFontSizeToFit>Eyes</Text>
                 </TouchableOpacity>
-                <TouchableOpacity title='Mouth' style={[styles.tabHeader, styles.mouth, activeTab === "Mouth" && styles.shadow]} onPress={() => handleTabPress("Mouth")} activeOpacity={0.6}>
+
+                <TouchableOpacity
+                    title='Mouth'
+                    style={[styles.tabHeader, styles.mouth, activeTab === "Mouth" && styles.shadow]}
+                    onPress={() => handleTabPress("Mouth")}
+                    activeOpacity={0.6}>
                     <Text style={styles.header} numberOfLines={1} adjustsFontSizeToFit>Mouth</Text>
                 </TouchableOpacity>
-                <TouchableOpacity title='Accessories' style={[styles.tabHeader, styles.accessories, activeTab === "Accessories" && styles.shadow]} onPress={() => handleTabPress("Accessories")} activeOpacity={0.6}>
+
+                <TouchableOpacity title='Accessories'
+                    style={[styles.tabHeader, styles.accessories, activeTab === "Accessories" && styles.shadow]}
+                    onPress={() => handleTabPress("Accessories")}
+                    activeOpacity={0.6}>
                     <Text style={styles.header} numberOfLines={1} adjustsFontSizeToFit>Accessories</Text>
                 </TouchableOpacity>
             </View>
-            {activeTab == 'Pattern' && <ContentTab style={styles.pattern}></ContentTab>}
-            {activeTab == 'Eyes' && <ContentTab style={styles.eyes}></ContentTab>}
-            {activeTab == 'Mouth' && <ContentTab style={styles.mouth}></ContentTab>}
-            {activeTab == 'Accessories' && <ContentTab style={styles.accessories}></ContentTab>}
+            {activeTab == 'Base' && <ContentTab style={styles.base} items={baseItems}></ContentTab>}
+            {activeTab == 'Eyes' && <ContentTab style={styles.eyes} items={eyesItems}></ContentTab>}
+            {activeTab == 'Mouth' && <ContentTab style={styles.mouth} items={mouthItems}></ContentTab>}
+            {activeTab == 'Accessories' && <ContentTab style={styles.accessories} items={accessoryItems}></ContentTab>}
         </View>
     )
 }
@@ -62,7 +102,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Doodle',
         fontSize: 18,
     },
-    pattern: {
+    base: {
         backgroundColor: '#FFEA8A'
     },
     eyes: {
