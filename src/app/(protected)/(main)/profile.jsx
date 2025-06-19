@@ -34,7 +34,7 @@ const index = () => {
             size={250}
           />
 
-          <Text style={styles.userName}>Test</Text>
+          <Text style={styles.userName}></Text>
 
           <View style={styles.buttonsRow}>
             <GradientButton
