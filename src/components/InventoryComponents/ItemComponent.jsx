@@ -4,9 +4,12 @@ import SingleFrameSprite from '../SingleFrameSprite'
 import Tack from '../../assets/Tack'
 import { useFonts } from 'expo-font';
 import { useAvatar } from '../../contexts/AvatarContext';
+import { handleItemEquip } from '../../utilities/handleItemEquip';
+import { useState } from 'react';
 
 const ItemComponent = ({item}) => {
     const { updateAvatar } = useAvatar();
+    const [equipped, isEquipped] = useState(item.equipped);
 
     useFonts({
         'Doodle': require('../../assets/fonts/doodle.ttf')
@@ -54,6 +57,7 @@ const ItemComponent = ({item}) => {
 
     const itemPress = (item) => {
         updateAvatar({[item.type] : item.itemID});
+        handleItemEquip(item);
     };
 
     return (
