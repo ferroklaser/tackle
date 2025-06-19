@@ -1,10 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import SingleFrameSprite from '../SingleFrameSprite'
 import Tack from '../../assets/Tack'
 import { useFonts } from 'expo-font';
+import { useAvatar } from '../../contexts/AvatarContext';
 
 const ItemComponent = ({item}) => {
+    const { updateAvatar } = useAvatar();
+
     useFonts({
         'Doodle': require('../../assets/fonts/doodle.ttf')
     });
@@ -49,12 +52,16 @@ const ItemComponent = ({item}) => {
 
     const data = getData();   
 
+    const itemPress = (item) => {
+        updateAvatar({[item.type] : item.itemID});
+    };
+
     return (
         <View style={styles.item}>
-            <View style={[item.equipped && styles.equipped]} pointerEvents='none'>
-                <View style={styles.square}>
+            <View style={[item.equipped && styles.equipped]}>
+                <TouchableOpacity onPress={() => itemPress(item)} activeOpacity={0.6} style={styles.square}>
                     <SingleFrameSprite {...data} />
-                </View>
+                </TouchableOpacity>
                 <Text style={styles.text}>{item.name}</Text>
             </View>
         </View>

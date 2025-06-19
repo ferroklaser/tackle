@@ -3,7 +3,7 @@ import React, { createContext, useEffect } from 'react'
 import { useState, useContext } from 'react';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../firebaseConfig';
 import LoadingSplash from '../components/LoadingSplash';
-import { getDoc, doc } from 'firebase/firestore';
+import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import Tack from '../assets/Tack';
 import { Asset } from 'expo-asset';
 
@@ -72,6 +72,7 @@ export const AvatarProvider = ({ children }) => {
     //     loadResources();
     // }, [isAvatarLoaded])
 
+    //load all Assets
     useEffect(() => {
         const loadAllAssets = async () => {
             try {
@@ -91,6 +92,21 @@ export const AvatarProvider = ({ children }) => {
         loadAllAssets();
     }, []);
 
+    const updateAvatar = async (updates) => {
+        const user = FIREBASE_AUTH.currentUser;
+        if (!user) return;
+        
+        const userRef = doc(FIREBASE_DATABASE, "users", user.uid);
+        const newAvatar = {...avatar, ...updates};
+
+        try {
+            await updateDoc(userRef, { avatar: newAvatar });
+            setAvatar(newAvatar);
+        } catch (error) {
+            console.log("Error updating avatar: ", error);
+        }
+    }
+
 
     if (!isAssetsLoaded || !isAvatarLoaded) {
         return (
@@ -99,7 +115,7 @@ export const AvatarProvider = ({ children }) => {
     }
 
     return (
-    <AvatarContext.Provider value={{ avatar, isAssetsLoaded, isAvatarLoaded }}>
+    <AvatarContext.Provider value={{ avatar, isAssetsLoaded, isAvatarLoaded, updateAvatar }}>
         {children}
     </AvatarContext.Provider>
     );
