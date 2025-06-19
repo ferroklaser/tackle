@@ -50,13 +50,15 @@ const ItemComponent = ({item}) => {
     const data = getData();   
 
     return (
-        <View style={styles.item} pointerEvents='none'>
-            <View style={styles.square}>
-                <SingleFrameSprite {...data}/>
+        <View style={styles.item}>
+            <View style={[item.equipped && styles.equipped]} pointerEvents='none'>
+                <View style={styles.square}>
+                    <SingleFrameSprite {...data} />
+                </View>
+                <Text style={styles.text}>{item.name}</Text>
             </View>
-            <Text style={styles.text}>{item.name}</Text>
         </View>
-  )
+    )
 }
 
 export default ItemComponent
@@ -69,16 +71,21 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 2,
-        marginVertical: 5,
     },
     item: {
         justifyContent: "center",
         alignItems: "center",
         flex: 0.5,
+        marginVertical: 5
     },
     text:{
         fontFamily: "Doodle",
         fontSize: 16,
         textAlign: 'center'
+    },
+    equipped: {
+        borderWidth: 3,
+        padding: 10,
+        margin: 0,
     }
 })
