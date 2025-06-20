@@ -21,11 +21,11 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFE98A",
         borderWidth: 1,
         borderColor: 'black',
-        height: 170,
-        width: 130,
+        height: 150,
+        width: 120,
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 20,
+        margin: 3,
 
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
@@ -35,8 +35,8 @@ const styles = StyleSheet.create({
     },
     dummy: {
         backgroundColor: 'white',
-        width: 100,
-        height: 100,
+        width: 90,
+        height: 90,
     },
     details: {
         marginTop: 10,
