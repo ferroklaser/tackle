@@ -1,14 +1,28 @@
 import { StyleSheet, Text, View, ImageBackground } from 'react-native'
-import React, { useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import CombinedTackSprite from '../../../components/TackComponents/CombinedTackSprite.jsx';
 import MyButton from '../../../components/MyButton.jsx';
 import GradientButton from '../../../components/GradientButton.jsx';
 import { useAuth } from '../../../contexts/AuthContext.jsx';
 import { useAvatar } from '../../../contexts/AvatarContext.jsx';
+import { getUsername } from '../../../utilities/getUsername.js';
 
 const index = () => {
   const { logOut } = useAuth();
   const { avatar } = useAvatar();
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    const fetchUsername = async () => {
+      try {
+        const userName = await getUsername();
+        setUsername(userName);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchUsername();
+  }, [])
 
   const handleSignOut = async () => {
     try {
@@ -34,7 +48,7 @@ const index = () => {
             size={250}
           />
 
-          <Text style={styles.userName}></Text>
+          <Text style={styles.userName}>{username}</Text>
 
           <View style={styles.buttonsRow}>
             <GradientButton
