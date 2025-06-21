@@ -15,7 +15,8 @@ export const generateUserShop = async (user) => {
 
         const unownedItems = allItems.filter(doc => !itemIDs.includes(doc.data().itemID));
         const shuffled = unownedItems.sort(() => Math.random() - 0.5);
-        return shuffled.map(doc => doc.data());
+        const output =  shuffled.map(doc => doc.data());
+        return output;
     } catch (error) {
         console.log("Error generating shop: ", error);
     }

@@ -1,15 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, Pressable, View } from 'react-native'
 import React from 'react'
 import SingleFrameSprite from '../SingleFrameSprite';
 import Tack from '../../assets/Tack';
-import { useFonts } from 'expo-font'
 
-const PolaroidView = ({ item }) => {
-    useFonts({
-        'Doodle': require('../../assets/fonts/doodle.ttf')
-    });
+const PolaroidView = ({ item, fontStyle }) => {
     const getData = () => {
-        console.log(item);
         switch (item.type) {
             case "base":
                 return {
@@ -50,17 +45,30 @@ const PolaroidView = ({ item }) => {
 
     const data = getData();
 
+    const getPolaroidColour = (item) => {
+        switch (item.type) {
+            case "base":
+                return '#FFE98A';
+            case "eyes":
+                return '#8CE2F5';
+            case "mouth":
+                return '#FBD0F4';
+            case "accessory":
+                return '#CBFAB5';
+        }
+    }
+
     return (
-        <View style={styles.container}>
-            <View style={styles.dummy}>
-                <SingleFrameSprite {...data} />
-            </View>
-            <View style={styles.details}>
-                <Text style={styles.text}>Name: {item.name}</Text>
-                <Text style={styles.text}>Type: {item.type}</Text>
-                <Text style={styles.text}>Price: {item.price}</Text>
-            </View>
-        </View>
+            <Pressable style={[styles.container, {backgroundColor: getPolaroidColour(item)}]} >
+                <View style={styles.dummy}>
+                    <SingleFrameSprite {...data} />
+                </View>
+                <View style={styles.details}>
+                    <Text style={[styles.text, fontStyle]}>Name: {item.name}</Text>
+
+                    <Text style={[styles.text, fontStyle]}>Price: {item.price}</Text>
+                </View>
+            </Pressable>
     )
 }
 
@@ -68,7 +76,6 @@ export default PolaroidView
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: "#FFE98A",
         borderWidth: 1,
         borderColor: 'black',
         height: 160,
@@ -86,7 +93,7 @@ const styles = StyleSheet.create({
     dummy: {
         backgroundColor: 'white',
         width: 110,
-        height: 100,
+        height: 110,
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 1
@@ -94,6 +101,5 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 15,
         textAlign: 'left',
-        fontFamily: 'Doodle'
     }
 })
