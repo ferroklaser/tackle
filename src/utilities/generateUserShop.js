@@ -2,7 +2,7 @@ import { FIREBASE_DATABASE } from "../firebaseConfig"
 import { getDocs, collection } from "firebase/firestore"
 
 
-const generateUserShop = async (user) => {
+export const generateUserShop = async (user) => {
     try {
         const userRef = collection(FIREBASE_DATABASE, "users", user.uid, "inventory");
         const snapShot = await getDocs(userRef);
@@ -14,8 +14,8 @@ const generateUserShop = async (user) => {
         const allItems = itemsSnapShot.docs;
 
         const unownedItems = allItems.filter(doc => !itemIDs.includes(doc.data().itemID));
-        const shuffled = unownedItems.sort(() => Math.random() - 0.5).slice(0, 6);
-        return shuffled;
+        const shuffled = unownedItems.sort(() => Math.random() - 0.5);
+        return shuffled.map(doc => doc.data());
     } catch (error) {
         console.log("Error generating shop: ", error);
     }
