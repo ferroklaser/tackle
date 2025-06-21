@@ -8,14 +8,14 @@ import { useAvatar } from '../../../contexts/AvatarContext.jsx';
 import { getUsername } from '../../../utilities/getUsername.js';
 
 const index = () => {
-  const { logOut } = useAuth();
+  const { logOut, user } = useAuth();
   const { avatar } = useAvatar();
   const [username, setUsername] = useState("");
 
   useEffect(() => {
     const fetchUsername = async () => {
       try {
-        const userName = await getUsername();
+        const userName = await getUsername(user);
         setUsername(userName);
       } catch (error) {
         console.log(error);
