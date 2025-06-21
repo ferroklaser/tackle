@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 import { useFonts } from 'expo-font'
 import LoadingSplash from '../../../../components/LoadingSplash.jsx'
 
+
 const store = () => {
   const { user } = useAuth();
   const [shop, setShop] = useState();

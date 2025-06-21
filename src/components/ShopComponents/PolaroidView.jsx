@@ -1,9 +1,12 @@
 import { StyleSheet, Text, Pressable, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import SingleFrameSprite from '../SingleFrameSprite';
 import Tack from '../../assets/Tack';
+import PreviewItemModal from '../Modals/PreviewItemModal';
 
 const PolaroidView = ({ item, fontStyle }) => {
+    const [isModalVisible, setModalVisible] = useState(false);
+
     const getData = () => {
         switch (item.type) {
             case "base":
@@ -58,17 +61,29 @@ const PolaroidView = ({ item, fontStyle }) => {
         }
     }
 
+    const handleItemPress = () => {
+        setModalVisible(true);
+    }
+    
+
     return (
-            <Pressable style={[styles.container, {backgroundColor: getPolaroidColour(item)}]} >
+        <>
+            <Pressable style={[styles.container, { backgroundColor: getPolaroidColour(item) }]} onPress={handleItemPress}>
                 <View style={styles.dummy}>
                     <SingleFrameSprite {...data} />
                 </View>
                 <View style={styles.details}>
-                    <Text style={[styles.text, fontStyle]}>Name: {item.name}</Text>
-
-                    <Text style={[styles.text, fontStyle]}>Price: {item.price}</Text>
+                    <Text style={[styles.text, fontStyle]}>{item.name}</Text>
+                    <Text style={[styles.text, fontStyle]}>{item.price}</Text>
                 </View>
             </Pressable>
+            <PreviewItemModal
+                setModalVisible={setModalVisible}
+                isModalVisible={isModalVisible}
+                backgroundColor={{ backgroundColor: getPolaroidColour(item)}}
+                fontStyle={fontStyle} 
+                item={item}/>
+        </>
     )
 }
 
@@ -101,5 +116,11 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 15,
         textAlign: 'left',
+    },
+    details: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 10,
+        width: 90
     }
 })
