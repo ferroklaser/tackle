@@ -4,11 +4,17 @@ import PolaroidView from '../../../../components/ShopComponents/PolaroidView'
 import { generateUserShop } from '../../../../utilities/generateUserShop.js'
 import { useAuth } from '../../../../contexts/AuthContext.jsx'
 import { useState, useEffect } from 'react'
+import { useFonts } from 'expo-font'
+import LoadingSplash from '../../../../components/LoadingSplash.jsx'
+
 
 const store = () => {
   const { user } = useAuth();
   const [shop, setShop] = useState();
-  
+  const [fontsLoaded] = useFonts({
+    'Doodle': require('../../../../assets/fonts/doodle.ttf')
+  });
+
   useEffect(() => {
     const fetchShop = async () => {
       try {
@@ -21,10 +27,14 @@ const store = () => {
     fetchShop();
   }, []);
 
+  if (!fontsLoaded) return <LoadingSplash />
+
+  const doodleFont = { fontFamily: 'Doodle'}
+
   return (
     <View style={styles.container}>
       {shop && shop.map(item => (
-        <PolaroidView key={item.itemID} item={item}/>
+        <PolaroidView key={item.itemID} item={item} fontStyle={doodleFont}/>
       ))}
     </View>
   )
@@ -38,6 +48,7 @@ const styles = StyleSheet.create({
       flexWrap: 'wrap',
       justifyContent: 'space-evenly',
       alignItems: 'center',
-      marginTop: 180
+      marginTop: 180,
+      overflow: 'hidden'
     }
 })
