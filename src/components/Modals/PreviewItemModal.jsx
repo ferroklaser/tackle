@@ -3,19 +3,28 @@ import React from 'react'
 import CombinedTackSprite from '../TackComponents/CombinedTackSprite'
 import { useAvatar } from '../../contexts/AvatarContext.jsx'
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useState, useEffect } from 'react';
 
 const PreviewItemModal = ({ isModalVisible, setModalVisible, backgroundColor, item, fontStyle}) => {
     const { avatar } = useAvatar();
+    const [previewAvatar, setPreviewAvatar] = useState({...avatar});
+
+    useEffect(() => {
+        setPreviewAvatar((prev) => ({
+            ...prev,
+            [item.type]: item.itemID,
+        }))
+    }, []);
 
     return (
         <Modal visible={isModalVisible}>
             <View style={styles.overlay}>
                 <View style={[styles.container, backgroundColor]}>
                     <CombinedTackSprite
-                        tackBaseOption={avatar.base}
-                        eyesOption={avatar.eyes}
-                        mouthOption={avatar.mouth}
-                        accessoryOption={avatar.accessory}
+                        tackBaseOption={previewAvatar.base}
+                        eyesOption={previewAvatar.eyes}
+                        mouthOption={previewAvatar.mouth}
+                        accessoryOption={previewAvatar.accessory}
                         size={270}
                     />
                     <View style={{marginBottom: 10}}>
