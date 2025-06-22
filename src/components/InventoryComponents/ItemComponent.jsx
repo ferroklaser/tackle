@@ -6,10 +6,12 @@ import { useFonts } from 'expo-font';
 import { useAvatar } from '../../contexts/AvatarContext';
 import { handleItemEquip } from '../../utilities/handleItemEquip';
 import { useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
 
 const ItemComponent = ({item}) => {
     const { updateAvatar } = useAvatar();
     const [equipped, isEquipped] = useState(item.equipped);
+    const { user } = useAuth();
 
     useFonts({
         'Doodle': require('../../assets/fonts/doodle.ttf')
@@ -55,15 +57,15 @@ const ItemComponent = ({item}) => {
 
     const data = getData();   
 
-    const itemPress = (item) => {
+    const itemPress = (user, item) => {
         updateAvatar({[item.type] : item.itemID});
-        handleItemEquip(item);
+        handleItemEquip(user, item);
     };
 
     return (
         <View style={styles.item}>
             <View style={[item.equipped && styles.equipped]}>
-                <TouchableOpacity onPress={() => itemPress(item)} activeOpacity={0.6} style={styles.square}>
+                <TouchableOpacity onPress={() => itemPress(user, item)} activeOpacity={0.6} style={styles.square}>
                     <SingleFrameSprite {...data} />
                 </TouchableOpacity>
                 <Text style={styles.text}>{item.name}</Text>
