@@ -4,10 +4,13 @@ import CombinedTackSprite from '../TackComponents/CombinedTackSprite'
 import { useAvatar } from '../../contexts/AvatarContext.jsx'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useState, useEffect } from 'react';
+import { handleItemBuy } from '../../utilities/handleItemBuy.js';
+import { useAuth } from '../../contexts/AuthContext.jsx';
 
 const PreviewItemModal = ({ isModalVisible, setModalVisible, backgroundColor, item, fontStyle}) => {
-    const { avatar } = useAvatar();
+    const { avatar, updateAvatar } = useAvatar();
     const [previewAvatar, setPreviewAvatar] = useState({...avatar});
+    const { user } = useAuth();
 
     useEffect(() => {
         setPreviewAvatar((prev) => ({
@@ -15,6 +18,11 @@ const PreviewItemModal = ({ isModalVisible, setModalVisible, backgroundColor, it
             [item.type]: item.itemID,
         }))
     }, []);
+
+    const handleBuyItem = () => {
+        handleItemBuy(user, item, updateAvatar);
+        setModalVisible(!isModalVisible);
+    }
 
     return (
         <Modal visible={isModalVisible}>
@@ -35,7 +43,7 @@ const PreviewItemModal = ({ isModalVisible, setModalVisible, backgroundColor, it
                         <TouchableOpacity style={[styles.button, styles.cancel]} onPress={() => setModalVisible(!isModalVisible)}>
                             <AntDesign name="close" size={40} color="red" />
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.button, styles.buy]}>
+                        <TouchableOpacity style={[styles.button, styles.buy]} onPress={handleBuyItem}>
                             <AntDesign name="check" size={40} color="green" />
                         </TouchableOpacity>
                     </View>

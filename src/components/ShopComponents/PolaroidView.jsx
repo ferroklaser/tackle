@@ -64,7 +64,6 @@ const PolaroidView = ({ item, fontStyle }) => {
     const handleItemPress = () => {
         setModalVisible(true);
     }
-    
 
     return (
         <>

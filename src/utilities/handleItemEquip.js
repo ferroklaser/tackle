@@ -1,11 +1,10 @@
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from "../firebaseConfig";
 import { collection, query, where, getDocs, updateDoc } from "firebase/firestore";
 
-export const handleItemEquip = async (item) => {
-    const user = FIREBASE_AUTH.currentUser.uid
+export const handleItemEquip = async (user, item) => {
     if (!user) return;
     try {
-    const inventoryRef = collection(FIREBASE_DATABASE, "users", user, "inventory");
+    const inventoryRef = collection(FIREBASE_DATABASE, "users", user.uid, "inventory");
 
     const q = query(inventoryRef, where("type", "==", item.type))
     const querySnapShot = await getDocs(q);
@@ -16,8 +15,6 @@ export const handleItemEquip = async (item) => {
             equipped: isEquip,
         })
     })
-
-    
         await Promise.all(updateInventory);
     } catch (error) {
         console.log("Unable to update inventory: ", error);
