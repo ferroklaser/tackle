@@ -14,7 +14,7 @@ export const generateUserShop = async (user) => {
         const allItems = itemsSnapShot.docs;
 
         const unownedItems = allItems.filter(doc => !itemIDs.includes(doc.data().itemID));
-        const shuffled = unownedItems.sort(() => Math.random() - 0.5);
+        const shuffled = unownedItems.sort(() => Math.random() - 0.5).slice(0, 6);
         const output =  shuffled.map(doc => doc.data());
         return output;
     } catch (error) {
