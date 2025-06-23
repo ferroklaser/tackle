@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
+import { KeyboardAvoidingView } from 'react-native'
 
 const ThemedInput = ({ onChangeText, value, placeholder, secureTextEntry, ...props}) => {
   return (
@@ -11,6 +12,7 @@ const ThemedInput = ({ onChangeText, value, placeholder, secureTextEntry, ...pro
         autoCapitalize='none'
         secureTextEntry={secureTextEntry}
         testID='themedInput'
+        style={{fontSize: 15}}
         {...props}/>
     </View>
   )

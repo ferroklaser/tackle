@@ -6,11 +6,13 @@ import GradientButton from '../../../components/GradientButton.jsx';
 import { useAuth } from '../../../contexts/AuthContext.jsx';
 import { useAvatar } from '../../../contexts/AvatarContext.jsx';
 import { getUsername } from '../../../utilities/getUsername.js';
+import EditProfileModal from '../../../components/Modals/EditProfileModal.jsx';
 
 const index = () => {
   const { logOut, user } = useAuth();
   const { avatar } = useAvatar();
   const [username, setUsername] = useState("");
+  const [isModalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchUsername = async () => {
@@ -56,6 +58,7 @@ const index = () => {
               colours={['#58C7E5', '#8FBBF5']}
               buttonStyle={styles.button}
               textStyle={styles.buttonText}
+              onPress={() => setModalVisible(!isModalVisible)}
             />
             <GradientButton
               title="Add Friends"
@@ -80,6 +83,8 @@ const index = () => {
           onPress={handleSignOut}
         />
       </View>
+
+      <EditProfileModal isModalVisible={isModalVisible} setModalVisible={setModalVisible}/>
       
     </ImageBackground>
   )
