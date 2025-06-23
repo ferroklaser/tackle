@@ -3,7 +3,13 @@ import React from 'react'
 
 const AuthButton = ({onPress, style, ...props}) => {
   return (
-    <TouchableOpacity style={ [styles.button, style] } onPress={onPress} activeOpacity={.5} {...props}/>
+    <TouchableOpacity
+      style={[styles.button, style]}
+      onPress={onPress}
+      activeOpacity={.5}
+      accessibilityRole='button'
+      accessibilityLabel='auth button'
+      {...props} />
   )
 }
 
