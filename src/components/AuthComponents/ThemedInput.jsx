@@ -10,6 +10,7 @@ const ThemedInput = ({ onChangeText, value, placeholder, secureTextEntry, ...pro
         onChangeText={onChangeText}
         autoCapitalize='none'
         secureTextEntry={secureTextEntry}
+        testID='themedInput'
         {...props}/>
     </View>
   )
