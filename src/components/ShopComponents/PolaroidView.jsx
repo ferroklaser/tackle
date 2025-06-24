@@ -67,7 +67,11 @@ const PolaroidView = ({ item, fontStyle }) => {
 
     return (
         <>
-            <Pressable style={[styles.container, { backgroundColor: getPolaroidColour(item) }]} onPress={handleItemPress}>
+            <Pressable
+                style={[
+                    styles.container,
+                    { backgroundColor: getPolaroidColour(item) }]}
+                onPress={handleItemPress} >
                 <View style={styles.dummy}>
                     <SingleFrameSprite {...data} />
                 </View>
@@ -79,9 +83,9 @@ const PolaroidView = ({ item, fontStyle }) => {
             <PreviewItemModal
                 setModalVisible={setModalVisible}
                 isModalVisible={isModalVisible}
-                backgroundColor={{ backgroundColor: getPolaroidColour(item)}}
-                fontStyle={fontStyle} 
-                item={item}/>
+                backgroundColor={{ backgroundColor: getPolaroidColour(item) }}
+                fontStyle={fontStyle}
+                item={item} />
         </>
     )
 }
@@ -110,7 +114,8 @@ const styles = StyleSheet.create({
         height: 110,
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 1
+        borderWidth: 1,
+        overflow: 'hidden'
     },
     text: {
         fontSize: 15,
