@@ -7,17 +7,17 @@ import { useState, useEffect } from 'react';
 import { handleItemBuy } from '../../utilities/handleItemBuy.js';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 
-const PreviewItemModal = ({ isModalVisible, setModalVisible, backgroundColor, item, fontStyle, isPurchased, setPurchased}) => {
+const PreviewItemModal = ({ isModalVisible, setModalVisible, backgroundColor, item, fontStyle, setPurchased}) => {
     const { avatar, updateAvatar } = useAvatar();
     const [previewAvatar, setPreviewAvatar] = useState({...avatar});
     const { user } = useAuth();
 
     useEffect(() => {
-        setPreviewAvatar((prev) => ({
-            ...prev,
+        setPreviewAvatar(() => ({
+            ...avatar,
             [item.type]: item.itemID,
         }))
-    }, []);
+    }, [avatar, item]);
 
     const handleBuyItem = async () => {
         if (await handleItemBuy(user, item, updateAvatar)) {
