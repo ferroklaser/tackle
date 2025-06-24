@@ -64,7 +64,7 @@ const ItemComponent = ({item}) => {
 
     return (
         <View style={styles.item}>
-            <View style={[item.equipped && styles.equipped]}>
+            <View>
                 <TouchableOpacity onPress={() => itemPress(user, item)} activeOpacity={0.6} style={styles.square}>
                     <SingleFrameSprite {...data} />
                 </TouchableOpacity>
