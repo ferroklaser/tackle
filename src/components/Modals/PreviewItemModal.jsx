@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import { handleItemBuy } from '../../utilities/handleItemBuy.js';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 
-const PreviewItemModal = ({ isModalVisible, setModalVisible, backgroundColor, item, fontStyle}) => {
+const PreviewItemModal = ({ isModalVisible, setModalVisible, backgroundColor, item, fontStyle, isPurchased, setPurchased}) => {
     const { avatar, updateAvatar } = useAvatar();
     const [previewAvatar, setPreviewAvatar] = useState({...avatar});
     const { user } = useAuth();
@@ -19,9 +19,11 @@ const PreviewItemModal = ({ isModalVisible, setModalVisible, backgroundColor, it
         }))
     }, []);
 
-    const handleBuyItem = () => {
-        handleItemBuy(user, item, updateAvatar);
-        setModalVisible(!isModalVisible);
+    const handleBuyItem = async () => {
+        if (await handleItemBuy(user, item, updateAvatar)) {
+            setPurchased(true);
+            setModalVisible(!isModalVisible);
+        }
     }
 
     return (

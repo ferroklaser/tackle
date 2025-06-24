@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font';
 import LoadingSplash from '../LoadingSplash';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig';
 import { getDocs, collection } from 'firebase/firestore';
+import { useInventoryListener } from '../../utilities/fetchInventory';
 
 const TabContainer = () => {
     const [fontsLoaded] =
@@ -12,25 +13,30 @@ const TabContainer = () => {
             'Doodle': require('../../assets/fonts/doodle.ttf')
         });
     const [activeTab, setActiveTab] = useState('Base');
-    const [inventory, setInventory] = useState([]);
+    // const [inventory, setInventory] = useState([]);
 
     const handleTabPress = (title) => {
         setActiveTab(title);
     }
 
-    const fetchInventory = async () => {
-        const uid = FIREBASE_AUTH.currentUser.uid;
-        const snapshot = await getDocs(collection(FIREBASE_DATABASE, 'users', uid, 'inventory'));
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    };
+    const inventory = useInventoryListener();
+    // const fetchInventory = async () => {
+    //     const uid = FIREBASE_AUTH.currentUser.uid;
+    //     const snapshot = await getDocs(collection(FIREBASE_DATABASE, 'users', uid, 'inventory'));
+    //     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    // };
 
-    useEffect(() => {
-        const loadInventory = async () => {
-            const items = await fetchInventory()
-            setInventory(items);
-        }
-        loadInventory();
-    }, []);
+    // useEffect(() => {
+    //     const loadInventory = async () => {
+    //         const items = await fetchInventory()
+    //         setInventory(items);
+    //     }
+    //     loadInventory();
+
+        
+    // }, []);
+
+    
 
     if (!fontsLoaded) {
         return <LoadingSplash />
