@@ -14,7 +14,8 @@ export const handleItemBuy = async (user, item, updateAvatar) => {
         if (docSnap.exists()) {
             const coins = docSnap.data().coins;
             if (coins < price) {
-                display("You have insufficient coins");
+                alert("You have insufficient coins");
+                return false;
             } else {
                 await updateDoc(userRef, { coins: coins - price });
                 updateAvatar({ [item.type]: item.itemID });
@@ -25,6 +26,7 @@ export const handleItemBuy = async (user, item, updateAvatar) => {
                     type: item.type,
                 })
                 handleItemEquip(user, item);
+                return true;
             }
         }
     } catch (error) {
