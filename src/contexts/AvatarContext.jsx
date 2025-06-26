@@ -31,26 +31,28 @@ export const AvatarProvider = ({ children }) => {
     const [isAvatarLoaded, setAvatarLoaded] = useState(false);
 
     useEffect(() => {
-        const fetchAvatar = async () => {
-            const ref = doc(FIREBASE_DATABASE, "users", user.uid)
-            try {
-                const docSnap = await getDoc(ref);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    const avatar = data.avatar;
-                    setAvatar({
-                        base: avatar.base,
-                        eyes: avatar.eyes,
-                        mouth: avatar.mouth,
-                        accessory: avatar.accessory,
-                    });
-                    setAvatarLoaded(true);
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        fetchAvatar();
+        // const fetchAvatar = async () => {
+        //     
+        //     try {
+        //         const docSnap = await getDoc(ref);
+        //         if (docSnap.exists()) {
+        //             const data = docSnap.data();
+        //             const avatar = data.avatar;
+        //             setAvatar({
+        //                 base: avatar.base,
+        //                 eyes: avatar.eyes,
+        //                 mouth: avatar.mouth,
+        //                 accessory: avatar.accessory,
+        //             });
+        //             setAvatarLoaded(true);
+        //         }
+        //     } catch (error) {
+        //         console.log(error)
+        //     }
+        // }
+        // fetchAvatar();
+
+        const ref = doc(FIREBASE_DATABASE, "users", user.uid)
 
         const unsubscribe = onSnapshot(ref, doc => {
             if (doc.exists()) {
