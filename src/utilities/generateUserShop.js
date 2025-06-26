@@ -19,7 +19,7 @@ export const generateUserShop = async (user) => {
 
         if (docSnap.exists()) {
             const docData = docSnap.data();
-            if (docData.shop.timestamp && isSameDay(docData.shop.timestamp)) {
+            if (docData.shop && docData.shop.timestamp && isSameDay(docData.shop.timestamp)) {
                 return docData.shop.shopItems;
             }
         }

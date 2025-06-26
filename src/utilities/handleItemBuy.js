@@ -2,6 +2,7 @@ import { useAvatar } from "../contexts/AvatarContext"
 import { handleItemEquip } from "./handleItemEquip";
 import { FIREBASE_DATABASE } from "../firebaseConfig";
 import { collection, doc, getDoc, updateDoc, addDoc } from "firebase/firestore";
+import { addItemToInventory } from "./addItemToInventory";
 
 
 export const handleItemBuy = async (user, item, updateAvatar) => {
@@ -32,13 +33,8 @@ export const handleItemBuy = async (user, item, updateAvatar) => {
                         "shop.shopItems": updatedShopItems,
                     });
                 }
-                await addDoc(inventoryRef, {
-                    name: item.name,
-                    itemID: item.itemID,
-                    equipped: true,
-                    type: item.type,
-                })
-                handleItemEquip(user, item);
+                await addItemToInventory(user, item);
+                await handleItemEquip(user, item);
                 return true;
             }
         }

@@ -10,6 +10,9 @@ import { useFonts } from 'expo-font';
 
 import { FIREBASE_DATABASE, FIREBASE_AUTH } from '../../firebaseConfig.js';
 import { doc, setDoc, updateDoc} from 'firebase/firestore';
+import { addItemToInventory } from '../../utilities/addItemToInventory.js';
+import { fetchItemByID } from '../../utilities/fetchItemByID.js';
+import { useAuth } from '../../contexts/AuthContext.jsx';
 
 // only add those available for users into these arrays
 const colourOptions = ['Yellow', 'Blue'];
@@ -29,44 +32,46 @@ const CreationComponent = () => {
 
   const [inputKey, setInputKey] = React.useState(0);
 
+  const { user } = useAuth();
+
   useFonts({
     'Doodle': require('../../assets/fonts/doodle.ttf')});
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    const loadAssets = async () => {
-      const assets = [];
+  //   const loadAssets = async () => {
+  //     const assets = [];
 
-      colourOptions.forEach((key) => {
-        const spriteSheet = Tack.TackBase[key];
-        assets.push(Asset.loadAsync(spriteSheet));
-      });
+  //     colourOptions.forEach((key) => {
+  //       const spriteSheet = Tack.TackBase[key];
+  //       assets.push(Asset.loadAsync(spriteSheet));
+  //     });
 
-      eyeOptions.forEach((key) => {
-        const spriteSheet = Tack.Eyes[key];
-        assets.push(Asset.loadAsync(spriteSheet));
-      });
+  //     eyeOptions.forEach((key) => {
+  //       const spriteSheet = Tack.Eyes[key];
+  //       assets.push(Asset.loadAsync(spriteSheet));
+  //     });
 
-      mouthOptions.forEach((key) => {
-        const spriteSheet = Tack.Mouth[key];
-        assets.push(Asset.loadAsync(spriteSheet));
-      });
+  //     mouthOptions.forEach((key) => {
+  //       const spriteSheet = Tack.Mouth[key];
+  //       assets.push(Asset.loadAsync(spriteSheet));
+  //     });
 
-      accessoryOptions.forEach((key) => {
-        const spriteSheet = Tack.Accessory[key];
-        assets.push(Asset.loadAsync(spriteSheet));
-      });
+  //     accessoryOptions.forEach((key) => {
+  //       const spriteSheet = Tack.Accessory[key];
+  //       assets.push(Asset.loadAsync(spriteSheet));
+  //     });
 
-      await Promise.all(assets);
-      setIsLoaded(true);
-    };
+  //     await Promise.all(assets);
+  //     setIsLoaded(true);
+  //   };
 
-    loadAssets();
-  }, []);
+  //   loadAssets();
+  // }, []);
 
-  if (!isLoaded) {
-    return <View />;
-  }
+  // if (!isLoaded) {
+  //   return <View />;
+  // }
 
   const currentColour = colourOptions[colourIndex];
   const currentEyes = eyeOptions[eyeIndex];
@@ -86,7 +91,7 @@ const CreationComponent = () => {
       Alert.alert('Reminder', 'Username cannot be empty')
     } else {
       try {
-        await updateDoc(doc(FIREBASE_DATABASE, "users", FIREBASE_AUTH.currentUser.uid), {
+        await updateDoc(doc(FIREBASE_DATABASE, "users", user.uid), {
           username: username,
           avatar: {
             base: currentColour,
@@ -95,6 +100,12 @@ const CreationComponent = () => {
             accessory: currentAccessory
           }
         });
+        const avatarItems = [currentColour, currentEyes, currentMouth, currentAccessory];
+
+        for (const avatarItem of avatarItems) {
+          const itemData = await fetchItemByID(avatarItem);
+          await addItemToInventory(user, itemData);
+        }
       } catch (error) {
         console.log(error);
       } finally {
