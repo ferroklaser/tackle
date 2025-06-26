@@ -19,6 +19,19 @@ export const handleItemBuy = async (user, item, updateAvatar) => {
             } else {
                 await updateDoc(userRef, { coins: coins - price });
                 updateAvatar({ [item.type]: item.itemID });
+
+                if (docSnap.data().shop && docSnap.data().shop.shopItems) {
+                    const updatedShopItems = docSnap.data().shop.shopItems.map(shopItem => {
+                        if (shopItem.itemID === item.itemID) {
+                            return { ...shopItem, purchased: true };
+                        }
+                        return shopItem;
+                    });
+
+                    await updateDoc(userRef, {
+                        "shop.shopItems": updatedShopItems,
+                    });
+                }
                 await addDoc(inventoryRef, {
                     name: item.name,
                     itemID: item.itemID,

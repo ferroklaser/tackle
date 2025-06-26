@@ -6,7 +6,7 @@ import PreviewItemModal from '../Modals/PreviewItemModal';
 
 const PolaroidView = ({ item, fontStyle }) => {
     const [isModalVisible, setModalVisible] = useState(false);
-    const [isPurchased, setPurchased] = useState(false);
+    const [isPurchased, setPurchased] = useState(item.purchased);
 
     const getData = () => {
         switch (item.type) {
