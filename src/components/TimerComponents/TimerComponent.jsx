@@ -20,9 +20,6 @@ const formatTime = (sec) => {
 
 const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
   const { taskId, taskData } = useTask();
-  const currentUser = FIREBASE_AUTH.currentUser;
-  const docRefReward = doc(FIREBASE_DATABASE, 'users', currentUser.uid);
-  const docRefComplete = doc(FIREBASE_DATABASE, 'userTasks', currentUser.uid, 'tasks', taskId);
   const [isPickerVisible, setPickerVisible] = useState(false);
   const [duration, setDuration] = useState(startingDuration);
   const [seconds, setSeconds] = useState(duration);
@@ -126,6 +123,12 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
   //adjust coins calculations here
   //Bonus is 20% of coins earned for now
   const handleRewardBonus = async () => {
+    const currentUser = FIREBASE_AUTH.currentUser;
+    if (!currentUser || !taskId) return;
+
+    const docRefReward = doc(FIREBASE_DATABASE, 'users', currentUser.uid);
+    const docRefComplete = doc(FIREBASE_DATABASE, 'userTasks', currentUser.uid, 'tasks', taskId);
+
     const coins = duration/100 * 0.2 + duration/100;
     setReward(Math.floor(coins));
     setRewardVisible(true);
@@ -140,6 +143,12 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
   }
 
   const handleRewardNoBonus = async () => {
+    const currentUser = FIREBASE_AUTH.currentUser;
+    if (!currentUser || !taskId) return;
+
+    const docRefReward = doc(FIREBASE_DATABASE, 'users', currentUser.uid);
+    const docRefComplete = doc(FIREBASE_DATABASE, 'userTasks', currentUser.uid, 'tasks', taskId);
+
     const coins = (duration - seconds)/100;
     setReward(Math.floor(coins));
     setRewardVisible(true);
