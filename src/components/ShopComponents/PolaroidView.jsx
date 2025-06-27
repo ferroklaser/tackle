@@ -6,6 +6,7 @@ import PreviewItemModal from '../Modals/PreviewItemModal';
 
 const PolaroidView = ({ item, fontStyle }) => {
     const [isModalVisible, setModalVisible] = useState(false);
+    const [isPurchased, setPurchased] = useState(item.purchased);
 
     const getData = () => {
         switch (item.type) {
@@ -62,12 +63,21 @@ const PolaroidView = ({ item, fontStyle }) => {
     }
 
     const handleItemPress = () => {
-        setModalVisible(true);
+        if (isPurchased) {
+            alert("Item has already been purchased")
+        } else {
+            setModalVisible(true);
+        }
     }
 
     return (
         <>
-            <Pressable style={[styles.container, { backgroundColor: getPolaroidColour(item) }]} onPress={handleItemPress}>
+            <Pressable
+                style={[
+                    styles.container,
+                    { backgroundColor: getPolaroidColour(item) },
+                    isPurchased && {opacity: 0.4 }]}
+                onPress={handleItemPress} >
                 <View style={styles.dummy}>
                     <SingleFrameSprite {...data} />
                 </View>
@@ -79,9 +89,11 @@ const PolaroidView = ({ item, fontStyle }) => {
             <PreviewItemModal
                 setModalVisible={setModalVisible}
                 isModalVisible={isModalVisible}
-                backgroundColor={{ backgroundColor: getPolaroidColour(item)}}
-                fontStyle={fontStyle} 
-                item={item}/>
+                backgroundColor={{ backgroundColor: getPolaroidColour(item) }}
+                fontStyle={fontStyle}
+                item={item}
+                isPurchased={isPurchased}
+                setPurchased={setPurchased} />
         </>
     )
 }
@@ -110,7 +122,8 @@ const styles = StyleSheet.create({
         height: 110,
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 1
+        borderWidth: 1,
+        overflow: 'hidden'
     },
     text: {
         fontSize: 15,

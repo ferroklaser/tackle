@@ -11,7 +11,8 @@ const ContentTab = ({items, style, ...props}) => {
         renderItem={({ item }) => <ItemComponent item={item} />}
         style={[style, {paddingTop: 10, width: '100%', zIndex: 100}]}
         numColumns={2}
-        contentContainerStyle={{}}>
+        contentContainerStyle={{}}
+        extraData={items}>
       </FlatList>
   )
 }

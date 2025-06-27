@@ -3,9 +3,10 @@ import React, { createContext, useEffect } from 'react'
 import { useState, useContext } from 'react';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../firebaseConfig';
 import LoadingSplash from '../components/LoadingSplash';
-import { getDoc, doc, updateDoc } from 'firebase/firestore';
+import { getDoc, doc, updateDoc, onSnapshot } from 'firebase/firestore';
 import Tack from '../assets/Tack';
 import { Asset } from 'expo-asset';
+import { useAuth } from './AuthContext';
 
 
 const AvatarContext = createContext({
@@ -17,6 +18,9 @@ const AvatarContext = createContext({
 export const useAvatar = () => useContext(AvatarContext);
 
 export const AvatarProvider = ({ children }) => {
+    const { user } = useAuth();
+
+    if (!user) return;
     const [avatar, setAvatar] = useState({
         base: null,
         eyes: null,
@@ -27,27 +31,48 @@ export const AvatarProvider = ({ children }) => {
     const [isAvatarLoaded, setAvatarLoaded] = useState(false);
 
     useEffect(() => {
-        const fetchAvatar = async () => {
-            const user = FIREBASE_AUTH.currentUser;
-            try {
-                const docSnap = await getDoc(doc(FIREBASE_DATABASE, "users", user.uid));
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    const avatar = data.avatar;
-                    setAvatar({
-                        base: avatar.base,
-                        eyes: avatar.eyes,
-                        mouth: avatar.mouth,
-                        accessory: avatar.accessory,
-                    });
-                    setAvatarLoaded(true);
-                }
-            } catch (error) {
-                console.log(error)
+        // const fetchAvatar = async () => {
+        //     
+        //     try {
+        //         const docSnap = await getDoc(ref);
+        //         if (docSnap.exists()) {
+        //             const data = docSnap.data();
+        //             const avatar = data.avatar;
+        //             setAvatar({
+        //                 base: avatar.base,
+        //                 eyes: avatar.eyes,
+        //                 mouth: avatar.mouth,
+        //                 accessory: avatar.accessory,
+        //             });
+        //             setAvatarLoaded(true);
+        //         }
+        //     } catch (error) {
+        //         console.log(error)
+        //     }
+        // }
+        // fetchAvatar();
+
+        const ref = doc(FIREBASE_DATABASE, "users", user.uid)
+
+        const unsubscribe = onSnapshot(ref, doc => {
+            if (doc.exists()) {
+                const avatar = doc.data().avatar;
+                setAvatar({
+                    base: avatar.base,
+                    eyes: avatar.eyes,
+                    mouth: avatar.mouth,
+                    accessory: avatar.accessory,
+                });
+                setAvatarLoaded(true);
             }
-        }
-        fetchAvatar();
+        }, error => {
+            console.log("Error listening to avatar", error);
+        });
+
+        return () => unsubscribe();
     }, [])
+
+    
 
     // useEffect(() => {
     //     const loadResources = async () => {

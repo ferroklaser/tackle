@@ -1,10 +1,9 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import ContentTab from './ContentTab';
 import { useFonts } from 'expo-font';
 import LoadingSplash from '../LoadingSplash';
-import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig';
-import { getDocs, collection } from 'firebase/firestore';
+import { useInventoryListener } from '../../utilities/fetchInventory';
 
 const TabContainer = () => {
     const [fontsLoaded] =
@@ -12,25 +11,11 @@ const TabContainer = () => {
             'Doodle': require('../../assets/fonts/doodle.ttf')
         });
     const [activeTab, setActiveTab] = useState('Base');
-    const [inventory, setInventory] = useState([]);
+    const inventory = useInventoryListener();
 
     const handleTabPress = (title) => {
         setActiveTab(title);
     }
-
-    const fetchInventory = async () => {
-        const uid = FIREBASE_AUTH.currentUser.uid;
-        const snapshot = await getDocs(collection(FIREBASE_DATABASE, 'users', uid, 'inventory'));
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    };
-
-    useEffect(() => {
-        const loadInventory = async () => {
-            const items = await fetchInventory()
-            setInventory(items);
-        }
-        loadInventory();
-    }, []);
 
     if (!fontsLoaded) {
         return <LoadingSplash />

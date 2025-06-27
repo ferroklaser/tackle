@@ -1,20 +1,26 @@
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from "../firebaseConfig";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import { useState, useEffect } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
-export const fetchInventory = async () => {
-    const user = FIREBASE_AUTH.currentUser.uid;
-    if (!user) return [];
+export function useInventoryListener() {
+    const { user } = useAuth();
+    const [inventory, setInventory] = useState([]);
 
-    try {
-        const inventoryRef = collection(FIREBASE_DATABASE, "users", user, "inventory");
-        const snapShot = await getDocs(inventoryRef);
+    if (!user) return;
 
-        const inventory = snapShot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-        }));
-        return inventory;
-    } catch (error) {
-        console.log("Error loading inventory: ", error);
-    }
-};
+    useEffect(() => {
+        const ref = collection(FIREBASE_DATABASE, "users", user.uid, 'inventory');
+
+        const unsubscribe = onSnapshot(ref, collection => {
+            const items = collection.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setInventory(items)
+        }, error => {
+            console.log("Error listening to inventory, ", error);
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    return inventory
+}
