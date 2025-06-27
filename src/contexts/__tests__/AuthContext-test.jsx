@@ -1,10 +1,11 @@
 import React from "react";
 import { AuthProvider } from "../AuthContext";
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from "../../firebaseConfig";
-import { renderHook, act } from "@testing-library/react-native";
+import { renderHook, act, render } from "@testing-library/react-native";
 import { useAuth } from "../AuthContext";
 import { 
     createUserWithEmailAndPassword, 
+    onAuthStateChanged, 
     sendEmailVerification,
     signInWithEmailAndPassword,
     signOut
@@ -124,5 +125,49 @@ describe("AuthContext", () => {
 
         expect(signOut).toHaveBeenCalledWith(FIREBASE_AUTH);
         expect(router.replace).toHaveBeenCalledWith('/login');
-    });
+    }),
+    test("auth state when user is logged in", () => {
+        const mockUser = {emailVerified: true, email: 'test@example.com'};
+        const unsubscribe = jest.fn();
+
+        onAuthStateChanged.mockImplementation((auth, callback) => {
+            callback(mockUser);
+            return unsubscribe;
+        });
+
+        const { result } = renderHook(() => useAuth(), {wrapper});
+
+        expect(result.current.user).toEqual(mockUser);
+        expect(result.current.isAuthReady).toBe(true);
+        expect(result.current.isEmailVerified).toBe(true);
+    }),
+    test("auth state when user is not logged in", () => {
+        const unsubscribe = jest.fn();
+
+        onAuthStateChanged.mockImplementation((auth, callback) => {
+            callback(null);
+            return unsubscribe;
+        });
+
+        const { result } = renderHook(() => useAuth(), {wrapper});
+
+        expect(result.current.user).toEqual(null);
+        expect(result.current.isAuthReady).toBe(true);
+        expect(result.current.isEmailVerified).toBe(false);
+    }),
+    test("auth state when user email is not verified", () => {
+        const mockUser = { emailVerified: false, email: 'test@example.com'}
+        const unsubscribe = jest.fn();
+
+        onAuthStateChanged.mockImplementation((auth, callback) => {
+            callback(mockUser);
+            return unsubscribe;
+        });
+
+        const { result } = renderHook(() => useAuth(), {wrapper});
+
+        expect(result.current.user).toEqual(mockUser);
+        expect(result.current.isAuthReady).toBe(true);
+        expect(result.current.isEmailVerified).toBe(false);
+    })
 });
