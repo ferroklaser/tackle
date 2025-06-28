@@ -9,6 +9,7 @@ const CombinedTackAnimation = ({
     eyesOption, 
     mouthOption,
     accessoryOption,
+    ...props
 }) => {
   const frameWidth = 299;
   const frameHeight = 260;
@@ -29,7 +30,7 @@ const CombinedTackAnimation = ({
   const rowIndex = 0;
 
   return (
-    <View style={[styles.tackContainer, { width: frameWidth, height: frameHeight }]}>
+    <View style={[styles.tackContainer, { width: frameWidth, height: frameHeight }]} testID={props.testID}>
         <AnimatedSprite
             spriteSheet={Tack.TackBase[tackBaseOption]}
             frameIndex={frameIndex}

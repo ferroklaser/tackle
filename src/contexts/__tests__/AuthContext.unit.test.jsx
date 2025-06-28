@@ -169,5 +169,39 @@ describe("AuthContext", () => {
         expect(result.current.user).toEqual(mockUser);
         expect(result.current.isAuthReady).toBe(true);
         expect(result.current.isEmailVerified).toBe(false);
+    }),
+    test("signing out resets auth state", async () => {
+        const mockUser = { emailVerified: true, uid: '123', email: 'test@example.com'};
+        const unsubscribe = jest.fn();
+
+        let authStateCallback;
+
+        //mock initial auth state
+        onAuthStateChanged.mockImplementation((auth, callback) => {
+            authStateCallback = callback
+            callback(mockUser); 
+            return unsubscribe;
+        });
+
+        const { result, rerender } = renderHook(() => useAuth(), {wrapper});
+        
+        expect(result.current.user).toEqual(mockUser);
+        expect(result.current.isEmailVerified).toBe(true);
+
+        //simulate signing out
+        signOut.mockResolvedValue();
+
+        await act(async () => {
+            await result.current.logOut();
+        });
+
+        act(() => {
+            authStateCallback(null);
+        });
+
+        //rerun hook to trigger updated state
+        rerender();
+        expect(result.current.user).toBe(null);
+        expect(result.current.isEmailVerified).toBe(false);
     })
 });
