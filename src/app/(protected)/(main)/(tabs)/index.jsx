@@ -52,6 +52,7 @@ const index = () => {
             eyesOption={avatar.eyes}
             mouthOption={avatar.mouth}
             accessoryOption={avatar.accessory}
+            testID="avatarSprite"
           />
         </View>
       </ImageBackground>

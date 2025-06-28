@@ -104,6 +104,7 @@ const CreationComponent = () => {
 
         for (const avatarItem of avatarItems) {
           const itemData = await fetchItemByID(avatarItem);
+          console.log(itemData);
           await addItemToInventory(user, itemData);
         }
       } catch (error) {

@@ -44,6 +44,7 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@testing-library/react-native": "^13.2.0",
+    "babel-jest": "^30.0.2",
     "expo-svg-transformer": "^2.0.1",
     "jest": "~29.7.0",
     "jest-expo": "~53.0.7",
@@ -57,7 +58,14 @@
     }
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "transform": {
+      "^.+\\.[jt]sx?$": "babel-jest"
+    },
+    "testEnvironment": "jsdom",
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|firebase|@?firebase))"
+    ]
   },
   "private": true
 }

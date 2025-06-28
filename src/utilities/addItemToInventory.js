@@ -10,6 +10,7 @@ export const addItemToInventory = async (user, item) => {
             equipped: true,
             type: item.type,
         });
+        console.log(item);
     } catch (error) {
         console.log('Error adding item to inventory,', error);
     }
