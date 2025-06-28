@@ -124,17 +124,18 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
   //Bonus is 20% of coins earned for now
   const handleRewardBonus = async () => {
     const currentUser = FIREBASE_AUTH.currentUser;
-    if (!currentUser || !taskId) return;
 
     const docRefReward = doc(FIREBASE_DATABASE, 'users', currentUser.uid);
-    const docRefComplete = doc(FIREBASE_DATABASE, 'userTasks', currentUser.uid, 'tasks', taskId);
+    const docRefComplete = doc(FIREBASE_DATABASE, 'users', currentUser.uid, 'tasks', taskId);
 
-    const coins = duration/100 * 0.2 + duration/100;
-    setReward(Math.floor(coins));
+    const coinsEarned = Math.floor(duration / 100 * 1.2);
+    setReward(coinsEarned);
     setRewardVisible(true);
-    await updateDoc(docRefReward, {
-      coins: increment(reward)
-    });
+    try {
+      await updateDoc(docRefReward, { coins: increment(coinsEarned) });
+    } catch (err) {
+      console.error('Failed to update coins:', err);
+    }
 
     await updateDoc(docRefComplete, {
       completed: increment(duration)
@@ -144,17 +145,19 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
 
   const handleRewardNoBonus = async () => {
     const currentUser = FIREBASE_AUTH.currentUser;
-    if (!currentUser || !taskId) return;
 
     const docRefReward = doc(FIREBASE_DATABASE, 'users', currentUser.uid);
-    const docRefComplete = doc(FIREBASE_DATABASE, 'userTasks', currentUser.uid, 'tasks', taskId);
+    const docRefComplete = doc(FIREBASE_DATABASE, 'users', currentUser.uid, 'tasks', taskId);
 
-    const coins = (duration - seconds)/100;
-    setReward(Math.floor(coins));
+    const coinsEarned = Math.floor((duration - seconds)/100);
+    setReward(coinsEarned);
     setRewardVisible(true);
-    await updateDoc(docRefReward, {
-      coins: increment(reward)
-    });
+    
+    try {
+      await updateDoc(docRefReward, { coins: increment(coinsEarned) });
+    } catch (err) {
+      console.error('Failed to update coins:', err);
+    }
 
     await updateDoc(docRefComplete, {
       completed: increment(duration - seconds)
