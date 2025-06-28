@@ -1,7 +1,7 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
 import React from 'react'
 import SingleFrameSprite from '../SingleFrameSprite'
-import Tack from '../../assets/Tack'
+import TackIcons from '../../assets/TackIcons'
 import { useFonts } from 'expo-font';
 import { useAvatar } from '../../contexts/AvatarContext';
 import { handleItemEquip } from '../../utilities/handleItemEquip';
@@ -17,44 +17,20 @@ const ItemComponent = ({item}) => {
         'Doodle': require('../../assets/fonts/doodle.ttf')
     });
     const getData = () => {
-        switch(item.type){
-            case "base":
-                return {
-                    spriteSheet: Tack.TackBase[item.itemID],
-                    frameWidth: 299,
-                    frameHeight: 260,
-                    scale: 0.5,
-                    rowIndex: 0,
-                }
-            case "eyes":
-                return {
-                    spriteSheet: Tack.Eyes[item.itemID],
-                    frameWidth: 300,
-                    frameHeight: 263,
-                    scale: 1,
-                    rowIndex: 0,
-                }
-            case "mouth":
-                return {
-                    spriteSheet: Tack.Mouth[item.itemID],
-                    frameWidth: 299,
-                    frameHeight: 260,
-                    scale: 1,
-                    rowIndex: 0,
-                }
-            case "accessory":
-                return {
-                    spriteSheet: Tack.Accessory[item.itemID],
-                    frameWidth: 299,
-                    frameHeight: 260,
-                    scale: 0.6,
-                    rowIndex: 0,
-                }
-            default:
-                return null;
+            switch (item.type) {
+                case "base":
+                    return TackIcons.TackBase[item.itemID]
+                case "eyes":
+                    return TackIcons.Eyes[item.itemID]
+                case "mouth":
+                    return TackIcons.Mouth[item.itemID]
+                case "accessory":
+                    return TackIcons.Accessory[item.itemID]
+                default:
+                    return null;
+            }
         }
-    }
-
+    
     const data = getData();   
 
     const itemPress = (user, item) => {
@@ -63,20 +39,55 @@ const ItemComponent = ({item}) => {
     };
 
     return (
-        <View style={styles.item}>
-            <View>
-                <TouchableOpacity onPress={() => itemPress(user, item)} activeOpacity={0.6} style={styles.square}>
-                    <SingleFrameSprite {...data} />
-                </TouchableOpacity>
-                <Text style={styles.text}>{item.name}</Text>
+         <TouchableOpacity
+            style={styles.container}
+            activeOpacity={0.6}
+            onPress={() => itemPress(user, item)} >
+            <View style={styles.dummy}>
+                <Image source={data} style={styles.image} resizeMode="contain" />
             </View>
-        </View>
+            <Text style={styles.text}>{item.name}</Text>
+        </TouchableOpacity>
+
+        // <View style={styles.item}>
+        //     <View>
+        //         <TouchableOpacity onPress={() => itemPress(user, item)} activeOpacity={0.6} style={styles.square}>
+        //             <SingleFrameSprite {...data} />
+        //         </TouchableOpacity>
+        //         <Text style={styles.text}>{item.name}</Text>
+        //     </View>
+        // </View>
     )
 }
 
 export default ItemComponent
 
 const styles = StyleSheet.create({
+    container: {
+        height: 140,
+        width: '30%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: '1.5%',
+        backgroundColor: '#D8D8D8',
+
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 3,
+        elevation: 4,
+    },
+    dummy: {
+        backgroundColor: 'white',
+        width: 105,
+        height: 105,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    image: {
+        width: '100%',
+        height: '100%',
+    },
     square: {
         width: 120,
         height: 120,
@@ -94,7 +105,8 @@ const styles = StyleSheet.create({
     text:{
         fontFamily: "Doodle",
         fontSize: 16,
-        textAlign: 'center'
+        textAlign: 'center',
+        marginTop: 5,
     },
     equipped: {
         borderWidth: 3,

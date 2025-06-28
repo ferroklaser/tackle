@@ -77,7 +77,7 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible, isTimer = false}
                 const docRef = await addDoc(
                     collection(
                         FIREBASE_DATABASE,
-                        'userTasks',
+                        'users',
                         currentUser.uid,
                         'tasks' 
                     ),

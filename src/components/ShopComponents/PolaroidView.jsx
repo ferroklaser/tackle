@@ -1,7 +1,6 @@
-import { StyleSheet, Text, Pressable, View } from 'react-native'
+import { StyleSheet, Text, Pressable, View, Image } from 'react-native'
 import React, { useState } from 'react'
-import SingleFrameSprite from '../SingleFrameSprite';
-import Tack from '../../assets/Tack';
+import TackIcons from '../../assets/TackIcons';
 import PreviewItemModal from '../Modals/PreviewItemModal';
 
 const PolaroidView = ({ item, fontStyle }) => {
@@ -11,37 +10,13 @@ const PolaroidView = ({ item, fontStyle }) => {
     const getData = () => {
         switch (item.type) {
             case "base":
-                return {
-                    spriteSheet: Tack.TackBase[item.itemID],
-                    frameWidth: 299,
-                    frameHeight: 260,
-                    scale: 0.4,
-                    rowIndex: 0,
-                }
+                return TackIcons.TackBase[item.itemID]
             case "eyes":
-                return {
-                    spriteSheet: Tack.Eyes[item.itemID],
-                    frameWidth: 300,
-                    frameHeight: 263,
-                    scale: 1,
-                    rowIndex: 0,
-                }
+                return TackIcons.Eyes[item.itemID]
             case "mouth":
-                return {
-                    spriteSheet: Tack.Mouth[item.itemID],
-                    frameWidth: 299,
-                    frameHeight: 260,
-                    scale: 1,
-                    rowIndex: 0,
-                }
+                return TackIcons.Mouth[item.itemID]
             case "accessory":
-                return {
-                    spriteSheet: Tack.Accessory[item.itemID],
-                    frameWidth: 299,
-                    frameHeight: 260,
-                    scale: 0.6,
-                    rowIndex: 0,
-                }
+                return TackIcons.Accessory[item.itemID]
             default:
                 return null;
         }
@@ -68,7 +43,7 @@ const PolaroidView = ({ item, fontStyle }) => {
         } else {
             setModalVisible(true);
         }
-    }
+    } 
 
     return (
         <>
@@ -79,12 +54,10 @@ const PolaroidView = ({ item, fontStyle }) => {
                     isPurchased && {opacity: 0.4 }]}
                 onPress={handleItemPress} >
                 <View style={styles.dummy}>
-                    <SingleFrameSprite {...data} />
+                    <Image source={data} style={styles.image} resizeMode="contain" />
                 </View>
-                <View style={styles.details}>
-                    <Text style={[styles.text, fontStyle]}>{item.name}</Text>
-                    <Text style={[styles.text, fontStyle]}>{item.price}</Text>
-                </View>
+                <Text style={[styles.text, fontStyle]}>{item.name}</Text>
+                <Text style={[styles.textcoins, fontStyle]}>{item.price} coins</Text>
             </Pressable>
             <PreviewItemModal
                 setModalVisible={setModalVisible}
@@ -102,8 +75,6 @@ export default PolaroidView
 
 const styles = StyleSheet.create({
     container: {
-        borderWidth: 1,
-        borderColor: 'black',
         height: 160,
         width: 120,
         justifyContent: 'center',
@@ -118,15 +89,23 @@ const styles = StyleSheet.create({
     },
     dummy: {
         backgroundColor: 'white',
-        width: 110,
-        height: 110,
+        width: 105,
+        height: 105,
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 1,
-        overflow: 'hidden'
+    },
+    image: {
+        width: '100%',
+        height: '100%',
     },
     text: {
-        fontSize: 15,
+        marginTop: 5,
+        fontSize: 12,
+        textAlign: 'left',
+    },
+    textcoins: {
+        marginTop: 5,
+        fontSize: 12,
         textAlign: 'left',
     },
     details: {

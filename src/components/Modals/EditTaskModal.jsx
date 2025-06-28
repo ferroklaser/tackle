@@ -62,7 +62,7 @@ const EditTaskModal = ({isModalVisible = false, setModalVisible, taskRef}) => {
                 if (!currentUser) return;
                 const ref = doc(
                     FIREBASE_DATABASE,
-                    'userTasks',
+                    'users',
                     currentUser.uid,
                     'tasks',
                     taskRef.id

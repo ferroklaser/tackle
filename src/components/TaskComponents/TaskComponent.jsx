@@ -35,7 +35,7 @@ const TaskComponent = ({task}) => {
 
               const taskRef = doc(
                 FIREBASE_DATABASE,
-                'userTasks',
+                'users',
                 user.uid,
                 'tasks',
                 task.id
@@ -66,7 +66,7 @@ const TaskComponent = ({task}) => {
           if (!currentUser) return;
           const ref = doc(
               FIREBASE_DATABASE,
-              'userTasks',
+              'users',
               currentUser.uid,
               'tasks',
               task.id

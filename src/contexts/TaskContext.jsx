@@ -23,7 +23,7 @@ export const TaskProvider = ({ children }) => {
     const user = FIREBASE_AUTH.currentUser;
     if (!user) return;
 
-    const ref = doc(FIREBASE_DATABASE, 'userTasks', user.uid, 'tasks', taskId);
+    const ref = doc(FIREBASE_DATABASE, 'users', user.uid, 'tasks', taskId);
 
     const unsubscribe = onSnapshot(ref, (snapshot) => {
       if (snapshot.exists()) {

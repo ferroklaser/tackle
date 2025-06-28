@@ -13,7 +13,7 @@ const TaskList = ({ filter = {}, sort = 'createdAt' }) => {
 
         const tasksRef = collection(
             FIREBASE_DATABASE,
-            'userTasks',
+            'users',
             user.uid,
             'tasks'
         );
