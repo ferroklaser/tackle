@@ -31,27 +31,6 @@ export const AvatarProvider = ({ children }) => {
     const [isAvatarLoaded, setAvatarLoaded] = useState(false);
 
     useEffect(() => {
-        // const fetchAvatar = async () => {
-        //     
-        //     try {
-        //         const docSnap = await getDoc(ref);
-        //         if (docSnap.exists()) {
-        //             const data = docSnap.data();
-        //             const avatar = data.avatar;
-        //             setAvatar({
-        //                 base: avatar.base,
-        //                 eyes: avatar.eyes,
-        //                 mouth: avatar.mouth,
-        //                 accessory: avatar.accessory,
-        //             });
-        //             setAvatarLoaded(true);
-        //         }
-        //     } catch (error) {
-        //         console.log(error)
-        //     }
-        // }
-        // fetchAvatar();
-
         const ref = doc(FIREBASE_DATABASE, "users", user.uid)
 
         const unsubscribe = onSnapshot(ref, doc => {
@@ -71,31 +50,6 @@ export const AvatarProvider = ({ children }) => {
 
         return () => unsubscribe();
     }, [])
-
-    
-
-    // useEffect(() => {
-    //     const loadResources = async () => {
-    //         let cacheResources = async () => {
-    //             if (!isAvatarLoaded) { return }
-                
-    //             try {
-    //                 const colourPromise = Asset.fromModule(Tack.TackBase[avatar.base]).downloadAsync();
-    //                 const eyesPromise = Asset.fromModule(Tack.Eyes[avatar.eyes]).downloadAsync();
-    //                 const mouthPromise = Asset.fromModule(Tack.Mouth[avatar.mouth]).downloadAsync();
-    //                 const accessoryPromise = Asset.fromModule(Tack.Accessory[avatar.accessory]).downloadAsync();
-    //                 const delayPromise = new Promise((resolve) => setTimeout(resolve, 0));
-
-    //                 await Promise.all([colourPromise, eyesPromise, mouthPromise, accessoryPromise, delayPromise]);
-    //                 setAssetsLoaded(true)
-    //             } catch (error) {
-    //                 console.log(error);
-    //             }
-    //         }
-    //         await cacheResources();
-    //     }
-    //     loadResources();
-    // }, [isAvatarLoaded])
 
     //load all Assets
     useEffect(() => {
