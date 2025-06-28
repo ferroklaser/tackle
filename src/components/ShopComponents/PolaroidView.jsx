@@ -29,7 +29,7 @@ const PolaroidView = ({ item, fontStyle }) => {
             case "base":
                 return '#FFE98A';
             case "eyes":
-                return '#8CE2F5';
+                return '#BBE9FB';
             case "mouth":
                 return '#FBD0F4';
             case "accessory":
