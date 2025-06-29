@@ -37,15 +37,15 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "5e5b1e74-619f-4960-9cfb-b587fedd1a41"
+        "projectId": "0feef38e-068e-463a-959e-2c3c8261329a"
       }
     },
-    "owner": "ferroklaser",
+    "owner": "jaepple",
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/5e5b1e74-619f-4960-9cfb-b587fedd1a41"
+      "url": "https://u.expo.dev/0feef38e-068e-463a-959e-2c3c8261329a"
     }
   }
 }
