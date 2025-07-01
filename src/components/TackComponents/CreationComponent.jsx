@@ -90,6 +90,7 @@ const CreationComponent = () => {
     if (username == '') {
       Alert.alert('Reminder', 'Username cannot be empty')
     } else {
+      router.replace('/');
       try {
         await updateDoc(doc(FIREBASE_DATABASE, "users", user.uid), {
           username: username,
@@ -109,8 +110,6 @@ const CreationComponent = () => {
         }
       } catch (error) {
         console.log(error);
-      } finally {
-        router.replace('/');
       }
     }
   }
