@@ -1,4 +1,4 @@
-import { FIREBASE_AUTH, FIREBASE_DATABASE } from "../../firebaseConfig"
+import { FIREBASE_DATABASE } from "../../firebaseConfig"
 import { addDoc, collection } from 'firebase/firestore'
 import { addItemToInventory } from "../addItemToInventory";
 

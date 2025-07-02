@@ -1,5 +1,5 @@
-import { FIREBASE_AUTH, FIREBASE_DATABASE } from "../firebaseConfig";
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import { FIREBASE_DATABASE } from "../firebaseConfig";
+import { collection, onSnapshot } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
