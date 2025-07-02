@@ -3,6 +3,9 @@ import { FIREBASE_DATABASE } from "../firebaseConfig";
 import { addDoc, collection } from "firebase/firestore";
 
 export const addItemToInventory = async (user, item) => {
+    //added this after testing
+    if (!user?.uid) return;
+
     try {
         await addDoc(collection(FIREBASE_DATABASE, "users", user.uid, "inventory"), {
             name: item.name,
@@ -10,8 +13,7 @@ export const addItemToInventory = async (user, item) => {
             equipped: true,
             type: item.type,
         });
-        console.log(item);
     } catch (error) {
-        console.log('Error adding item to inventory,', error);
+        console.log('Error adding', item.name, 'to inventory,', error);
     }
 }
