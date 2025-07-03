@@ -1,5 +1,5 @@
-import { FIREBASE_AUTH, FIREBASE_DATABASE } from "../firebaseConfig";
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import { FIREBASE_DATABASE } from "../firebaseConfig";
+import { collection, onSnapshot } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -7,9 +7,8 @@ export function useInventoryListener() {
     const { user } = useAuth();
     const [inventory, setInventory] = useState([]);
 
-    if (!user) return;
-
     useEffect(() => {
+        if (!user) return;
         const ref = collection(FIREBASE_DATABASE, "users", user.uid, 'inventory');
 
         const unsubscribe = onSnapshot(ref, collection => {
