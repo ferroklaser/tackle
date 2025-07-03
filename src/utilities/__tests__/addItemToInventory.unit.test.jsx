@@ -81,7 +81,7 @@ describe('addItemToInventory method', () => {
         const mockError = new Error('Firestore failed');
         addDoc.mockRejectedValue(mockError);
 
-        const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+        const consoleSpy = jest.spyOn(console, 'log');
 
         await addItemToInventory(mockUser, mockItem); 
         
@@ -91,5 +91,7 @@ describe('addItemToInventory method', () => {
             'to inventory,',
             mockError
         );
+        //clear spy
+        consoleSpy.mockRestore();
     })
 })
