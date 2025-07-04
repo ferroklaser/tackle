@@ -1,22 +1,22 @@
-import { FIREBASE_AUTH, FIREBASE_DATABASE } from "../firebaseConfig";
+import { FIREBASE_DATABASE } from "../firebaseConfig";
 import { collection, query, where, getDocs, updateDoc } from "firebase/firestore";
 
 export const handleItemEquip = async (user, item) => {
-    if (!user) return;
+    if (!user?.uid) return;
     try {
-    const inventoryRef = collection(FIREBASE_DATABASE, "users", user.uid, "inventory");
+        const inventoryRef = collection(FIREBASE_DATABASE, "users", user.uid, "inventory");
 
-    const q = query(inventoryRef, where("type", "==", item.type))
-    const querySnapShot = await getDocs(q);
-    const updateInventory = querySnapShot.docs.map(async (doc) => {
-        const itemID = item.itemID;
-        const isEquip = itemID === doc.data().itemID;
-        await updateDoc(doc.ref, {
-            equipped: isEquip,
+        const q = query(inventoryRef, where("type", "==", item.type))
+        const querySnapShot = await getDocs(q);
+        const updateInventory = querySnapShot.docs.map(async (doc) => {
+            const itemID = item.itemID;
+            const isEquip = itemID === doc.data().itemID;
+            await updateDoc(doc.ref, {
+                equipped: isEquip,
+            })
         })
-    })
         await Promise.all(updateInventory);
     } catch (error) {
-        console.log("Unable to update inventory: ", error);
+        console.log(`Unable to update inventory/equip item: ${item.itemID}`, error);
     }
 }

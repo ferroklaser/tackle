@@ -17,7 +17,7 @@ jest.mock('firebase/firestore', () => ({
     onSnapshot: jest.fn(),
 }))
 
-describe("fetchInventory", () => {
+describe("useInventoryListener", () => {
     beforeEach(() => {
         collection.mockClear();
         onSnapshot.mockClear();

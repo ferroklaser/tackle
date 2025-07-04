@@ -1,5 +1,5 @@
 import { getDoc, doc } from "firebase/firestore";
-import { FIREBASE_AUTH, FIREBASE_DATABASE } from "../firebaseConfig";
+import { FIREBASE_DATABASE } from "../firebaseConfig";
 
 export const getUsername = async (user) => {
     try {

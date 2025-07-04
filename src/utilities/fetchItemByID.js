@@ -15,6 +15,7 @@ export const fetchItemByID = async (itemID) => {
         return querySnapshot.docs[0].data();
 
     } catch (error) {
-        console.log("Error fetching item by itemID", error);
+        console.log(`Error fetching item by itemID: ${itemID}`, error);
+        return null;
     }
 }
