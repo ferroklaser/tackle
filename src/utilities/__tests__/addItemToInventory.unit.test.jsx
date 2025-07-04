@@ -14,7 +14,7 @@ jest.mock('firebase/firestore', () => ({
 }))
 
 
-describe('addItemToInventory method', () => {
+describe('addItemToInventory', () => {
     beforeEach(() => {
         collection.mockClear();
         addDoc.mockClear();
