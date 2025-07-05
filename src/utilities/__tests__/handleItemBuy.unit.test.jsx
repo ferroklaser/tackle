@@ -176,5 +176,21 @@ describe('handleItemBuy', () => {
         expect(logSpy).toHaveBeenCalledWith(
             'Error handling item buy for Hat', mockError
         );
-    })  
+    }),
+    test('invalid user or uid', async () => {
+        const mockUser = {};
+        const mockItem = {
+            name: 'hat',
+            itemID: 'Hat',
+            price: 400,
+            type: 'accessory',
+        };
+        const updateAvatar = jest.fn();
+
+        const result = await handleItemBuy(mockUser, mockItem, updateAvatar);
+
+        expect(result).toBe(false);
+        expect(doc).not.toHaveBeenCalled();
+        expect(getDoc).not.toHaveBeenCalled();
+    })
 })

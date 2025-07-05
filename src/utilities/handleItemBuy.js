@@ -5,6 +5,8 @@ import { addItemToInventory } from "./addItemToInventory";
 
 
 export const handleItemBuy = async (user, item, updateAvatar) => {
+    if (!user?.uid) return false;
+
     try {
         const price = item.price;
         const userRef = doc(FIREBASE_DATABASE, "users", user.uid);
