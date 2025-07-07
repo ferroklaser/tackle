@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, View } from 'react-native'
+import { Video } from 'expo-av';
 import PolaroidView from '../../../../components/ShopComponents/PolaroidView'
 import { generateUserShop } from '../../../../utilities/generateUserShop.js'
 import { useAuth } from '../../../../contexts/AuthContext.jsx'
@@ -27,16 +27,30 @@ const store = () => {
     fetchShop();
   }, []);
 
-  if (!fontsLoaded) return <LoadingSplash />
+  if (!fontsLoaded || !shop) return <LoadingSplash />
 
   const doodleFont = { fontFamily: 'Doodle'}
 
   return (
-    <View style={styles.container}>
-      {shop && shop.map(item => (
-        <PolaroidView key={item.itemID} item={item} fontStyle={doodleFont}/>
-      ))}
+    <View style={styles.page}>
+      <Video
+          source={require('../../../../assets/videos/shopBackground.mp4')}
+          rate={1.0}
+          volume={1.0}
+          isMuted={true}
+          resizeMode="cover"
+          shouldPlay
+          isLooping
+          style={StyleSheet.absoluteFill}
+        />
+
+      <View style={styles.container}>
+        {shop && shop.map(item => (
+          <PolaroidView key={item.itemID} item={item} fontStyle={doodleFont}/>
+        ))}
+      </View>
     </View>
+    
   )
 }
 
@@ -50,5 +64,8 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       marginTop: 180,
       overflow: 'hidden'
-    }
+    },
+    page: {
+      flex: 1,
+    },
 })
