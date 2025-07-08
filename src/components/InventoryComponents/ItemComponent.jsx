@@ -34,8 +34,7 @@ const ItemComponent = ({item}) => {
     const data = getData();   
 
     const itemPress = (user, item) => {
-        updateAvatar({[item.type] : item.itemID});
-        handleItemEquip(user, item);
+        handleItemEquip(user, item, updateAvatar);
     };
 
     return (
