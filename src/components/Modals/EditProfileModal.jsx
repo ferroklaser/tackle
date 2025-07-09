@@ -6,7 +6,7 @@ import { getUsername } from '../../utilities/getUsername'
 import PillInput from '../PillInput'
 import GradientButton from '../GradientButton'
 import { EmailAuthProvider, reauthenticateWithCredential, deleteUser } from 'firebase/auth';
-import { deleteDoc, doc } from 'firebase/firestore';
+import { deleteDoc, doc, collection, getDocs } from 'firebase/firestore';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig'
 
 const EditProfileModal = ({ isModalVisible, setModalVisible }) => {
@@ -43,12 +43,20 @@ const EditProfileModal = ({ isModalVisible, setModalVisible }) => {
         try {
             const credential = EmailAuthProvider.credential(user.email, password);
             await reauthenticateWithCredential(user, credential);
+            
+            const deleteSubcollectionDocs = async (collectionPath) => {
+                const colRef = collection(FIREBASE_DATABASE, collectionPath);
+                const snapshot = await getDocs(colRef);
+                const deletions = snapshot.docs.map((docSnap) => deleteDoc(docSnap.ref));
+                await Promise.all(deletions);
+            };
+
+            await deleteSubcollectionDocs(`users/${user.uid}/inventory`);
+            await deleteSubcollectionDocs(`users/${user.uid}/tasks`);
 
             await deleteDoc(doc(FIREBASE_DATABASE, 'users', user.uid));
 
             await deleteUser(user);
-
-            navigation.replace('/login');
 
         } catch (error) {
             console.error('Delete account failed:', error);
