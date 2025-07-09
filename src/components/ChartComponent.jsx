@@ -4,26 +4,27 @@ import { BarChart } from 'react-native-gifted-charts'
 
 const ChartComponent = ({ data }) => {
     const maxDataValue = Math.max(...data.map(d => d.value));
-    const maxValue = Math.ceil(maxDataValue) + 1;
+    const rawMax = Math.max(1, maxDataValue); // minimum of 1 to avoid flat axis
+    const maxValue = rawMax == 1 ? 1 : Math.ceil(rawMax / 4) * 4;
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Weekly Focus</Text>
-                <BarChart
-                    barWidth={30}
-                    noOfSections={5}
-                    maxValue={maxValue}
-                    barBorderRadius={2}
-                    spacing={10}
-                    frontColor="#04e5cb"
-                    data={data}
-                    yAxisLabel=""
-                    yAxisSuffix="h"
-                    height={250}
-                    xAxisLabelTextStyle={{ color: 'gray' }}
-                />
+            <BarChart
+                barWidth={30}
+                noOfSections={4}
+                maxValue={maxValue}
+                barBorderRadius={2}
+                spacing={10}
+                frontColor="#04e5cb"
+                data={data}
+                yAxisLabel=""
+                height={250}
+                xAxisLabelTextStyle={{ color: 'gray' }}
+                yAxisLabelSuffix='h'
+            />
         </View>
-  )
+    )
 }
 
 export default ChartComponent
@@ -37,5 +38,6 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 18,
+        marginBottom: 20
     }
 })

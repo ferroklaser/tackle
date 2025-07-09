@@ -1,17 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import ChartComponent from '../../../components/ChartComponent';
+import { useWeeklyFocusData } from '../../../utilities/generateWeeklyFocusData';
 
 const stats = () => {
-    const data = [
-        { value: 1.2, label: 'S' },
-        { value: 0.0, label: 'M' },
-        { value: 2.5, label: 'T' },
-        { value: 0.75, label: 'W' },
-        { value: 3.0, label: 'T' },
-        { value: 1.7, label: 'F' },
-        { value: 5.1, label: 'S' },
-    ];
+    const { data } = useWeeklyFocusData();
     return (
         <View style={styles.container}>
             <ChartComponent data={data} />
