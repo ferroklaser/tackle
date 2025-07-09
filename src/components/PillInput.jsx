@@ -13,13 +13,14 @@ const PillInput = ({
   multiline = false,
   textDropdown,
   handleDropdown,
+  bgcolor = 'white',
   haveDropdown = false,
   ...props}) => {
   return (
     <View style={styles.container}>
       {promptPresent && <Text style={{fontWeight: 'bold'}}>{prompt}:</Text>}
 
-      <View style={[ styles.input, {width: width} ]}>
+      <View style={[ styles.input, {width: width, backgroundColor: bgcolor,} ]}>
         {haveDropdown ?
         <TouchableOpacity onPress={handleDropdown}>
           <View style={styles.row}>
@@ -54,7 +55,6 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     padding: 10,
     width: '100%',
-    backgroundColor: 'white',
     borderRadius: 15,
     textAlignVertical: 'top',
   },

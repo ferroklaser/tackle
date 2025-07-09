@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     flex: 1,
-    justifyContent: 'space-between',  // Pushes signout to bottom
+    justifyContent: 'space-between', 
   },
   tackContainer: {
     position: 'relative',
