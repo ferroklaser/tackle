@@ -12,7 +12,7 @@ const index = () => {
   const { logOut, user } = useAuth();
   const { avatar } = useAvatar();
   const [username, setUsername] = useState("");
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isEditProfileVisible, setEditProfileVisible] = useState(false);
 
   useEffect(() => {
     const fetchUsername = async () => {
@@ -58,7 +58,7 @@ const index = () => {
               colours={['#58C7E5', '#8FBBF5']}
               buttonStyle={styles.button}
               textStyle={styles.buttonText}
-              onPress={() => setModalVisible(!isModalVisible)}
+              onPress={() => setEditProfileVisible(!isEditProfileVisible)}
             />
             <GradientButton
               title="Add Friends"
@@ -84,7 +84,7 @@ const index = () => {
         />
       </View>
 
-      <EditProfileModal isModalVisible={isModalVisible} setModalVisible={setModalVisible}/>
+      <EditProfileModal isModalVisible={isEditProfileVisible} setModalVisible={setEditProfileVisible}/>
       
     </ImageBackground>
   )

@@ -45,6 +45,7 @@ const FilterModal = ({isModalVisible = false, setModalVisible, setFilter, setFil
                             <Picker
                                 selectedValue={selectedValue}
                                 style={styles.picker}
+                                itemStyle={{color: 'black'}}
                                 onValueChange={(itemValue) => setSelectedValue(itemValue)}
                             >
                                 {filterOptions.map((option, i) => (

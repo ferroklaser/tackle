@@ -67,6 +67,7 @@ const DeadlinePicker = ({
                             <Picker
                             selectedValue={selectedDay}
                             style={styles.picker}
+                            itemStyle={{color: 'black'}}
                             onValueChange={setSelectedDay}
                             >
                             {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => (
@@ -77,6 +78,7 @@ const DeadlinePicker = ({
                             <Picker
                             selectedValue={selectedMonth}
                             style={styles.picker}
+                            itemStyle={{color: 'black'}}
                             onValueChange={setSelectedMonth}
                             >
                             {[
@@ -90,6 +92,7 @@ const DeadlinePicker = ({
                             <Picker
                             selectedValue={selectedYear}
                             style={styles.picker}
+                            itemStyle={{color: 'black'}}
                             onValueChange={setSelectedYear}
                             >
                             {Array.from({ length: 5 }, (_, i) => today.year + i).map(year => (

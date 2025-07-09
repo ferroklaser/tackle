@@ -36,6 +36,7 @@ const SortModal = ({isModalVisible = false, setModalVisible, setSort, setSortLab
                             <Picker
                                 selectedValue={selectedValue}
                                 style={styles.picker}
+                                itemStyle={{color: 'black'}}
                                 onValueChange={(itemValue) => setSelectedValue(itemValue)}
                             >
                                 {sortOptions.map((option, i) => (

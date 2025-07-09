@@ -40,6 +40,7 @@ const DurationPicker = ({isModalVisible = false, setModalVisible, setDuration, s
                             <Picker
                             selectedValue={selectedHour}
                             style={styles.picker}
+                            itemStyle={{color: 'black'}}
                             onValueChange={(itemValue) => setSelectedHour(itemValue)}
                             >
                             {[...Array(8)].map((_, i) => (
@@ -50,6 +51,7 @@ const DurationPicker = ({isModalVisible = false, setModalVisible, setDuration, s
                             <Picker
                             selectedValue={selectedMinute}
                             style={styles.picker}
+                            itemStyle={{color: 'black'}}
                             onValueChange={(itemValue) => setSelectedMinute(itemValue)}
                             >
                             {Array.from({ length: 12 }, (_, i) => i * 5).map((min) => (
