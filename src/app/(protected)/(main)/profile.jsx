@@ -90,7 +90,7 @@ const index = () => {
       </View>
 
       <EditProfileModal isModalVisible={isEditProfileVisible} setModalVisible={setEditProfileVisible}/>
-      <AddFriendsModal isModalVisible={isAddFriendsVisible} setModalVisible={setAddFriendsVisible}/>
+      <AddFriendsModal isModalVisible={isAddFriendsVisible} setModalVisible={setAddFriendsVisible} username={username}/>
     </ImageBackground>
   )
 }

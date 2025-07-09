@@ -5,9 +5,10 @@ import { useAuth } from '../../contexts/AuthContext'
 import { getFriendCode } from '../../utilities/getFriendCode'
 import PillInput from '../PillInput'
 import GradientButton from '../GradientButton'
+import { sendFriendRequest } from '../../utilities/sendFriendRequest'
 
-const AddFriendsModal = ({ isModalVisible, setModalVisible }) => {
-    const [userCode, setUserCode] = useState('AJKDBFWBDWK');
+const AddFriendsModal = ({ isModalVisible, setModalVisible, username }) => {
+    const [userCode, setUserCode] = useState('');
     const [friendCode, setFriendCode] = useState('');
     const { user } = useAuth();
  
@@ -22,6 +23,16 @@ const AddFriendsModal = ({ isModalVisible, setModalVisible }) => {
         }
         fetchCode();
     }, [])
+
+    const handleFriendRequest = async () => {
+        try {
+            setModalVisible(false);
+            setFriendCode('');
+            await sendFriendRequest(friendCode, userCode, user.uid, username);
+        } catch (error) {
+            alert('Something went wrong. Please try again.');
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -65,7 +76,7 @@ const AddFriendsModal = ({ isModalVisible, setModalVisible }) => {
                                 colours={['#CBAADE', '#989FEF']}
                                 buttonStyle={styles.button}
                                 textStyle={styles.buttonText}
-                                onPress={() => {}}
+                                onPress={handleFriendRequest}
                                 />
                             </View>
                         </View>

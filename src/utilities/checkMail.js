@@ -5,8 +5,15 @@ export const checkMail = async (user) => {
     try {
         const mailRef = collection(FIREBASE_DATABASE, 'users', user.uid, 'mail');
         const snapshot = await getDocs(mailRef);
-        return snapshot.empty;
+        console.log(snapshot.docs.length)
+
+        if (snapshot.docs.length === 0) {
+            return true;
+        } else {
+            return false;
+        }
     } catch (error) {
-        console.log("Unable to check mail: ", error)
+        console.log("Unable to check mail: ", error);
+        return true;
     }
 }
