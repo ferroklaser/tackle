@@ -1,0 +1,52 @@
+import { onSnapshot, collection, where, query } from "firebase/firestore";
+import { useAuth } from "../contexts/AuthContext";
+import { FIREBASE_DATABASE } from "../firebaseConfig";
+import { useState, useEffect } from "react";
+
+export function useWeeklyFocusData() {
+    const { user } = useAuth();
+
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        if (!user) return;
+
+        const today = new Date();
+        const dayOfWeek = today.getDay();
+
+        const sunday = new Date(today);
+        sunday.setDate(today.getDate() - dayOfWeek);
+
+        const weekDates = Array.from({ length: 7 }, (e, i) => {
+            const d = new Date(sunday);
+            d.setDate(d.getDate() + i);
+            return d.toISOString().slice(0, 10);
+        });
+
+        const q = query(
+            collection(FIREBASE_DATABASE, "users", user.uid, "dailyUsage"), 
+            where ("date", "in", weekDates));
+        
+        const unsubscribe = onSnapshot(q, snapshot => {
+            const usageMap = {};
+            snapshot.forEach(doc => {
+                const { date, totalSeconds } = doc.data();
+                usageMap[date] = totalSeconds;
+            });
+
+            const daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+            const chartData = weekDates.map(data => {
+                const date = new Date(data);
+                const dayIndex = date.getDay();
+                return {
+                    label: daysOfWeek[dayIndex],
+                    value: (usageMap[data] / 3600 || 0 / 3600)
+                }
+            })
+            setData(chartData);
+        })
+        return () => unsubscribe();
+    }, [])
+
+    return { data };
+}
