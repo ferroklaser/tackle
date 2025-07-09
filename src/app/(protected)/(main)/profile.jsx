@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ImageBackground } from 'react-native'
+import { StyleSheet, Text, View, ImageBackground, Button } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import CombinedTackSprite from '../../../components/TackComponents/CombinedTackSprite.jsx';
 import MyButton from '../../../components/MyButton.jsx';
@@ -7,6 +7,7 @@ import { useAuth } from '../../../contexts/AuthContext.jsx';
 import { useAvatar } from '../../../contexts/AvatarContext.jsx';
 import { getUsername } from '../../../utilities/getUsername.js';
 import EditProfileModal from '../../../components/Modals/EditProfileModal.jsx';
+import { router } from 'expo-router';
 
 const index = () => {
   const { logOut, user } = useAuth();
@@ -72,6 +73,7 @@ const index = () => {
             {/* <Text>INFO</Text>
             <Text>INFO</Text>
             <Text>INFO</Text> */}
+            <Button title='stats' onPress={() => router.push('/stats')}></Button>
           </View>
         </View>
       </View>
