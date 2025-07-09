@@ -9,7 +9,7 @@ import UnderlinedInput from '../UnderlinedInput';
 import { useFonts } from 'expo-font';
 
 import { FIREBASE_DATABASE, FIREBASE_AUTH } from '../../firebaseConfig.js';
-import { doc, setDoc, updateDoc} from 'firebase/firestore';
+import { doc, setDoc, getDoc, updateDoc} from 'firebase/firestore';
 import { addItemToInventory } from '../../utilities/addItemToInventory.js';
 import { fetchItemByID } from '../../utilities/fetchItemByID.js';
 import { useAuth } from '../../contexts/AuthContext.jsx';
@@ -86,6 +86,30 @@ const CreationComponent = () => {
     setter(Math.abs((currentIndex - 1) % array.length));
   }
 
+  const generateFriendCode = (length = 6) => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }
+
+  const generateAndAssignFriendCode = async (uid) => {
+    let code;
+    let docRef;
+
+    do {
+      code = generateFriendCode();
+      docRef = doc(FIREBASE_DATABASE, 'friendCodes', code);
+    } while ((await getDoc(docRef)).exists());
+
+    await setDoc(docRef, { uid });
+    await setDoc(doc(FIREBASE_DATABASE, 'users', uid), { friendCode: code }, { merge: true });
+
+    return code;
+  };
+
   const storeData = async () => {
     if (username == '') {
       Alert.alert('Reminder', 'Username cannot be empty')
@@ -101,6 +125,8 @@ const CreationComponent = () => {
             accessory: currentAccessory
           }
         });
+        await generateAndAssignFriendCode(user.uid);
+
         const avatarItems = [currentColour, currentEyes, currentMouth, currentAccessory];
 
         for (const avatarItem of avatarItems) {

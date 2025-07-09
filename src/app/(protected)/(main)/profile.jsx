@@ -7,6 +7,7 @@ import { useAuth } from '../../../contexts/AuthContext.jsx';
 import { useAvatar } from '../../../contexts/AvatarContext.jsx';
 import { getUsername } from '../../../utilities/getUsername.js';
 import EditProfileModal from '../../../components/Modals/EditProfileModal.jsx';
+import AddFriendsModal from '../../../components/Modals/AddFriendsModal.jsx';
 import { router } from 'expo-router';
 
 const index = () => {
@@ -14,6 +15,7 @@ const index = () => {
   const { avatar } = useAvatar();
   const [username, setUsername] = useState("");
   const [isEditProfileVisible, setEditProfileVisible] = useState(false);
+  const [isAddFriendsVisible, setAddFriendsVisible] = useState(false);
 
   useEffect(() => {
     const fetchUsername = async () => {
@@ -66,6 +68,7 @@ const index = () => {
               colours={['#CBAADE', '#989FEF']}
               buttonStyle={styles.button}
               textStyle={styles.buttonText}
+              onPress={() => setAddFriendsVisible(!isAddFriendsVisible)}
             />
           </View>
 
@@ -87,7 +90,7 @@ const index = () => {
       </View>
 
       <EditProfileModal isModalVisible={isEditProfileVisible} setModalVisible={setEditProfileVisible}/>
-      
+      <AddFriendsModal isModalVisible={isAddFriendsVisible} setModalVisible={setAddFriendsVisible}/>
     </ImageBackground>
   )
 }
