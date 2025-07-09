@@ -12,7 +12,6 @@ const TopNavBar = ( ) => {
 
   const pathname = usePathname();
   const isBackable = pathname === '/profile' || pathname === '/stats';
-  console.log(pathname)
 
   useEffect(() => {
     const user = FIREBASE_AUTH.currentUser;
