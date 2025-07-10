@@ -1,19 +1,24 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const FriendDisplay = () => {
+const FriendDisplay = ({item}) => {
 
-    const name = 'Test'
-    const status = "online"
+    const name = item.username
+    const status = item.status
+    const statusColor = {
+        Online: 'green',
+        Focus: '#FEDC5C',
+        Offline: 'red'
+    }
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>{name}</Text>
-      <View style={styles.status}>
-        <Text style={styles.text}>status</Text>
-        <View style={styles.indicator}></View>
-      </View>
-    </View>
+    return (
+        <View style={styles.container}>
+            <Text style={styles.text}>{name}</Text>
+            <View style={styles.status}>
+                <Text style={styles.text}>{status}</Text>
+                <View style={[styles.indicator, { backgroundColor: statusColor[item.status] }]}></View>
+            </View>
+        </View>
   )
 }
 
@@ -26,7 +31,8 @@ const styles = StyleSheet.create({
         width: '100%',
         padding: 20,
         borderBottomWidth: 2,
-        borderBottomColor: '#A8B7AB'
+        borderBottomColor: '#A8B7AB',
+        backgroundColor: '#f5f5f5'
     },
     status: {
         flexDirection: 'row',
@@ -34,10 +40,10 @@ const styles = StyleSheet.create({
         gap: 5
     },
     indicator: {
-        width: 10,
-        height: 10,
+        width: 12,
+        height: 12,
         borderRadius: 10,
-        backgroundColor: 'green'
+        borderWidth: 1
     },
     text: {
         fontSize: 15,

@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import FriendDisplay from '../../../components/FriendDisplay'
+import FriendList from '../../../components/FriendList'
 
 const friendlist = () => {
   return (
     <View style={styles.top}>
-      <FriendDisplay></FriendDisplay>
+        <FriendList />
     </View>
   )
 }
@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
         marginTop: 123,
         alignItems: 'center',
         flex: 1,
+        justifyContent: 'center',
         backgroundColor: 'white'
     }
 })

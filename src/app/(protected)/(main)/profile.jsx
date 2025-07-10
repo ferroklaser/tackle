@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ImageBackground, Button } from 'react-native'
+import { StyleSheet, Text, View, ImageBackground, Button, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import CombinedTackSprite from '../../../components/TackComponents/CombinedTackSprite.jsx';
 import MyButton from '../../../components/MyButton.jsx';
@@ -76,8 +76,19 @@ const index = () => {
             {/* <Text>INFO</Text>
             <Text>INFO</Text>
             <Text>INFO</Text> */}
-            <Button title='stats' onPress={() => router.push('/stats')}></Button>
-            <Button title='friends' onPress={() => router.push('/friendlist')} />
+
+              <TouchableOpacity onPress={() => router.push('/friendlist')} style={styles.bar}>
+                <Text style={styles.tabtitle}>Friends</Text>
+              </TouchableOpacity>
+            
+              <TouchableOpacity onPress={() => router.push('/stats')} style={styles.bar}>
+                <Text style={styles.tabtitle}>Statistics</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => {}} style={styles.bar}>
+                <Text style={styles.tabtitle}>About</Text>
+              </TouchableOpacity>
+
           </View>
         </View>
       </View>
@@ -138,6 +149,9 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     justifyContent: 'center',
+    width: '100%',
+    margin: 10,
+
   },
   signOutContainer: {
     alignItems: 'center',
@@ -150,4 +164,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#CE433E',
   },
+  bar: {
+    padding: 25,
+    widht: '95%',
+    borderTopWidth: 2,
+  },
+  tabtitle: {
+    fontSize: 16,
+    fontWeight: 'bold'
+  }
 })
