@@ -77,6 +77,7 @@ const index = () => {
             <Text>INFO</Text>
             <Text>INFO</Text> */}
             <Button title='stats' onPress={() => router.push('/stats')}></Button>
+            <Button title='friends' onPress={() => router.push('/friendlist')} />
           </View>
         </View>
       </View>
