@@ -1,12 +1,28 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import Modal from 'react-native-modal'
+import { useState, useEffect } from 'react';
 import { AntDesign } from '@expo/vector-icons'; 
 import { useAuth } from '../../contexts/AuthContext'
 import { checkMail } from '../../utilities/checkMail';
+import MailList from '../MailComponents/MailList';
+import { collection, onSnapshot } from 'firebase/firestore';
+import { FIREBASE_DATABASE } from '../../firebaseConfig';
 
 const MailModal = ({ isModalVisible, setModalVisible }) => {
     const { user } = useAuth();
-    let isMailEmpty = checkMail(user);
+    const [isMailEmpty, setIsMailEmpty] = useState(true);
+    
+    useEffect(() => {
+        if (!user?.uid) return;
+
+        const mailRef = collection(FIREBASE_DATABASE, 'users', user.uid, 'mail');
+
+        const unsubscribe = onSnapshot(mailRef, (snapshot) => {
+            setIsMailEmpty(snapshot.empty);
+        });
+
+        return () => unsubscribe();
+    }, [user]);
 
     return (
         <View style={styles.container}>
@@ -29,8 +45,10 @@ const MailModal = ({ isModalVisible, setModalVisible }) => {
                         <Text>Your Inbox is empty.</Text>
                         <Text>Check back another time!</Text>
                     </View>
-                    : 
-                    <View></View>}
+                    :   
+                    <View style={styles.mail}>
+                        <MailList />
+                    </View>}
                 </View>
             </Modal>
         </View>

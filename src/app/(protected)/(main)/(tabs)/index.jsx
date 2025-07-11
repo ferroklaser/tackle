@@ -9,13 +9,27 @@ import { useAvatar } from '../../../../contexts/AvatarContext.jsx';
 import { checkMail } from '../../../../utilities/checkMail.js';
 import { useAuth } from '../../../../contexts/AuthContext.jsx';
 import MailModal from '../../../../components/Modals/MailModal.jsx';
+import { collection, onSnapshot } from 'firebase/firestore';
+import { FIREBASE_DATABASE } from '../../../../firebaseConfig.js';
 
 const index = () => {
   const { avatar, isAssetsLoaded, isAvatarLoaded } = useAvatar();
   const { user } = useAuth();
-  const [isMailPressed, setMailPressed] = useState(false);
-  const [isMailEmpty, setMailEmpty] = useState(checkMail(user));
-  const [isBackgroundLoaded, setBackgroundLoaded] = useState(false);
+  const [ isMailPressed, setMailPressed ] = useState(false);
+  const [ isBackgroundLoaded, setBackgroundLoaded ] = useState(false);
+  const [isMailEmpty, setIsMailEmpty] = useState(true);
+    
+  useEffect(() => {
+    if (!user?.uid) return;
+
+    const mailRef = collection(FIREBASE_DATABASE, 'users', user.uid, 'mail');
+
+    const unsubscribe = onSnapshot(mailRef, (snapshot) => {
+        setIsMailEmpty(snapshot.empty);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
 
   const getIsNight = () => {
     const hour = new Date().getHours();
