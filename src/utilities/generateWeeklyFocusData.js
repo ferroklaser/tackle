@@ -1,4 +1,4 @@
-import { onSnapshot, collection, where, query } from "firebase/firestore";
+import { onSnapshot, collection, where, query, documentId } from "firebase/firestore";
 import { useAuth } from "../contexts/AuthContext";
 import { FIREBASE_DATABASE } from "../firebaseConfig";
 import { useState, useEffect } from "react";
@@ -25,13 +25,13 @@ export function useWeeklyFocusData() {
 
         const q = query(
             collection(FIREBASE_DATABASE, "users", user.uid, "dailyUsage"), 
-            where ("date", "in", weekDates));
+            where (documentId(), "in", weekDates));
         
         const unsubscribe = onSnapshot(q, snapshot => {
             const usageMap = {};
             snapshot.forEach(doc => {
-                const { date, totalSeconds } = doc.data();
-                usageMap[date] = totalSeconds;
+                const totalSeconds = doc.data().totalSeconds || 0;
+                usageMap[doc.id] = totalSeconds;
             });
 
             const daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
@@ -40,7 +40,7 @@ export function useWeeklyFocusData() {
                 const dayIndex = date.getDay();
                 return {
                     label: daysOfWeek[dayIndex],
-                    value: (usageMap[data] / 3600 || 0 / 3600)
+                    value: (usageMap[data] || 0) / 3600
                 }
             })
             setData(chartData);
