@@ -34,8 +34,8 @@ const FriendRequest = ({ mail }) => {
             try {
               const userName = await getUsername(user);
               const mailRef = doc(FIREBASE_DATABASE, 'users', user.uid, 'mail', mail.id);
-              const friendRef = doc(FIREBASE_DATABASE, 'users', mail.fromUid, 'friend', user.uid)
-              const userRef = doc(FIREBASE_DATABASE, 'users', user.uid, 'friend', mail.fromUid)
+              const friendRef = doc(FIREBASE_DATABASE, 'users', mail.fromUid, 'friends', user.uid)
+              const userRef = doc(FIREBASE_DATABASE, 'users', user.uid, 'friends', mail.fromUid)
               
 
               await deleteDoc(mailRef);

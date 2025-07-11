@@ -22,6 +22,15 @@ export const sendFriendRequest = async (receiverCode, senderCode, senderUid, use
         return;
         }
 
+        const checkFriendRef = doc(FIREBASE_DATABASE, 'users', senderUid, 'friends', friendID);
+        const docSnap = await getDoc(checkFriendRef);
+
+        if (docSnap.exists()) {
+            Alert.alert('Warning', 'You are already friends with this user!');
+            console.log('User exists:', docSnap.data());
+            return;
+        }
+
         const mailRef = collection(FIREBASE_DATABASE, 'users', friendID, 'mail');
         await addDoc(mailRef, {
             type: 'friend_request',
