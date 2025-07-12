@@ -2,9 +2,15 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import ChartComponent from '../../../components/ChartComponent';
 import { useWeeklyFocusData } from '../../../utilities/generateWeeklyFocusData';
+import LoadingSplash from '../../../components/LoadingSplash';
 
 const stats = () => {
-    const { data } = useWeeklyFocusData();
+    const { data, loading} = useWeeklyFocusData();
+
+    if (loading) {
+        return <LoadingSplash />
+    }
+
     return (
         <View style={styles.container}>
             <ChartComponent data={data} />

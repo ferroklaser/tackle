@@ -7,9 +7,12 @@ export function useWeeklyFocusData() {
     const { user } = useAuth();
 
     const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (!user) return;
+
+        setLoading(true);
 
         const today = new Date();
         const dayOfWeek = today.getDay();
@@ -44,9 +47,10 @@ export function useWeeklyFocusData() {
                 }
             })
             setData(chartData);
+            setLoading(false);
         })
         return () => unsubscribe();
     }, [])
 
-    return { data };
+    return { data, loading };
 }
