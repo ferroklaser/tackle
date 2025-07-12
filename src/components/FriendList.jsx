@@ -3,22 +3,37 @@ import React from 'react'
 import FriendDisplay from './FriendDisplay'
 import { useFriendList } from '../utilities/fetchFriends'
 import LoadingSplash from './LoadingSplash'
+import { useState } from 'react'
 
 const FriendList = () => {
-    const { friends, loading } = useFriendList();
+    const { friends, loading, refresh} = useFriendList();
+    const [refreshing, setRefreshing] = useState(false);
 
-    if (loading) {
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await refresh(); //waits for refresh
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 800);
+    }
+
+    if (loading && friends.length == 0) {
         return <LoadingSplash />
     }
 
-  return (
-    <View style={styles.top}>
-      <FlatList 
-        data={friends}
-        renderItem={({item}) => <FriendDisplay item={item}/>}
-        keyExtractor={(item) => item.uid}
-        />
-    </View>
+    return (
+        <View style={styles.top}>
+            <FlatList
+                data={friends}
+                renderItem={({ item }) => <FriendDisplay item={item} />}
+                keyExtractor={(item) => item.uid}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh} />
+                }
+            />
+        </View>
   )
 }
 

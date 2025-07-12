@@ -32,7 +32,6 @@ try {
   // If already initialized, fallback to getAuth()
   FIREBASE_AUTH = getAuth(FIREBASE_APP);
 }
-
 export { FIREBASE_AUTH }
 // connectAuthEmulator(FIREBASE_AUTH, "http://127.0.0.1:9099");
 export const FIREBASE_DATABASE = getFirestore(FIREBASE_APP);

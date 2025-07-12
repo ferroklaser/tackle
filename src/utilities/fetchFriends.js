@@ -8,27 +8,29 @@ export const useFriendList = () => {
     const [friends, setFriends] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
+    if (!user) return;
+
+    const ref = collection(FIREBASE_DATABASE, 'users', user.uid, 'friends');
+    const fetchFriends = async () => {
         if (!user) return;
+        setLoading(true);
+        try {
+            const snapshot = await getDocs(ref);
 
-        const ref = collection(FIREBASE_DATABASE, 'users', user.uid, 'friends');
-        const fetchFriends = async () => {
-            setLoading(true);
-            try {
-                const snapshot = await getDocs(ref);
-
-                const friendsData = snapshot.docs.map(doc => ({
-                    uid: doc.id,
-                    ...doc.data()
-                }));
-                setFriends(friendsData);
-            } catch (error) {
-                console.log("Error fetching friendList", error);
-            }
-            setLoading(false);
+            const friendsData = snapshot.docs.map(doc => ({
+                uid: doc.id,
+                ...doc.data()
+            }));
+            setFriends(friendsData);
+        } catch (error) {
+            console.log("Error fetching friendList", error);
         }
+        setLoading(false);
+    }
+
+    useEffect(() => {
         fetchFriends();
     }, []);
 
-    return { friends, loading }
+    return { friends, loading, refresh: fetchFriends }
 }
