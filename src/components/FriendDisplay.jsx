@@ -15,8 +15,8 @@ const FriendDisplay = ({item}) => {
         <View style={styles.container}>
             <Text style={styles.text}>{name}</Text>
             <View style={styles.status}>
-                <Text style={styles.text}>{status}</Text>
-                <View style={[styles.indicator, { backgroundColor: statusColor[item.status] }]}></View>
+                <Text style={styles.text}>status</Text>
+                <View style={[styles.indicator, { backgroundColor: 'green' }]}></View>
             </View>
         </View>
   )
