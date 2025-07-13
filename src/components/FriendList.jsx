@@ -32,6 +32,9 @@ const FriendList = () => {
                         refreshing={refreshing}
                         onRefresh={onRefresh} />
                 }
+                ListFooterComponent={
+                    <Text style={styles.footer}>Pull To Refresh</Text>
+                }
             />
         </View>
   )
@@ -45,5 +48,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         flex: 1,
         width: '100%'
+    },
+    footer: {
+        alignContent: 'center',
+        marginTop: 20,
+        textAlign: 'center'
     }
 })

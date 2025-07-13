@@ -50,7 +50,7 @@ const index = () => {
             eyesOption={avatar.eyes}
             mouthOption={avatar.mouth}
             accessoryOption={avatar.accessory}
-            size={250}
+            size={270}
           />
 
           <Text style={styles.userName}>{username}</Text>
