@@ -17,7 +17,7 @@ const EditProfileModal = ({ isModalVisible, setModalVisible }) => {
     useEffect(() => {
         const fetchUsername = async () => {
             try {
-                const userName = await getUsername(user);
+                const userName = await getUsername(user.uid);
                 setUsername(userName);
             } catch (error) {
                 console.log(error);

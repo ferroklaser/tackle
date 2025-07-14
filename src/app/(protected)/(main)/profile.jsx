@@ -20,7 +20,7 @@ const index = () => {
   useEffect(() => {
     const fetchUsername = async () => {
       try {
-        const userName = await getUsername(user);
+        const userName = await getUsername(user.uid);
         setUsername(userName);
       } catch (error) {
         console.log(error);
@@ -50,7 +50,7 @@ const index = () => {
             eyesOption={avatar.eyes}
             mouthOption={avatar.mouth}
             accessoryOption={avatar.accessory}
-            size={250}
+            size={270}
           />
 
           <Text style={styles.userName}>{username}</Text>
