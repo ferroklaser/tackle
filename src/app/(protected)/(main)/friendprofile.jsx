@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 import { useLocalSearchParams } from 'expo-router'
 import { getAvatar } from '../../../utilities/getAvatar'
 import { getWeeklyUsage } from '../../../utilities/getWeeklyUsage'
+import LoadingSplash from '../../../components/LoadingSplash'
 
 const FriendProfilePage = () => {
     const { userID } = useLocalSearchParams();
@@ -18,18 +19,28 @@ const FriendProfilePage = () => {
         accessory: null,
     });
     const [usage, setUsage] = useState([]);
+    const [loading, setLoading] = useState(false);
+
 
     useEffect(() => {
         const fetchFriendProfile = async () => {
-            const friendUsername = await getUsername(userID);
-            const friendAvatar = await getAvatar(userID);
-            const friendWeeklyUsage = await getWeeklyUsage(userID);
+            setLoading(true);
+            const [friendUsername, friendAvatar, friendWeeklyUsage] = await Promise.all([
+                getUsername(userID),
+                getAvatar(userID),
+                getWeeklyUsage(userID),
+            ]);
             setAvatar(friendAvatar);
             setUsername(friendUsername);
             setUsage(friendWeeklyUsage);
+            setLoading(false);
         }
         fetchFriendProfile();
-    }, [userID])
+    }, [userID]);
+
+    if (loading) {
+        return <LoadingSplash />
+    }
 
     return (
         <ImageBackground

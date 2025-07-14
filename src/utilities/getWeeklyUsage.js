@@ -3,8 +3,6 @@ import { useState } from "react";
 import { getDocs, collection, where, query, documentId } from "firebase/firestore";
 
 export const getWeeklyUsage = async (userID) => {
-    const [data, setData] = useState([]);
-
     try {
         const today = new Date();
         const dayOfWeek = today.getDay();
@@ -35,12 +33,11 @@ export const getWeeklyUsage = async (userID) => {
             const date = new Date(data);
             const dayIndex = date.getDay();
             return {
-                label: dayOfWeek[dayIndex],
+                label: daysOfWeek[dayIndex],
                 value: (usageMap[data] || 0) / 3600
             }
         });
-        setData(chartData);
-        return data;
+        return chartData;
     } catch (error) {
         console.log('Error getting weekly usage:', error);
     }
