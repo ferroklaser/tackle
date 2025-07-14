@@ -13,7 +13,7 @@ const FriendDisplay = ({item}) => {
     }
 
     const handlePress = () => {
-        router.push('/friendprofile');
+        router.push({ pathname: '/friendprofile', params: { userID: item.uid }});
     }
 
     return (

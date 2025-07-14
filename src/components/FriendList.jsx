@@ -6,7 +6,7 @@ import LoadingSplash from './LoadingSplash'
 import { useState } from 'react'
 
 const FriendList = () => {
-    const { friends, loading, refresh} = useFriendList();
+    const { friends, loading, refresh } = useFriendList();
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = async () => {

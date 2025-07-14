@@ -2,17 +2,35 @@ import { ImageBackground, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import CombinedTackAnimation from '../../../components/TackComponents/CombinedTackSprite'
 import ChartComponent from '../../../components/ChartComponent'
+import { getUsername } from '../../../utilities/getUsername'
+import { useState, useEffect } from 'react'
+import { useLocalSearchParams } from 'expo-router'
+import { getAvatar } from '../../../utilities/getAvatar'
+import { getWeeklyUsage } from '../../../utilities/getWeeklyUsage'
 
-const FriendProfilePage = (userID) => {
-    const dummyData = [
-        { label: 'Mon', value: 30 },
-        { label: 'Tue', value: 45 },
-        { label: 'Wed', value: 28 },
-        { label: 'Thu', value: 60 },
-        { label: 'Fri', value: 50 },
-        { label: 'Sat', value: 75 },
-        { label: 'Sun', value: 40 },
-    ];
+const FriendProfilePage = () => {
+    const { userID } = useLocalSearchParams();
+    const [username, setUsername] = useState('');
+    const [avatar, setAvatar] = useState({
+        base: null,
+        eyes: null,
+        mouth: null,
+        accessory: null,
+    });
+    const [usage, setUsage] = useState([]);
+
+    useEffect(() => {
+        const fetchFriendProfile = async () => {
+            const friendUsername = await getUsername(userID);
+            const friendAvatar = await getAvatar(userID);
+            const friendWeeklyUsage = await getWeeklyUsage(userID);
+            setAvatar(friendAvatar);
+            setUsername(friendUsername);
+            setUsage(friendWeeklyUsage);
+        }
+        fetchFriendProfile();
+    }, [userID])
+
     return (
         <ImageBackground
             source={require('../../../assets/Backgrounds/ProfileBG.png')}
@@ -20,17 +38,17 @@ const FriendProfilePage = (userID) => {
             resizeMode='cover'>
             <View style={styles.tackContainer}>
                 <CombinedTackAnimation
-                    tackBaseOption='Blue'
-                    eyesOption='Excited'
-                    mouthOption='Agape'
-                    accessoryOption='Tulip'
+                    tackBaseOption={avatar.base}
+                    eyesOption={avatar.eyes}
+                    mouthOption={avatar.mouth}
+                    accessoryOption={avatar.accessory}
                     size={270}>
                 </CombinedTackAnimation>
 
-                <Text style={styles.username}>username</Text>
+                <Text style={styles.username}>{username}</Text>
             </View>
             <View style={styles.chartContainer}>
-                <ChartComponent data={dummyData}/>
+                <ChartComponent data={usage}/>
             </View>
         </ImageBackground>
     )
