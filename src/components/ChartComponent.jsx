@@ -4,8 +4,10 @@ import { BarChart } from 'react-native-gifted-charts'
 
 const ChartComponent = ({ data }) => {
     const maxDataValue = Math.max(...data.map(d => d.value));
-    const rawMax = Math.max(1, maxDataValue); // minimum of 1 to avoid flat axis
-    const maxValue = rawMax == 1 ? 1 : Math.ceil(rawMax / 4) * 4;
+    const rawMax = Math.max(4, maxDataValue); // minimum of 4 to avoid flat axis
+    const maxValue = rawMax % 4 === 0
+        ? rawMax
+        : rawMax + (4 - (rawMax % 4));
 
     return (
         <View style={styles.container}>
@@ -18,10 +20,10 @@ const ChartComponent = ({ data }) => {
                 spacing={10}
                 frontColor="#04e5cb"
                 data={data}
-                yAxisLabel=""
                 height={250}
                 xAxisLabelTextStyle={{ color: 'gray' }}
                 yAxisLabelSuffix='h'
+                formatYLabel={val => Math.round(val).toString()}
             />
         </View>
     )
