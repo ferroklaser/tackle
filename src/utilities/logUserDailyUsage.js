@@ -5,7 +5,6 @@ import { doc, setDoc, increment } from "firebase/firestore";
 export const logUserDailyUsage = async (user, seconds) => {
     if (!user?.uid || !seconds) return;
 
-    console.log("hi");
     const todayKey = new Date().toISOString().slice(0, 10);
     const docRef = doc(FIREBASE_DATABASE, "users", user.uid, 'dailyUsage', todayKey);
 

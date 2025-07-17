@@ -32,7 +32,7 @@ const FriendRequest = ({ mail }) => {
           text: "Accept",
           onPress: async() => {
             try {
-              const userName = await getUsername(user);
+              const userName = await getUsername(user.uid);
               const mailRef = doc(FIREBASE_DATABASE, 'users', user.uid, 'mail', mail.id);
               const friendRef = doc(FIREBASE_DATABASE, 'users', mail.fromUid, 'friends', user.uid)
               const userRef = doc(FIREBASE_DATABASE, 'users', user.uid, 'friends', mail.fromUid)

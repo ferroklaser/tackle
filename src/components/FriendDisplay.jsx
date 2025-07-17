@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import { router } from 'expo-router'
 
 const FriendDisplay = ({item}) => {
 
@@ -11,14 +12,18 @@ const FriendDisplay = ({item}) => {
         Offline: 'red'
     }
 
+    const handlePress = () => {
+        router.push({ pathname: '/friendprofile', params: { userID: item.uid }});
+    }
+
     return (
-        <View style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress={handlePress}>
             <Text style={styles.text}>{name}</Text>
             <View style={styles.status}>
                 <Text style={styles.text}>status</Text>
                 <View style={[styles.indicator, { backgroundColor: 'green' }]}></View>
             </View>
-        </View>
+        </TouchableOpacity>
   )
 }
 
