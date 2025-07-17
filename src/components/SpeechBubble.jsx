@@ -2,24 +2,29 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import AntDesign from '@expo/vector-icons/AntDesign';
 
-const SpeechBubble = () => {
+const SpeechBubble = ({item}) => {
+    const title = item.title;
+    const likes = item.like;
+    const sharingMessage = item.message;
+    const username = item.username;
+
     return (
         <View style={styles.container}>
             <View style={styles.bubble}>
                 <View style={styles.header}>
-                    <Text style={styles.title}>Title</Text>
+                    <Text style={styles.title}>{title}</Text>
                 </View>
                 <View style={styles.body}>
                     <Text style={styles.info}>Time Spent</Text>
-                    <Text style={styles.info}>Sharing Message</Text>
+                    <Text style={styles.info}>{sharingMessage}</Text>
                 </View>
                 <View style={styles.footer}>
                     <View style={styles.like}>
                         <AntDesign name="hearto" size={27} color="black" />
-                        <Text>0</Text>
+                        <Text>{likes}</Text>
                     </View>
                     <View style={styles.corner}>
-                        <Text style={styles.details}>Name</Text>
+                        <Text style={styles.details}>{username}</Text>
                         <Text style={styles.details}>Time/Date</Text>
                     </View>
                 </View>
@@ -36,10 +41,10 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: 'white',
         borderRadius: 16,
-        alignItems: 'center'
+        alignItems: 'center',
     },
     container: {
-        width: '80%'
+        width: '90%'
     }, 
     triangle: {
         width: 0,
