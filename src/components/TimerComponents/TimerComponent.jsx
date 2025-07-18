@@ -11,6 +11,8 @@ import { useTask } from '../../contexts/TaskContext.jsx';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig'
 import { doc, updateDoc, increment } from 'firebase/firestore'
 import { logUserDailyUsage } from '../../utilities/logUserDailyUsage.js';
+import { useAuth } from '../../contexts/AuthContext.jsx';
+import { setFocusState } from '../../utilities/setFocusState.js';
 
 const formatTime = (sec) => {
   const hrs = String(Math.floor(sec / 3600)).padStart(2, '0');
@@ -28,6 +30,7 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
   const [reward, setReward] = useState(0);
   const intervalRef = useRef(null);
   const appState = useRef(AppState.currentState || "active");
+  const { user } = useAuth();
   
   const [fontsLoaded] = useFonts({
     RobotoMono: require('../../assets/fonts/RobotoMono.ttf'),
@@ -81,11 +84,12 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
 
   const handlePause = () => setIsRunning(false);
 
-  const handlePlay = () => {
+  const handlePlay = async () => {
     if (!taskId) {
       Alert.alert('Warning', 'No task selected.')
     } else if (duration !== 0 && seconds != 0) {
       setIsRunning(true);
+      await setFocusState(user, true);
     } else {
       Alert.alert(
         'Warning',
@@ -133,8 +137,10 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
     const coinsEarned = Math.floor(duration / 100 * 1.2);
     setReward(coinsEarned);
     setRewardVisible(true);
+
     try {
       await updateDoc(docRefReward, { coins: increment(coinsEarned) });
+      await setFocusState(user, false);
     } catch (err) {
       console.error('Failed to update coins:', err);
     }
@@ -158,6 +164,7 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
     
     try {
       await updateDoc(docRefReward, { coins: increment(coinsEarned) });
+      await setFocusState(user, false);
     } catch (err) {
       console.error('Failed to update coins:', err);
     }
