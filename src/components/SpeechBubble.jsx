@@ -7,6 +7,7 @@ const SpeechBubble = ({item}) => {
     const likes = item.like;
     const sharingMessage = item.message;
     const username = item.username;
+    const timestamp = item.timestamp.toDate().toLocaleString();
 
     return (
         <View style={styles.container}>
@@ -25,7 +26,7 @@ const SpeechBubble = ({item}) => {
                     </View>
                     <View style={styles.corner}>
                         <Text style={styles.details}>{username}</Text>
-                        <Text style={styles.details}>Time/Date</Text>
+                        <Text style={styles.details}>{timestamp}</Text>
                     </View>
                 </View>
             </View>
@@ -38,7 +39,7 @@ export default SpeechBubble
 
 const styles = StyleSheet.create({
     bubble: {
-        padding: 10,
+        padding: 15,
         backgroundColor: 'white',
         borderRadius: 16,
         alignItems: 'center',
@@ -91,8 +92,9 @@ const styles = StyleSheet.create({
 
     },
     details: {
-        fontSize: 12,
-        fontWeight: 600
+        fontSize: 10,
+        fontWeight: 500,
+        textAlign: 'right'
     },
     like: {
         flexDirection: 'row',
