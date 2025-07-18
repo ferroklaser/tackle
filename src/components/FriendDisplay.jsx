@@ -3,13 +3,11 @@ import React from 'react'
 import { router } from 'expo-router'
 
 const FriendDisplay = ({item}) => {
-
     const name = item.username
-    const status = item.status
+    const status = item.presence?.state || '';
     const statusColor = {
-        Online: 'green',
-        Focus: '#FEDC5C',
-        Offline: 'red'
+        online: 'green',
+        offline: 'red'
     }
 
     const handlePress = () => {
@@ -20,8 +18,8 @@ const FriendDisplay = ({item}) => {
         <TouchableOpacity style={styles.container} onPress={handlePress}>
             <Text style={styles.text}>{name}</Text>
             <View style={styles.status}>
-                <Text style={styles.text}>status</Text>
-                <View style={[styles.indicator, { backgroundColor: 'green' }]}></View>
+                <Text style={[styles.text, { color: statusColor[status]}]}>{status}</Text>
+                <View style={[styles.indicator, { backgroundColor: statusColor[status] }]}></View>
             </View>
         </TouchableOpacity>
   )

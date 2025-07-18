@@ -3,35 +3,44 @@ import React from 'react'
 import FriendDisplay from './FriendDisplay'
 import { useFriendList } from '../utilities/fetchFriends'
 import LoadingSplash from './LoadingSplash'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
+import { useFriendsPresence } from '../utilities/fetchFriendsPresence'
 
 const FriendList = () => {
-    const { friends, loading, refresh } = useFriendList();
+    const { friends, loadingFriends, refresh } = useFriendList();
     const [refreshing, setRefreshing] = useState(false);
+    const friendUIDs = useMemo(() => friends.map(friend => friend.uid), [friends]);
+    const { presence } = useFriendsPresence(friendUIDs);
 
     const onRefresh = async () => {
-        setRefreshing(true);
+        setRefreshing(true); 
         await refresh(); //waits for refresh
         setTimeout(() => {
             setRefreshing(false);
         }, 800);
     }
 
-    if (loading && friends.length == 0) {
+    const completeFriends = friends.map(friend => ({
+        ...friend,
+        presence: presence[friend.uid], 
+    }));
+
+    if (loadingFriends || friends.length == 0) {
         return <LoadingSplash />
     }
 
     return (
         <View style={styles.top}>
             <FlatList
-                data={friends}
+                data={completeFriends}
+                extraData={presence}
                 renderItem={({ item }) => <FriendDisplay item={item} />}
                 keyExtractor={(item) => item.uid}
                 refreshControl={
                     <RefreshControl
                         refreshing={refreshing}
                         onRefresh={onRefresh} />
-                }
+                } 
                 ListFooterComponent={
                     <Text style={styles.footer}>Pull To Refresh</Text>
                 }

@@ -6,7 +6,7 @@ import { collection, getDocs } from "firebase/firestore";
 export const useFriendList = () => {
     const { user } = useAuth();
     const [friends, setFriends] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loadingFriends, setLoading] = useState(false);
 
     if (!user) return;
 
@@ -32,5 +32,5 @@ export const useFriendList = () => {
         fetchFriends();
     }, []);
 
-    return { friends, loading, refresh: fetchFriends }
+    return { friends, loadingFriends, refresh: fetchFriends }
 }
