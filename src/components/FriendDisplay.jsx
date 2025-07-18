@@ -4,10 +4,11 @@ import { router } from 'expo-router'
 
 const FriendDisplay = ({item}) => {
     const name = item.username
-    const status = item.presence?.state || '';
+    const status = item.presence?.focus ? 'focus' : item.presence?.state || '';
     const statusColor = {
         online: 'green',
-        offline: 'red'
+        offline: 'red',
+        focus: '#FFBF00'
     }
 
     const handlePress = () => {
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
         padding: 20,
         borderBottomWidth: 2,
         borderBottomColor: '#A8B7AB',
-        backgroundColor: '#f5f5f5'
+        backgroundColor: '#FAF5EF'
     },
     status: {
         flexDirection: 'row',

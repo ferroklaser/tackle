@@ -25,6 +25,6 @@ export const useFriendsPresence = (friendsUID) => {
         return () => {
             listeners.forEach(cleanup => cleanup());
         }
-    }, [friendsUID]);
+    }, []);
     return { presence, loadingPresence };
 }
