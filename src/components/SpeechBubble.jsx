@@ -1,13 +1,34 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useState } from 'react';
+
+
+//format time into h, m, s
+function formatDuration(seconds) {
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+
+    const parts = [];
+    if (hrs > 0) parts.push(`${hrs}h`);
+    if (mins > 0) parts.push(`${mins}m`);
+    if (secs > 0 || parts.length === 0) parts.push(`${secs}s`);
+
+    return parts.join(' ');
+}
 
 const SpeechBubble = ({item}) => {
     const title = item.title;
-    const likes = item.like;
+    const [likes, setLikes] = useState(item.like);
     const sharingMessage = item.message;
     const username = item.username;
     const timestamp = item.timestamp.toDate().toLocaleString();
+    const duration = formatDuration(item.duration);
+
+    const handleLikeButtonPress = () => {
+
+    }
 
     return (
         <View style={styles.container}>
@@ -16,12 +37,14 @@ const SpeechBubble = ({item}) => {
                     <Text style={styles.title}>{title}</Text>
                 </View>
                 <View style={styles.body}>
-                    <Text style={styles.info}>Time Spent</Text>
+                    <Text style={styles.info}>Time Spent:{duration}</Text>
                     <Text style={styles.info}>{sharingMessage}</Text>
                 </View>
                 <View style={styles.footer}>
                     <View style={styles.like}>
-                        <AntDesign name="hearto" size={27} color="black" />
+                        <TouchableOpacity>
+                            <AntDesign name="hearto" size={27} color="black" />
+                        </TouchableOpacity>
                         <Text>{likes}</Text>
                     </View>
                     <View style={styles.corner}>
