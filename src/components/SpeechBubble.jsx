@@ -1,8 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useState } from 'react';
-
+import { FIREBASE_DATABASE } from '../firebaseConfig';
+import { useAuth } from '../contexts/AuthContext';
+import { doc, updateDoc, increment} from 'firebase/firestore';
 
 //format time into h, m, s
 function formatDuration(seconds) {
@@ -19,15 +21,36 @@ function formatDuration(seconds) {
 }
 
 const SpeechBubble = ({item}) => {
+    const { user } = useAuth();
     const title = item.title;
-    const [likes, setLikes] = useState(item.like);
+    const [likes, setLikes] = useState(item.likes);
+    const [liked, setLiked] = useState(item.liked)
     const sharingMessage = item.message;
     const username = item.username;
     const timestamp = item.timestamp.toDate().toLocaleString();
     const duration = formatDuration(item.duration);
 
-    const handleLikeButtonPress = () => {
+    const handleLikeButtonPress = async () => {
+        const newLike = !liked;
+        const likeCount = likes;
+        setLiked(newLike);
+        setLikes(newLike ? likeCount + 1 : likeCount - 1);
 
+        try {
+            const postRef = doc(FIREBASE_DATABASE, 'posts', item.id);
+            const feedRef = doc(FIREBASE_DATABASE, 'users', user.uid, 'feed', item.id);
+
+            await updateDoc(postRef, {
+                likes: increment(newLike ? 1 : -1)
+            });
+            await updateDoc(feedRef, {
+                liked: newLike
+            });
+        } catch (error) {
+            console.log('Error liking post:', error);
+            setLiked(!newLike);
+            setLikes(likeCount)
+        }
     }
 
     return (
@@ -42,9 +65,9 @@ const SpeechBubble = ({item}) => {
                 </View>
                 <View style={styles.footer}>
                     <View style={styles.like}>
-                        <TouchableOpacity>
-                            <AntDesign name="hearto" size={27} color="black" />
-                        </TouchableOpacity>
+                        <Pressable onPress={handleLikeButtonPress}>
+                            <AntDesign name={liked ? "like1" : "like2"} size={27} color="black"/>
+                        </Pressable>
                         <Text>{likes}</Text>
                     </View>
                     <View style={styles.corner}>

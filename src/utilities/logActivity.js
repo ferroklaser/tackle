@@ -8,7 +8,7 @@ export const logActivity = async (user, time, title) => {
 
     try {
         const docRef = await addDoc(postRef, {
-            like: 0,
+            likes: 0,
             message: 'Message',
             duration: time,
             timestamp: serverTimestamp(),
