@@ -9,10 +9,11 @@ import NoTimerTask from '../TaskComponents/NoTimerTask.jsx'
 import TimerTask from '../TaskComponents/TimerTask.jsx';
 import { useTask } from '../../contexts/TaskContext.jsx';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig'
-import { doc, updateDoc, increment } from 'firebase/firestore'
+import { doc, updateDoc, increment, getDoc } from 'firebase/firestore'
 import { logUserDailyUsage } from '../../utilities/logUserDailyUsage.js';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 import { setFocusState } from '../../utilities/setFocusState.js';
+import { logActivity } from '../../utilities/logActivity.js';
 
 const formatTime = (sec) => {
   const hrs = String(Math.floor(sec / 3600)).padStart(2, '0');
@@ -148,7 +149,9 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
     await updateDoc(docRefComplete, {
       completed: increment(duration)
     });
+    const document = await getDoc(docRefComplete);
     await logUserDailyUsage(currentUser, duration);
+    await logActivity(currentUser, duration, document.data().title)
   }
 
   const handleRewardNoBonus = async () => {

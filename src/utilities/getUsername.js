@@ -6,7 +6,7 @@ export const getUsername = async (userID) => {
         const userRef = doc(FIREBASE_DATABASE, "users", userID);
         const docSnap = await getDoc(userRef);
 
-        if(docSnap.exists) {
+        if(docSnap.exists()) {
             const data = docSnap.data();
             return data.username;
         } else {

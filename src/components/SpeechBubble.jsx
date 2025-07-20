@@ -1,13 +1,57 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useState } from 'react';
+import { FIREBASE_DATABASE } from '../firebaseConfig';
+import { useAuth } from '../contexts/AuthContext';
+import { doc, updateDoc, increment} from 'firebase/firestore';
+
+//format time into h, m, s
+function formatDuration(seconds) {
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+
+    const parts = [];
+    if (hrs > 0) parts.push(`${hrs}h`);
+    if (mins > 0) parts.push(`${mins}m`);
+    if (secs > 0 || parts.length === 0) parts.push(`${secs}s`);
+
+    return parts.join(' ');
+}
 
 const SpeechBubble = ({item}) => {
+    const { user } = useAuth();
     const title = item.title;
-    const likes = item.like;
+    const [likes, setLikes] = useState(item.likes);
+    const [liked, setLiked] = useState(item.liked)
     const sharingMessage = item.message;
     const username = item.username;
     const timestamp = item.timestamp.toDate().toLocaleString();
+    const duration = formatDuration(item.duration);
+
+    const handleLikeButtonPress = async () => {
+        const newLike = !liked;
+        const likeCount = likes;
+        setLiked(newLike);
+        setLikes(newLike ? likeCount + 1 : likeCount - 1);
+
+        try {
+            const postRef = doc(FIREBASE_DATABASE, 'posts', item.id);
+            const feedRef = doc(FIREBASE_DATABASE, 'users', user.uid, 'feed', item.id);
+
+            await updateDoc(postRef, {
+                likes: increment(newLike ? 1 : -1)
+            });
+            await updateDoc(feedRef, {
+                liked: newLike
+            });
+        } catch (error) {
+            console.log('Error liking post:', error);
+            setLiked(!newLike);
+            setLikes(likeCount)
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -16,12 +60,14 @@ const SpeechBubble = ({item}) => {
                     <Text style={styles.title}>{title}</Text>
                 </View>
                 <View style={styles.body}>
-                    <Text style={styles.info}>Time Spent</Text>
+                    <Text style={styles.info}>Time Spent:{duration}</Text>
                     <Text style={styles.info}>{sharingMessage}</Text>
                 </View>
                 <View style={styles.footer}>
                     <View style={styles.like}>
-                        <AntDesign name="hearto" size={27} color="black" />
+                        <Pressable onPress={handleLikeButtonPress}>
+                            <AntDesign name={liked ? "like1" : "like2"} size={27} color="black"/>
+                        </Pressable>
                         <Text>{likes}</Text>
                     </View>
                     <View style={styles.corner}>
