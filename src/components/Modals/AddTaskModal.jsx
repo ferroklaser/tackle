@@ -44,7 +44,7 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible, isTimer = false}
     const [color, setColor] = useState('#FFEA8A');
 
     const [friends, setFriends] = useState('No Friends Selected');
-    const [friendsID, setFriendsID] = useState('');
+    const [friendsID, setFriendsID] = useState([]);
     const [isGroupTask, setGroupTask] = useState(false);
 
     const [durationModal, setDurationModal] = useState(false);
@@ -134,9 +134,10 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible, isTimer = false}
                     setPriority={setPriority}/>
 
                     <FriendPickerModal
-                    isModalVisible={friendModal}
+                    isModalVisible={friendModal} 
                     setModalVisible={setFriendModal}
-                    setFriends={setFriends}/>
+                    setFriends={setFriends}
+                    setFriendsID={setFriendsID}/>
 
                     <View style={[styles.modalContainer, { backgroundColor: color }]}>
                         <PillInput 
