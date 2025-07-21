@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert, AppState} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, AppState, Button } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
@@ -14,6 +14,7 @@ import { logUserDailyUsage } from '../../utilities/logUserDailyUsage.js';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 import { setFocusState } from '../../utilities/setFocusState.js';
 import { logActivity } from '../../utilities/logActivity.js';
+import LogMessageModal from '../Modals/LogMessageModal.jsx';
 
 const formatTime = (sec) => {
   const hrs = String(Math.floor(sec / 3600)).padStart(2, '0');
@@ -32,6 +33,8 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
   const intervalRef = useRef(null);
   const appState = useRef(AppState.currentState || "active");
   const { user } = useAuth();
+  const [isLogMessageVisible, setLogMessage] = useState(false);
+  const [pendingLogMessage, setPendingLogMessage] = useState(null);
   
   const [fontsLoaded] = useFonts({
     RobotoMono: require('../../assets/fonts/RobotoMono.ttf'),
@@ -137,7 +140,7 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
 
     const coinsEarned = Math.floor(duration / 100 * 1.2);
     setReward(coinsEarned);
-    setRewardVisible(true);
+    // setRewardVisible(true);
 
     try {
       await updateDoc(docRefReward, { coins: increment(coinsEarned) });
@@ -151,7 +154,10 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
     });
     const document = await getDoc(docRefComplete);
     await logUserDailyUsage(currentUser, duration);
-    await logActivity(currentUser, duration, document.data().title)
+    // await logActivity(currentUser, duration, document.data().title);
+
+    setPendingLogMessage({user: currentUser, duration: duration, title: document.data().title});
+    setLogMessage(true);
   }
 
   const handleRewardNoBonus = async () => {
@@ -187,6 +193,21 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
       setModalVisible={setRewardVisible}
       reward={reward}
       />
+
+      <LogMessageModal
+        isModalVisible={isLogMessageVisible}
+        setModalVisible={setLogMessage}
+        onSubmit={async (message) => {
+          if (!pendingLogMessage) return;
+          try {
+            await logActivity(pendingLogMessage.user, pendingLogMessage.duration, pendingLogMessage.title, message);
+          } catch (error) {
+            console.log("Error logging log message: ", error);
+          } finally {
+            setRewardVisible(true);
+            setPendingLogMessage(null);
+          }
+        }}/>
       
       <View style={styles.circle} />
 
