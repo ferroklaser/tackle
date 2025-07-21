@@ -2,7 +2,7 @@ import { ImageBackground, StyleSheet, Text, View, TouchableOpacity } from 'react
 import Modal from 'react-native-modal'
 import React from 'react'
 import { AntDesign } from '@expo/vector-icons'; 
-import SpeechBubble from '../SpeechBubble';
+import ActivityFeed from '../ActivityFeed';
 
 const FriendActivityModal = ({isModalVisible, setModalVisible}) => {
     return (
@@ -20,7 +20,7 @@ const FriendActivityModal = ({isModalVisible, setModalVisible}) => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.feed}>
-                        <SpeechBubble />
+                        <ActivityFeed/>
                     </View> 
                 </View>
             </ImageBackground>
@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     main: {
         flex: 1,
         marginTop: 70,
+        width: '100%'
     },
     background: {
         flex: 1,
@@ -56,6 +57,9 @@ const styles = StyleSheet.create({
         fontSize: 25,
     },
     feed: {
-        alignItems: 'center'
+        alignItems: 'center',
+        width: '100%',
+        flex: 1,
+        marginBottom: 30
     }
 })

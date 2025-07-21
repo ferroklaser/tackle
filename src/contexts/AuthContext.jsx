@@ -53,10 +53,12 @@ export function AuthProvider({ children }) {
 
             onDisconnect(userStatusRef).set({
                 state: "offline",
+                focus: false,
                 last_changed: Date.now(),
             }).then(() => {
                 set(userStatusRef, {
                     state: "online",
+                    focus: false,
                     last_changed: Date.now(),
                 })
             });
