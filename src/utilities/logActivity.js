@@ -2,14 +2,14 @@ import { FIREBASE_DATABASE } from "../firebaseConfig";
 import { collection, addDoc, serverTimestamp, setDoc, doc } from "firebase/firestore";
 import { getUsername } from "./getUsername"
 
-export const logActivity = async (user, time, title) => {
+export const logActivity = async (user, time, title, message) => {
     const postRef = collection(FIREBASE_DATABASE, 'posts');
     const username = await getUsername(user.uid);
 
     try {
         const docRef = await addDoc(postRef, {
             likes: 0,
-            message: 'Message',
+            message: message,
             duration: time,
             timestamp: serverTimestamp(),
             title: title,
