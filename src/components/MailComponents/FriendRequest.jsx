@@ -17,7 +17,7 @@ const FriendRequest = ({ mail }) => {
     hour: 'numeric',
     minute: '2-digit',
     hour12: true,
-    timeZone: 'Asia/Singapore', // Optional, depending on your location
+    timeZone: 'Asia/Singapore', 
   }).format(date);
 
   const handleAccept = () => {

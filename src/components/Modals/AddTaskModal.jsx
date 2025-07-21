@@ -1,4 +1,4 @@
-import { StyleSheet, View, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native'
+import { StyleSheet, View, TouchableWithoutFeedback, Keyboard, Alert, Switch } from 'react-native'
 import {useState} from 'react'
 import Modal from 'react-native-modal'
 import GradientButton from '../GradientButton'
@@ -10,6 +10,8 @@ import TaskDurationPicker from './TaskDurationPicker'
 import DeadlinePicker from './DeadlinePicker'
 import PriorityModal from './PriorityModal'
 import { useTask } from '../../contexts/TaskContext';
+import YesNoSwitch from '../YesNoSwitch'
+import FriendPickerModal from './FriendPickerModal'
 
 const formatDate = (dateString) => {
   const [year, month, day] = dateString.split('-');
@@ -40,9 +42,15 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible, isTimer = false}
     const [priority, setPriority] = useState('Low');
     const [deadline, setDeadline] = useState(new Date().toISOString().split('T')[0]);
     const [color, setColor] = useState('#FFEA8A');
+
+    const [friends, setFriends] = useState('No Friends Selected');
+    const [friendsID, setFriendsID] = useState('');
+    const [isGroupTask, setGroupTask] = useState(false);
+
     const [durationModal, setDurationModal] = useState(false);
     const [deadlineModal, setDeadlineModal] = useState(false);
     const [priorityModal, setPriorityModal] = useState(false);
+    const [friendModal, setFriendModal] = useState(false);
 
     const task = {
         title,
@@ -64,6 +72,9 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible, isTimer = false}
         setPriority('Low')
         setDeadline(new Date().toISOString().split('T')[0]);
         setColor('#FFEA8A');
+        setGroupTask(false);
+        setFriends('No Friends Selected');
+        setFriendsID('');
     }
 
     const addTask = async () => {
@@ -122,6 +133,11 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible, isTimer = false}
                     setModalVisible={setPriorityModal}
                     setPriority={setPriority}/>
 
+                    <FriendPickerModal
+                    isModalVisible={friendModal}
+                    setModalVisible={setFriendModal}
+                    setFriends={setFriends}/>
+
                     <View style={[styles.modalContainer, { backgroundColor: color }]}>
                         <PillInput 
                         value={title}
@@ -152,8 +168,16 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible, isTimer = false}
                         textDropdown={priority}
                         handleDropdown={() => setPriorityModal(true)}
                         haveDropdown={true}/>
-
+                        
                         <ColorPicker setColor={setColor}/>
+
+                        <YesNoSwitch isGroupTask={isGroupTask} setGroupTask={setGroupTask}/>
+
+                        { isGroupTask && <PillInput
+                        prompt='Friends Selected'
+                        textDropdown={friends}
+                        handleDropdown={() => setFriendModal(true)}
+                        haveDropdown={true}/>}
 
                         <View style={styles.buttonsRow}>
                             <GradientButton
