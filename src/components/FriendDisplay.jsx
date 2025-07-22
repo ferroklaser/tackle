@@ -3,7 +3,7 @@ import React from 'react'
 import { router } from 'expo-router'
 
 const FriendDisplay = ({item}) => {
-    const name = item.username
+    const name = item.username;
     const status = item.presence?.focus ? 'focus' : item.presence?.state || '';
     const statusColor = {
         online: 'green',
