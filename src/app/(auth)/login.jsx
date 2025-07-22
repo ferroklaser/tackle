@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native'
+import { StyleSheet, Text, View, Pressable, Image } from 'react-native'
 import React from 'react'
 import ThemedInput from '../../components/AuthComponents/ThemedInput'
 import { Link } from 'expo-router'
@@ -91,7 +91,12 @@ const login = () => {
           </Link>
         </View>
       </View>
-
+      <View style={{width: '100%', height: '18%', justifyContent: 'center', alignItems: 'center'}}>
+         <Image
+          style={styles.logo} 
+          source={require('../../assets/Icons/Logo.png')} 
+          resizeMode='contain'/>
+      </View>
       <View 
         style={{ 
           alignItems: 'center', 
@@ -149,6 +154,11 @@ const styles = StyleSheet.create({
     width: '40%',
     borderRadius: 10,
     alignItems: 'center'
+  },
+  logo: {
+    width: '80%',
+    height: '100%',
+    marginTop: 100
   }
 
 })
