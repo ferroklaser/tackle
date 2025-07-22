@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FIREBASE_DATABASE } from '../firebaseConfig';
 import { useAuth } from '../contexts/AuthContext';
 import { doc, updateDoc, increment} from 'firebase/firestore';
@@ -24,11 +24,12 @@ const SpeechBubble = ({item}) => {
     const { user } = useAuth();
     const title = item.title;
     const [likes, setLikes] = useState(item.likes);
-    const [liked, setLiked] = useState(item.liked)
+    const [liked, setLiked] = useState(item.liked);
     const sharingMessage = item.message;
     const username = item.username;
     const timestamp = item.timestamp.toDate().toLocaleString();
     const duration = formatDuration(item.duration);
+    const isOwnPost = item.userID === user.uid;
 
     const handleLikeButtonPress = async () => {
         const newLike = !liked;
@@ -54,7 +55,7 @@ const SpeechBubble = ({item}) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={isOwnPost ? styles.containerRight: styles.containerLeft}>
             <View style={styles.bubble}>
                 <View style={styles.header}>
                     <Text style={styles.title}>{title}</Text>
@@ -76,7 +77,7 @@ const SpeechBubble = ({item}) => {
                     </View>
                 </View>
             </View>
-            <View style={styles.triangle}></View>
+            <View style={isOwnPost ? styles.triangleRight : styles.triangleLeft}></View>
         </View>
     )
 }
@@ -90,10 +91,14 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         alignItems: 'center',
     },
-    container: {
+    containerLeft: {
         width: '90%'
     }, 
-    triangle: {
+    containerRight: {
+        width: '90%',
+        left: 36
+    },
+    triangleLeft: {
         width: 0,
         height: 0,
         backgroundColor: 'transparent',
@@ -107,7 +112,23 @@ const styles = StyleSheet.create({
         borderBottomColor: 'transparent',
         borderLeftColor: 'transparent',
         left: 5,
-        bottom: 5
+        bottom: 5,
+    },
+    triangleRight: {
+        width: 0,
+        height: 0,
+        backgroundColor: 'transparent',
+        borderStyle: 'solid',
+        borderTopWidth: 20,
+        borderRightWidth: 10,
+        borderBottomWidth: 0,
+        borderLeftWidth: 10,
+        borderTopColor: 'white',
+        borderRightColor: 'transparent',
+        borderBottomColor: 'transparent',
+        borderLeftColor: 'transparent',
+        bottom: 5,
+        left: 293
     },
     header: {
         alignItems: 'flex-start',
