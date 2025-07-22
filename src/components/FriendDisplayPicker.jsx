@@ -3,21 +3,24 @@ import React, { useState } from 'react'
 import { router } from 'expo-router'
 import { MaterialIcons } from '@expo/vector-icons';
 
-const FriendDisplayPicker = ({item}) => {
+const FriendDisplayPicker = ({item, press}) => {
     const name = item.username
     const [isSelected, setIsSelected] = useState(false)
 
     const handlePress = () => {
-        if ( isSelected ) {
-            setIsSelected(false);
+        if (press() == 0) {
+            return;
         } else {
-            setIsSelected(true);
+            if ( isSelected ) {
+                setIsSelected(false);
+            } else {
+                setIsSelected(true);
+            }
         }
-        
     }
 
     return (
-        <TouchableOpacity style={styles.container} onPress={handlePress}>
+        <TouchableOpacity style={ isSelected ? styles.select : styles.container} onPress={handlePress}>
             <Text style={styles.text}>{name}</Text>
 
             { isSelected 
@@ -37,6 +40,15 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         padding: 20,
         borderColor: '#A8B7AB',
+    },
+    select: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        borderBottomWidth: 2,
+        padding: 20,
+        backgroundColor:'#A8B7AB',
+        borderColor: '#7C817D',
     },
     status: {
         flexDirection: 'row',

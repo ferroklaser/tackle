@@ -87,14 +87,14 @@ const EditProfileModal = ({ isModalVisible, setModalVisible }) => {
                                 prompt="New Username"/>
                             </View>
                             
-                            <View style={styles.inputContainer}>
+                            {/* <View style={styles.inputContainer}>
                                 <PillInput 
                                 placeholder={email}
                                 value={email}
                                 onChangeText={setEmail}
                                 bgcolor='#D9D9D9'
                                 prompt="New Email"/>
-                            </View>
+                            </View> */}
 
                             <View style={styles.buttonRow}>
                                 <GradientButton

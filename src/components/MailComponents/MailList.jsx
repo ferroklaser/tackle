@@ -4,6 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { FIREBASE_DATABASE } from '../../firebaseConfig';
 import { collection, onSnapshot, orderBy } from 'firebase/firestore';
 import FriendRequest from './FriendRequest';
+import GroupTaskRequest from './GroupTaskRequest';
 
 const MailList = () => {
   const [mail, setMail] = useState([]);
@@ -31,7 +32,11 @@ const MailList = () => {
       style={styles.list}
       data={mail}
       keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <FriendRequest mail={item} />}
+      renderItem={({ item }) => 
+        item.type == 'group_task_request' 
+          ? <GroupTaskRequest mail={item} />
+          : <FriendRequest mail={item} />
+      }
       showsVerticalScrollIndicator={true}
       scrollEventThrottle={16}
       contentContainerStyle={{ paddingBottom: 90 }}

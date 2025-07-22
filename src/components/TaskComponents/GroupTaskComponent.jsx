@@ -9,7 +9,10 @@ import { useRouter } from 'expo-router';
 import { useTask } from '../../contexts/TaskContext';
 import { useAuth } from '../../contexts/AuthContext';
 
-const TaskComponent = ({task}) => {
+const formatFriendNames = (usernames) =>
+  usernames.length > 0 ? usernames.join(', ') : 'Pending ...';
+
+const GroupTaskComponent = ({task}) => {
   const isOverdue = new Date(task.deadline) < new Date();
   const [editModal, setEditModal] = useState(false);
   const router = useRouter();
@@ -50,7 +53,9 @@ const TaskComponent = ({task}) => {
           text: "Delete",
           onPress: async() => {
             try {
+              const friendsID = task.friendsID;
               const user = FIREBASE_AUTH.currentUser;
+              
               if (!user) return;
 
               const taskRef = doc(
@@ -61,6 +66,21 @@ const TaskComponent = ({task}) => {
                 task.id
               );
               await deleteDoc(taskRef);
+
+              if (Array.isArray(friendsID)) {
+                const deletePromises = friendsID.map(async (friendUid) => {
+                  const ref = doc(
+                    FIREBASE_DATABASE,
+                    'users',
+                    friendUid,
+                    'taskRefs',
+                    task.id
+                  );
+                  await deleteDoc(ref);
+                });
+
+                await Promise.all(deletePromises);
+              }
             } catch (error) {
               console.error('Failed to delete task:', error);
             }
@@ -121,7 +141,7 @@ const TaskComponent = ({task}) => {
     <View 
       pointerEvents="box-none"
       style = {{
-      height: 170,
+      height: 220,
       marginHorizontal: 15,
       marginTop: 5,
       marginBottom: 10,
@@ -139,12 +159,14 @@ const TaskComponent = ({task}) => {
       isModalVisible={editModal} 
       setModalVisible={setEditModal}/>
 
-      <Text style={task.isComplete ? styles.completeTitle : styles.title}>Title: {task.title}</Text>
+      <Text style={task.isComplete ? styles.completeTitle : styles.title}>Group Task Title: {task.title}</Text>
       <View style={styles.line} />
       <ProgressBar total={task.duration} completed={task.completed}/>
       <View style={{flex: 1}}/>
       <Text style={task.isComplete ? styles.completeBody : styles.body}>Priority: {task.priority}</Text>
       <Text style={task.isComplete ? styles.completeBody : styles.body}>Deadline: {task.deadline}</Text>
+      <Text style={task.isComplete ? styles.completeBody : styles.body}>Owner: {task.owner}</Text>
+      <Text style={task.isComplete ? styles.completeBody : styles.body}>Members: {formatFriendNames(task.members)}</Text>
 
       <View style={styles.iconRow}>
         <View style={styles.iconGroup}>
@@ -173,7 +195,7 @@ const TaskComponent = ({task}) => {
   )
 }
 
-export default TaskComponent
+export default GroupTaskComponent
 
 const styles = StyleSheet.create({
   line: {

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native'
+import { StyleSheet, Text, View, FlatList, Alert } from 'react-native'
 import Modal from 'react-native-modal'
 import React from 'react'
 import FriendDisplayPicker from '../FriendDisplayPicker'
@@ -22,18 +22,27 @@ const FriendPickerModal = ({isModalVisible, setModalVisible, setFriends, setFrie
         } else {
             if (selectedFriends.length >= MAX_SELECTION) {
                 Alert.alert('Limit Reached', `You can only select up to ${MAX_SELECTION} friends.`);
-                return;
+                return 0;
             }
             setSelectedFriends([...selectedFriends, username]);
             setSelectedFriendsID([...selectedFriendsID, uid]);
         }
-        console.log(selectedFriends);
     };
 
+    const formatFriendNames = (usernames) =>
+        usernames.length > 0 ? usernames.join(', ') : 'No Friends Selected';
+
     const confirm = async () => {
-        // setFriends();
+        setFriends(formatFriendNames(selectedFriends));
+        console.log(formatFriendNames(selectedFriends)); 
         setFriendsID(selectedFriendsID);
+        reset();
         setModalVisible(false);
+    }
+
+    const reset = () => {
+        setSelectedFriends([]);
+        setSelectedFriendsID([]);
     }
 
     const cancel = () => {
@@ -56,7 +65,7 @@ const FriendPickerModal = ({isModalVisible, setModalVisible, setFriends, setFrie
                     <View style={styles.list}>
                         <FlatList
                             data={friends}
-                            renderItem={({ item }) => <FriendDisplayPicker item={item} />}
+                            renderItem={({ item }) => <FriendDisplayPicker item={item} press={() => toggleSelect(item.username, item.uid)} />}
                             keyExtractor={(item) => item.uid}
                         />
                     </View>
