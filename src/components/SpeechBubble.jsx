@@ -23,13 +23,14 @@ function formatDuration(seconds) {
 const SpeechBubble = ({item}) => {
     const { user } = useAuth();
     const title = item.title;
+    const isOwnPost = item.userID === user.uid;
     const [likes, setLikes] = useState(item.likes);
     const [liked, setLiked] = useState(item.liked);
     const sharingMessage = item.message;
-    const username = item.username;
+    const username = isOwnPost ? 'Me' : item.username;
     const timestamp = item.timestamp.toDate().toLocaleString();
     const duration = formatDuration(item.duration);
-    const isOwnPost = item.userID === user.uid;
+    
 
     const handleLikeButtonPress = async () => {
         const newLike = !liked;
