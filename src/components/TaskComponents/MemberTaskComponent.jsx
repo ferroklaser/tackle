@@ -2,23 +2,36 @@ import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native'
 import { useState, useEffect } from 'react'
 import ProgressBar from '../ProgressBar'
 import { FontAwesome, MaterialIcons, Fontisto, MaterialCommunityIcons } from '@expo/vector-icons';
-import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
+import { doc, deleteDoc, updateDoc, getDoc } from 'firebase/firestore';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig';
 import EditTaskModal from '../Modals/EditTaskModal';
 import { useRouter } from 'expo-router';
 import { useTask } from '../../contexts/TaskContext';
 import { useAuth } from '../../contexts/AuthContext';
+import { getUsername } from '../../utilities/getUsername';
 
-const TaskComponent = ({task}) => {
+const formatFriendNames = (usernames) =>
+  usernames.length > 0 ? usernames.join(', ') : 'Pending ...';
+
+const MemberTaskComponent = ({task}) => {
   const isOverdue = new Date(task.deadline) < new Date();
-  const [editModal, setEditModal] = useState(false);
   const router = useRouter();
-  const { setuid, setTaskId } = useTask();
   const { user } = useAuth();
-
-  const handleEdit = () => {
-    setEditModal(true);
-  }
+  const { setuid, setTaskId } = useTask();
+  const [username, setUsername] = useState("");
+      
+  useEffect(() => {
+      const fetchUsername = async () => {
+          try {
+          const userName = await getUsername(user.uid);
+          setUsername(userName);
+          } catch (error) {
+          console.log(error);
+          }
+      }
+      fetchUsername();
+      console.log(username);
+  }, [])
 
   useEffect(() => {
     const updateComplete = async () => {
@@ -57,10 +70,30 @@ const TaskComponent = ({task}) => {
                 FIREBASE_DATABASE,
                 'users',
                 user.uid,
-                'tasks',
+                'taskRefs',
                 task.id
               );
               await deleteDoc(taskRef);
+
+              const ownerTaskRef = doc(
+                FIREBASE_DATABASE,
+                'users',
+                task.ownerID,
+                'tasks',
+                task.id
+              );
+
+              const ownerTaskSnap = await getDoc(ownerTaskRef);
+              if (!ownerTaskSnap.exists()) throw new Error('Task not found');
+
+              const taskData = ownerTaskSnap.data();
+              const members = Array.isArray(taskData.members) ? taskData.members : [];
+
+              const updatedMembers = members.filter((member) => member !== username);
+
+              await updateDoc(ownerTaskRef, {
+                members: updatedMembers
+              });
             } catch (error) {
               console.error('Failed to delete task:', error);
             }
@@ -81,7 +114,7 @@ const TaskComponent = ({task}) => {
     }
 
     setTaskId(task.id);
-    setuid(user.uid);
+    setuid(task.ownerID);
     router.push('/timer');
   }
 
@@ -121,7 +154,7 @@ const TaskComponent = ({task}) => {
     <View 
       pointerEvents="box-none"
       style = {{
-      height: 170,
+      height: 220,
       marginHorizontal: 15,
       marginTop: 5,
       marginBottom: 10,
@@ -134,26 +167,20 @@ const TaskComponent = ({task}) => {
       backgroundColor: task.isComplete ? '#C7C7C7' : task.color
       }}>
 
-      <EditTaskModal
-      taskRef={task}
-      isModalVisible={editModal} 
-      setModalVisible={setEditModal}/>
-
-      <Text style={task.isComplete ? styles.completeTitle : styles.title}>Title: {task.title}</Text>
+      <Text style={task.isComplete ? styles.completeTitle : styles.title}>Group Task Title: {task.title}</Text>
       <View style={styles.line} />
       <ProgressBar total={task.duration} completed={task.completed}/>
       <View style={{flex: 1}}/>
       <Text style={task.isComplete ? styles.completeBody : styles.body}>Priority: {task.priority}</Text>
       <Text style={task.isComplete ? styles.completeBody : styles.body}>Deadline: {task.deadline}</Text>
+      <Text style={task.isComplete ? styles.completeBody : styles.body}>Owner: {task.owner}</Text>
+      <Text style={task.isComplete ? styles.completeBody : styles.body}>Members: {formatFriendNames(task.members)}</Text>
 
       <View style={styles.iconRow}>
         <View style={styles.iconGroup}>
           {isOverdue && <MaterialCommunityIcons name="alert-circle" size={20} color="red"/>}
           <TouchableOpacity onPress={handleTimer}>
             <FontAwesome name="clock-o" size={20} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleEdit}>
-            <MaterialIcons name="edit" size={20} />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleDelete}>
             <FontAwesome name="trash" size={20} />
@@ -173,7 +200,7 @@ const TaskComponent = ({task}) => {
   )
 }
 
-export default TaskComponent
+export default MemberTaskComponent
 
 const styles = StyleSheet.create({
   line: {

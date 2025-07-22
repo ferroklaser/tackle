@@ -1,12 +1,12 @@
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native'
 import React from 'react'
-import { doc, deleteDoc, setDoc } from 'firebase/firestore';
+import { doc, deleteDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { useAuth } from '../../contexts/AuthContext';
 import { AntDesign } from '@expo/vector-icons';
 import { FIREBASE_DATABASE } from '../../firebaseConfig';
 import { getUsername } from '../../utilities/getUsername';
 
-const FriendRequest = ({ mail }) => {
+const GroupTaskRequest = ({ mail }) => {
   const date = mail.timestamp.toDate();
   const { user } = useAuth();
 
@@ -21,44 +21,42 @@ const FriendRequest = ({ mail }) => {
   }).format(date);
 
   const handleAccept = () => {
-    Alert.alert('Caution', 'Accept this Friend Request?',
-      [
-        {
-          text: "Cancel",
-          onPress: () => {},
-          style: "cancel",
+    Alert.alert('Accept Group Task?', `Join "${mail.taskTitle}"?`, [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Accept',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            const mailRef = doc(FIREBASE_DATABASE, 'users', user.uid, 'mail', mail.id);
+
+            const refDoc = doc(FIREBASE_DATABASE, 'users', user.uid, 'taskRefs', mail.taskId);
+            await setDoc(refDoc, {
+              taskId: mail.taskId,
+              ownerUid: mail.fromUid,
+              title: mail.taskTitle,
+              timestamp: mail.timestamp,
+            });
+
+            const memberUsername = await getUsername(user.uid);
+            const ownerTaskDoc = doc(FIREBASE_DATABASE, 'users', mail.fromUid, 'tasks', mail.taskId);
+
+            await updateDoc(ownerTaskDoc, {
+              members: arrayUnion(memberUsername)
+            });
+
+            await deleteDoc(mailRef);
+            console.log('Task reference added');
+          } catch (err) {
+            console.error('Failed to accept group task:', err);
+          }
         },
-        {
-          text: "Accept",
-          onPress: async() => {
-            try {
-              const userName = await getUsername(user.uid);
-              const mailRef = doc(FIREBASE_DATABASE, 'users', user.uid, 'mail', mail.id);
-              const friendRef = doc(FIREBASE_DATABASE, 'users', mail.fromUid, 'friends', user.uid)
-              const userRef = doc(FIREBASE_DATABASE, 'users', user.uid, 'friends', mail.fromUid)
-              
-
-              await deleteDoc(mailRef);
-
-              await setDoc(friendRef, {
-                username: userName,
-              });
-
-              await setDoc(userRef, {
-                username: mail.username,
-              });
-            } catch (err) {
-              console.error('Failed to accept request', err);
-            }
-          },
-          style: "destructive",
-        }
-      ]
-    )
-  }
+      },
+    ]);
+  };
 
   const handleReject = async () => {
-    Alert.alert('Caution', 'Reject this Friend Request?',
+    Alert.alert('Caution', 'Reject this Group Task Request?',
       [
         {
           text: "Cancel",
@@ -85,8 +83,9 @@ const FriendRequest = ({ mail }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}> Friend Request from {mail.username}!</Text>
+      <Text style={styles.title}> Group Task invite from {mail.username}!</Text>
       <View style={styles.line}/>
+      <Text> Task Title: {mail.taskTitle}</Text>
       <View style={styles.iconRow}>
         <Text> {formatted}</Text>
         <View style={styles.iconGroup}>
@@ -105,7 +104,7 @@ const FriendRequest = ({ mail }) => {
   )
 }
 
-export default FriendRequest
+export default GroupTaskRequest
 
 const styles = StyleSheet.create({
   container: {
@@ -130,7 +129,7 @@ const styles = StyleSheet.create({
   line: {
     height: 2,
     backgroundColor: '#ccc',
-    marginBottom: 20,
+    // marginBottom: 10,
     backgroundColor: "black",
   },
   title: {

@@ -136,7 +136,7 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
     const currentUser = FIREBASE_AUTH.currentUser;
 
     const docRefReward = doc(FIREBASE_DATABASE, 'users', currentUser.uid);
-    const docRefComplete = doc(FIREBASE_DATABASE, 'users', currentUser.uid, 'tasks', taskId);
+    const docRefComplete = doc(FIREBASE_DATABASE, 'users', taskData.ownerID, 'tasks', taskId);
 
     const coinsEarned = Math.floor(duration / 100 * 1.2);
     setReward(coinsEarned);
@@ -165,7 +165,7 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
     const currentUser = FIREBASE_AUTH.currentUser;
 
     const docRefReward = doc(FIREBASE_DATABASE, 'users', currentUser.uid);
-    const docRefComplete = doc(FIREBASE_DATABASE, 'users', currentUser.uid, 'tasks', taskId);
+    const docRefComplete = doc(FIREBASE_DATABASE, 'users', taskData.ownerID, 'tasks', taskId);
 
     const coinsEarned = Math.floor((duration - seconds)/100);
     setReward(coinsEarned);
