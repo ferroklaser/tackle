@@ -1,11 +1,11 @@
 {
   "expo": {
     "scheme": "tackle",
-    "name": "tackle",
+    "name": "Tackle",
     "slug": "tackle",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/Icons/ProfileIcon.png",
+    "icon": "./assets/Icons/Logo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
