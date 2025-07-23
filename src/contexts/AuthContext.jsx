@@ -99,9 +99,9 @@ export function AuthProvider({ children }) {
             },
             coins: 0,
         });
-        await setDoc(doc(FIREBASE_DATABASE, "users", cred.user.uid, "tasks", "_init"), {
-            placeholder: true
-        });
+        // await setDoc(doc(FIREBASE_DATABASE, "users", cred.user.uid, "tasks", "_init"), {
+        //     placeholder: true
+        // });
     }
 
     const logOut = async () => {
