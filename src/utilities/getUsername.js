@@ -1,15 +1,11 @@
 import { getDoc, doc } from "firebase/firestore";
 import { FIREBASE_DATABASE } from "../firebaseConfig";
 
-export const getUsername = async (user) => {
-    //added after testing
-    if (!user?.uid) return "";
-
+export const getUsername = async (userID) => {
     try {
-        const userRef = doc(FIREBASE_DATABASE, "users", user.uid);
+        const userRef = doc(FIREBASE_DATABASE, "users", userID);
         const docSnap = await getDoc(userRef);
 
-        //() added after testing
         if(docSnap.exists()) {
             const data = docSnap.data();
             return data.username;

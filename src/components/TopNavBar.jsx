@@ -1,14 +1,17 @@
 import { View, TouchableOpacity, StyleSheet, Image, Alert, Text } from 'react-native';
-import { router } from 'expo-router';
+import { router, usePathname } from 'expo-router';
 import { useState, useEffect } from 'react';
 import { useTimer } from '../contexts/TimerContext';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../firebaseConfig';
 import { doc, onSnapshot } from 'firebase/firestore';
 
 const TopNavBar = ( ) => {
-  const [isBackable, setIsBackable] = useState(false);
+  // const [isBackable, setIsBackable] = useState(false);
   const {isRunning, setIsRunning} = useTimer();
   const [numCoins, setNumCoins] = useState(0);
+
+  const pathname = usePathname();
+  const isBackable = pathname === '/profile' || pathname === '/stats' || pathname === '/friendlist' || pathname === '/friendprofile';
 
   useEffect(() => {
     const user = FIREBASE_AUTH.currentUser;
@@ -35,12 +38,12 @@ const TopNavBar = ( ) => {
   }
 
   const handleBack = () => {
-    setIsBackable(false);
+    // setIsBackable(false);
     router.back();
   };
 
   const handleProfile = () => {
-    setIsBackable(true);
+    // setIsBackable(true);
     router.push('/profile');
   }
 

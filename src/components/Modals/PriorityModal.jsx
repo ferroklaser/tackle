@@ -31,6 +31,7 @@ const PriorityModal = ({isModalVisible = false, setModalVisible, setPriority}) =
                             <Picker
                             selectedValue={selectedPriority}
                             style={styles.picker}
+                            itemStyle={{color: 'black'}}
                             onValueChange={(itemValue) => setSelectedPriority(itemValue)}
                             >
                                 {['Low', 'Moderate', 'High'].map((label, i) => (

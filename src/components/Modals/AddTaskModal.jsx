@@ -1,5 +1,5 @@
-import { StyleSheet, View, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native'
-import {useState} from 'react'
+import { StyleSheet, View, TouchableWithoutFeedback, Keyboard, Alert, Switch } from 'react-native'
+import { useState, useEffect } from 'react'
 import Modal from 'react-native-modal'
 import GradientButton from '../GradientButton'
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig'
@@ -10,6 +10,11 @@ import TaskDurationPicker from './TaskDurationPicker'
 import DeadlinePicker from './DeadlinePicker'
 import PriorityModal from './PriorityModal'
 import { useTask } from '../../contexts/TaskContext';
+import YesNoSwitch from '../YesNoSwitch'
+import FriendPickerModal from './FriendPickerModal'
+import { useAuth } from '../../contexts/AuthContext'
+import { getUsername } from '../../utilities/getUsername'
+import { sendGroupTaskRequest } from '../../utilities/sendGroupTaskRequest'
 
 const formatDate = (dateString) => {
   const [year, month, day] = dateString.split('-');
@@ -33,6 +38,7 @@ const formatSeconds = (seconds) => {
 
 const AddTaskModal = ({isModalVisible = false, setModalVisible, isTimer = false}) => {
     const currentUser = FIREBASE_AUTH.currentUser;
+    const { user } = useAuth();
     const { setTaskId } = useTask();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -40,11 +46,46 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible, isTimer = false}
     const [priority, setPriority] = useState('Low');
     const [deadline, setDeadline] = useState(new Date().toISOString().split('T')[0]);
     const [color, setColor] = useState('#FFEA8A');
+
+    const [friends, setFriends] = useState('No Friends Selected');
+    const [friendsID, setFriendsID] = useState([]);
+    const [isGroupTask, setGroupTask] = useState(false);
+
     const [durationModal, setDurationModal] = useState(false);
     const [deadlineModal, setDeadlineModal] = useState(false);
     const [priorityModal, setPriorityModal] = useState(false);
+    const [friendModal, setFriendModal] = useState(false);
+    const [username, setUsername] = useState("");
+    
+    useEffect(() => {
+        const fetchUsername = async () => {
+            try {
+            const userName = await getUsername(user.uid);
+            setUsername(userName);
+            } catch (error) {
+            console.log(error);
+            }
+        }
+        fetchUsername();
+    }, [])
 
     const task = {
+        isGroupTask,
+        title,
+        description,
+        duration,
+        completed: 0,
+        isComplete: false,
+        priority,
+        deadline,
+        ownerID: user.uid,
+        deadlineStamp : Timestamp.fromDate(new Date(deadline)),
+        color,
+        createdAt: Timestamp.now(),
+    };
+
+    const groupTask = {
+        isGroupTask,
         title,
         description,
         duration,
@@ -54,6 +95,10 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible, isTimer = false}
         deadline,
         deadlineStamp : Timestamp.fromDate(new Date(deadline)),
         color,
+        friendsID,
+        members: [],
+        owner: username,
+        ownerID: user.uid,
         createdAt: Timestamp.now(),
     };
 
@@ -64,6 +109,9 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible, isTimer = false}
         setPriority('Low')
         setDeadline(new Date().toISOString().split('T')[0]);
         setColor('#FFEA8A');
+        setGroupTask(false);
+        setFriends('No Friends Selected');
+        setFriendsID([]);
     }
 
     const addTask = async () => {
@@ -71,7 +119,10 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible, isTimer = false}
             Alert.alert('Warning', 'The estimated duration of your task cannot be 0')
         } else if (title == '') {
             Alert.alert('Warning', 'Title cannot be empty')
+        } else if (isGroupTask && friends == 'No Friends Selected'){
+            Alert.alert('Warning', 'Group tasks require at least 1 friend')
         } else {
+            let x = isGroupTask ? groupTask : task;
             try {
                 setModalVisible(false);
                 const docRef = await addDoc(
@@ -81,12 +132,23 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible, isTimer = false}
                         currentUser.uid,
                         'tasks' 
                     ),
-                    task
+                    x
                 );
 
                 if (isTimer) {
                     setTaskId(docRef.id);
                 };
+
+                if (isGroupTask) {
+                    await sendGroupTaskRequest(
+                        friendsID,                          
+                        currentUser.uid,                    
+                        username,  
+                        docRef.id,                          
+                        title                               
+                    );
+                }
+
                 console.log('Task added');
                 reset();
             } catch (error) {
@@ -122,6 +184,12 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible, isTimer = false}
                     setModalVisible={setPriorityModal}
                     setPriority={setPriority}/>
 
+                    <FriendPickerModal
+                    isModalVisible={friendModal} 
+                    setModalVisible={setFriendModal}
+                    setFriends={setFriends}
+                    setFriendsID={setFriendsID}/>
+
                     <View style={[styles.modalContainer, { backgroundColor: color }]}>
                         <PillInput 
                         value={title}
@@ -152,8 +220,20 @@ const AddTaskModal = ({isModalVisible = false, setModalVisible, isTimer = false}
                         textDropdown={priority}
                         handleDropdown={() => setPriorityModal(true)}
                         haveDropdown={true}/>
-
+                        
                         <ColorPicker setColor={setColor}/>
+
+                        <YesNoSwitch isGroupTask={isGroupTask} setGroupTask={setGroupTask}/>
+
+                        { isGroupTask && <PillInput
+                        prompt='Friends Selected'
+                        textDropdown={friends}
+                        handleDropdown={() => {
+                            setFriends('No Friends Selected');
+                            setFriendsID([]);
+                            setFriendModal(true);
+                        }}
+                        haveDropdown={true}/>}
 
                         <View style={styles.buttonsRow}>
                             <GradientButton

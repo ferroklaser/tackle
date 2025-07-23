@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ImageBackground } from 'react-native'
+import { StyleSheet, Text, View, ImageBackground, Button, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import CombinedTackSprite from '../../../components/TackComponents/CombinedTackSprite.jsx';
 import MyButton from '../../../components/MyButton.jsx';
@@ -7,17 +7,20 @@ import { useAuth } from '../../../contexts/AuthContext.jsx';
 import { useAvatar } from '../../../contexts/AvatarContext.jsx';
 import { getUsername } from '../../../utilities/getUsername.js';
 import EditProfileModal from '../../../components/Modals/EditProfileModal.jsx';
+import AddFriendsModal from '../../../components/Modals/AddFriendsModal.jsx';
+import { router } from 'expo-router';
 
 const index = () => {
   const { logOut, user } = useAuth();
   const { avatar } = useAvatar();
   const [username, setUsername] = useState("");
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isEditProfileVisible, setEditProfileVisible] = useState(false);
+  const [isAddFriendsVisible, setAddFriendsVisible] = useState(false);
 
   useEffect(() => {
     const fetchUsername = async () => {
       try {
-        const userName = await getUsername(user);
+        const userName = await getUsername(user.uid);
         setUsername(userName);
       } catch (error) {
         console.log(error);
@@ -47,7 +50,7 @@ const index = () => {
             eyesOption={avatar.eyes}
             mouthOption={avatar.mouth}
             accessoryOption={avatar.accessory}
-            size={250}
+            size={270}
           />
 
           <Text style={styles.userName}>{username}</Text>
@@ -58,13 +61,14 @@ const index = () => {
               colours={['#58C7E5', '#8FBBF5']}
               buttonStyle={styles.button}
               textStyle={styles.buttonText}
-              onPress={() => setModalVisible(!isModalVisible)}
+              onPress={() => setEditProfileVisible(!isEditProfileVisible)}
             />
             <GradientButton
               title="Add Friends"
               colours={['#CBAADE', '#989FEF']}
               buttonStyle={styles.button}
               textStyle={styles.buttonText}
+              onPress={() => setAddFriendsVisible(!isAddFriendsVisible)}
             />
           </View>
 
@@ -72,6 +76,19 @@ const index = () => {
             {/* <Text>INFO</Text>
             <Text>INFO</Text>
             <Text>INFO</Text> */}
+
+              <TouchableOpacity onPress={() => router.push('/friendlist')} style={styles.bar}>
+                <Text style={styles.tabtitle}>Friends</Text>
+              </TouchableOpacity>
+            
+              <TouchableOpacity onPress={() => router.push('/stats')} style={styles.bar}>
+                <Text style={styles.tabtitle}>Statistics</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => {}} style={styles.bar}>
+                <Text style={styles.tabtitle}>About</Text>
+              </TouchableOpacity>
+
           </View>
         </View>
       </View>
@@ -84,8 +101,8 @@ const index = () => {
         />
       </View>
 
-      <EditProfileModal isModalVisible={isModalVisible} setModalVisible={setModalVisible}/>
-      
+      <EditProfileModal isModalVisible={isEditProfileVisible} setModalVisible={setEditProfileVisible}/>
+      <AddFriendsModal isModalVisible={isAddFriendsVisible} setModalVisible={setAddFriendsVisible} username={username}/>
     </ImageBackground>
   )
 }
@@ -98,7 +115,7 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     flex: 1,
-    justifyContent: 'space-between',  // Pushes signout to bottom
+    justifyContent: 'space-between', 
   },
   tackContainer: {
     position: 'relative',
@@ -132,6 +149,9 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     justifyContent: 'center',
+    width: '100%',
+    margin: 10,
+
   },
   signOutContainer: {
     alignItems: 'center',
@@ -144,4 +164,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#CE433E',
   },
+  bar: {
+    padding: 25,
+    widht: '95%',
+    borderTopWidth: 2,
+  },
+  tabtitle: {
+    fontSize: 16,
+    fontWeight: 'bold'
+  }
 })

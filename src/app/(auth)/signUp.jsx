@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, Modal, TouchableOpacity, Alert } from 'react-native'
+import { StyleSheet, Text, View, Pressable, Modal, TouchableOpacity, Image} from 'react-native'
 import React from 'react'
 import ThemedInput from '../../components/AuthComponents/ThemedInput'
 import { Link, router } from 'expo-router'
@@ -36,11 +36,11 @@ const signUp = () => {
     }
 
     try {
-      await signUp(email, password);
+      setModalVisible(!modalVisible);
+      signUp(email, password);
       setEmail("");
       setPassword("");
       setConfirm("");
-      setModalVisible(!modalVisible);
     } catch (error) {
       authErrorHandler("Sign up", error);
       console.log(error.code);
@@ -153,6 +153,12 @@ const signUp = () => {
           </View>
         </View>
       </View>
+      <View style={{width: '100%', height: '18%', justifyContent: 'center', alignItems: 'center'}}>
+          <Image
+          style={styles.logo} 
+          source={require('../../assets/Icons/Logo.png')} 
+          resizeMode='contain'/>
+      </View>
       <View
         style={{
           alignItems: 'center',
@@ -253,4 +259,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)', 
   },
+  logo: {
+    width: '80%',
+    height: '100%',
+    marginTop: 45
+  }
 })

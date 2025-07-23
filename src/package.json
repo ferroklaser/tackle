@@ -31,6 +31,7 @@
     "react-native": "0.79.3",
     "react-native-circular-progress": "^1.4.1",
     "react-native-gesture-handler": "~2.24.0",
+    "react-native-gifted-charts": "^1.4.62",
     "react-native-modal": "^14.0.0-rc.1",
     "react-native-modal-datetime-picker": "^18.0.0",
     "react-native-number-please": "^1.0.5",

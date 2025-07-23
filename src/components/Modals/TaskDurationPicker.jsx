@@ -39,6 +39,7 @@ const TaskDurationPicker = ({isModalVisible = false, setModalVisible, setDuratio
                             <Picker
                             selectedValue={selectedHour}
                             style={styles.picker}
+                            itemStyle={{color: 'black'}}
                             onValueChange={(itemValue) => setSelectedHour(itemValue)}
                             >
                                 {[...Array(25)].map((_, i) => (
@@ -50,6 +51,7 @@ const TaskDurationPicker = ({isModalVisible = false, setModalVisible, setDuratio
                             <Picker
                             selectedValue={selectedMinute}
                             style={styles.picker}
+                            itemStyle={{color: 'black'}}
                             onValueChange={(itemValue) => setSelectedMinute(itemValue)}
                             >
                                 {[0].map((min) => (
@@ -60,6 +62,7 @@ const TaskDurationPicker = ({isModalVisible = false, setModalVisible, setDuratio
                             <Picker
                             selectedValue={selectedMinute}
                             style={styles.picker}
+                            itemStyle={{color: 'black'}}
                             onValueChange={(itemValue) => setSelectedMinute(itemValue)}
                             >
                                 {[0, 15, 30, 45].map((min) => (

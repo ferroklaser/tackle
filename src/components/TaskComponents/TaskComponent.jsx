@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ProgressBar from '../ProgressBar'
 import { FontAwesome, MaterialIcons, Fontisto, MaterialCommunityIcons } from '@expo/vector-icons';
 import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
@@ -7,16 +7,36 @@ import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig';
 import EditTaskModal from '../Modals/EditTaskModal';
 import { useRouter } from 'expo-router';
 import { useTask } from '../../contexts/TaskContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 const TaskComponent = ({task}) => {
   const isOverdue = new Date(task.deadline) < new Date();
   const [editModal, setEditModal] = useState(false);
   const router = useRouter();
-  const { setTaskId } = useTask();
+  const { setuid, setTaskId } = useTask();
+  const { user } = useAuth();
 
   const handleEdit = () => {
     setEditModal(true);
   }
+
+  useEffect(() => {
+    const updateComplete = async () => {
+      if (task.completed >= task.duration && !task.isComplete) {
+        try {
+          const currentUser = FIREBASE_AUTH.currentUser;
+          if (!currentUser) return;
+
+          const ref = doc(FIREBASE_DATABASE, 'users', currentUser.uid, 'tasks', task.id);
+          await updateDoc(ref, { isComplete: true });
+        } catch (error) {
+          console.error('Failed to auto-mark complete:', error);
+        }
+      }
+    };
+
+    updateComplete();
+  }, [task]);
 
   const handleDelete = () => {
     Alert.alert('Warning', 'You are about to delete a task. Would you like to proceed?',
@@ -52,12 +72,29 @@ const TaskComponent = ({task}) => {
   };
 
   const handleTimer = () => {
+    if (task.isComplete == true) {
+      Alert.alert(
+        'Reminder',
+        'This task has already been marked as completed. \nToggle its completion or work on a different task.'
+      );
+      return;
+    }
+
     setTaskId(task.id);
+    setuid(user.uid);
     router.push('/timer');
   }
 
   const toggleComplete = async () => {
-    if (task.completed == -1) {
+    if (task.completed >= task.duration) {
+      Alert.alert(
+        'Reminder',
+        'This task has already reached its full duration. \nEdit task to extend its duration, or delete this task and start a new one.'
+      );
+      return;
+    }
+
+    if (task.completed == 0) {
       Alert.alert('Warning', 'You have not started on this task yet. Press the timer button to begin.')
     } else {
       try {

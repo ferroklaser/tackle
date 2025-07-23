@@ -79,11 +79,7 @@ describe('handleItemBuy', () => {
         expect(getDoc).toHaveBeenCalledTimes(1);
         expect(getDoc).toHaveBeenCalledWith(mockDoc);
 
-        expect(updateDoc).toHaveBeenCalledTimes(2);
-        expect(updateDoc).toHaveBeenCalledWith(
-            mockDoc,
-            { coins: 100 }
-        );
+        expect(updateDoc).toHaveBeenCalledTimes(1);
         expect(updateDoc).toHaveBeenCalledWith(
             mockDoc,
             {
@@ -91,7 +87,8 @@ describe('handleItemBuy', () => {
                 [
                     { name: 'hat', type: 'accessory', itemID: 'Hat', purchased: true },
                     { name: 'cape', type: 'accessory', itemID: 'Cape', purchased: false }
-                ]
+                ],
+                coins: 100
             }
         )
         

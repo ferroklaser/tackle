@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert, AppState} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, AppState, Button } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
@@ -9,7 +9,12 @@ import NoTimerTask from '../TaskComponents/NoTimerTask.jsx'
 import TimerTask from '../TaskComponents/TimerTask.jsx';
 import { useTask } from '../../contexts/TaskContext.jsx';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig'
-import { doc, updateDoc, increment } from 'firebase/firestore'
+import { doc, updateDoc, increment, getDoc } from 'firebase/firestore'
+import { logUserDailyUsage } from '../../utilities/logUserDailyUsage.js';
+import { useAuth } from '../../contexts/AuthContext.jsx';
+import { setFocusState } from '../../utilities/setFocusState.js';
+import { logActivity } from '../../utilities/logActivity.js';
+import LogMessageModal from '../Modals/LogMessageModal.jsx';
 
 const formatTime = (sec) => {
   const hrs = String(Math.floor(sec / 3600)).padStart(2, '0');
@@ -19,7 +24,7 @@ const formatTime = (sec) => {
 };
 
 const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
-  const { taskId, taskData } = useTask();
+  const { taskId, taskData, setTaskId } = useTask();
   const [isPickerVisible, setPickerVisible] = useState(false);
   const [duration, setDuration] = useState(startingDuration);
   const [seconds, setSeconds] = useState(duration);
@@ -27,6 +32,9 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
   const [reward, setReward] = useState(0);
   const intervalRef = useRef(null);
   const appState = useRef(AppState.currentState || "active");
+  const { user } = useAuth();
+  const [isLogMessageVisible, setLogMessage] = useState(false);
+  const [pendingLogMessage, setPendingLogMessage] = useState(null);
   
   const [fontsLoaded] = useFonts({
     RobotoMono: require('../../assets/fonts/RobotoMono.ttf'),
@@ -80,11 +88,12 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
 
   const handlePause = () => setIsRunning(false);
 
-  const handlePlay = () => {
+  const handlePlay = async () => {
     if (!taskId) {
       Alert.alert('Warning', 'No task selected.')
     } else if (duration !== 0 && seconds != 0) {
       setIsRunning(true);
+      await setFocusState(user, true);
     } else {
       Alert.alert(
         'Warning',
@@ -123,16 +132,19 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
   //adjust coins calculations here
   //Bonus is 20% of coins earned for now
   const handleRewardBonus = async () => {
+    setTaskId(null);
     const currentUser = FIREBASE_AUTH.currentUser;
 
     const docRefReward = doc(FIREBASE_DATABASE, 'users', currentUser.uid);
-    const docRefComplete = doc(FIREBASE_DATABASE, 'users', currentUser.uid, 'tasks', taskId);
+    const docRefComplete = doc(FIREBASE_DATABASE, 'users', taskData.ownerID, 'tasks', taskId);
 
     const coinsEarned = Math.floor(duration / 100 * 1.2);
     setReward(coinsEarned);
-    setRewardVisible(true);
+    // setRewardVisible(true);
+
     try {
       await updateDoc(docRefReward, { coins: increment(coinsEarned) });
+      await setFocusState(user, false);
     } catch (err) {
       console.error('Failed to update coins:', err);
     }
@@ -140,14 +152,20 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
     await updateDoc(docRefComplete, {
       completed: increment(duration)
     });
+    const document = await getDoc(docRefComplete);
+    await logUserDailyUsage(currentUser, duration);
+    // await logActivity(currentUser, duration, document.data().title);
 
+    setPendingLogMessage({user: currentUser, duration: duration, title: document.data().title});
+    setLogMessage(true);
   }
 
   const handleRewardNoBonus = async () => {
+    setTaskId(null);
     const currentUser = FIREBASE_AUTH.currentUser;
 
     const docRefReward = doc(FIREBASE_DATABASE, 'users', currentUser.uid);
-    const docRefComplete = doc(FIREBASE_DATABASE, 'users', currentUser.uid, 'tasks', taskId);
+    const docRefComplete = doc(FIREBASE_DATABASE, 'users', taskData.ownerID, 'tasks', taskId);
 
     const coinsEarned = Math.floor((duration - seconds)/100);
     setReward(coinsEarned);
@@ -155,6 +173,7 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
     
     try {
       await updateDoc(docRefReward, { coins: increment(coinsEarned) });
+      await setFocusState(user, false);
     } catch (err) {
       console.error('Failed to update coins:', err);
     }
@@ -162,6 +181,7 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
     await updateDoc(docRefComplete, {
       completed: increment(duration - seconds)
     });
+    await logUserDailyUsage(currentUser, duration - seconds);
   }
 
   const fill = duration == 0 ? 0 : seconds / duration * 100;
@@ -173,6 +193,21 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
       setModalVisible={setRewardVisible}
       reward={reward}
       />
+
+      <LogMessageModal
+        isModalVisible={isLogMessageVisible}
+        setModalVisible={setLogMessage}
+        onSubmit={async (message) => {
+          if (!pendingLogMessage) return;
+          try {
+            await logActivity(pendingLogMessage.user, pendingLogMessage.duration, pendingLogMessage.title, message);
+          } catch (error) {
+            console.log("Error logging log message: ", error);
+          } finally {
+            setRewardVisible(true);
+            setPendingLogMessage(null);
+          }
+        }}/>
       
       <View style={styles.circle} />
 
