@@ -2,7 +2,7 @@ import { ImageBackground, StyleSheet, Text, View, TouchableOpacity } from 'react
 import Modal from 'react-native-modal'
 import React from 'react'
 import { AntDesign } from '@expo/vector-icons'; 
-import ActivityFeed from '../ActivityFeed';
+import ActivityFeed from '../FeedComponents/ActivityFeed';
 
 const FriendActivityModal = ({isModalVisible, setModalVisible}) => {
     return (
