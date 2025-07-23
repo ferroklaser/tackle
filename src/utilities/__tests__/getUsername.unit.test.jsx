@@ -30,7 +30,7 @@ describe('getUsername', () => {
         doc.mockReturnValue(mockDoc);
         getDoc.mockResolvedValue(mockDocSnap);
 
-        const result = await getUsername(mockUser);
+        const result = await getUsername(mockUser.uid);
 
         expect(doc).toHaveBeenCalledWith(
             FIREBASE_DATABASE,
@@ -57,7 +57,7 @@ describe('getUsername', () => {
         doc.mockReturnValue(mockDoc);
         getDoc.mockResolvedValue(mockDocSnap);
 
-        const result = await getUsername(mockUser);
+        const result = await getUsername(mockUser.uid);
 
         expect(doc).toHaveBeenCalledWith(
             FIREBASE_DATABASE,
@@ -81,7 +81,7 @@ describe('getUsername', () => {
 
         const logSpy = jest.spyOn(console, 'log');
 
-        await getUsername(mockUser);
+        await getUsername(mockUser.uid);
 
         expect(logSpy).toHaveBeenCalledWith(
             "Unable to retrieve username: ", mockError
@@ -91,7 +91,7 @@ describe('getUsername', () => {
     }),
     test('invalid user or uid', async () => {
         const mockUser = {};
-        const result = await getUsername(mockUser);
+        const result = await getUsername(mockUser.uid);
 
         expect(result).toEqual('');
         expect(doc).not.toHaveBeenCalled();

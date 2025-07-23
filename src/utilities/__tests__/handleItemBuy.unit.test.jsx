@@ -92,11 +92,6 @@ describe('handleItemBuy', () => {
             }
         )
         
-        expect(updateAvatar).toHaveBeenCalledTimes(1);
-        expect(updateAvatar).toHaveBeenCalledWith(
-            { 'accessory' :  'Hat' }
-        );
-
         expect(addItemToInventory).toHaveBeenCalledTimes(1);
         expect(addItemToInventory).toHaveBeenCalledWith(
             mockUser,
@@ -106,7 +101,8 @@ describe('handleItemBuy', () => {
         expect(handleItemEquip).toHaveBeenCalledTimes(1);
         expect(handleItemEquip).toHaveBeenCalledWith(
             mockUser,
-            mockItem
+            mockItem,
+            updateAvatar
         );
 
         expect(result).toBe(true);
