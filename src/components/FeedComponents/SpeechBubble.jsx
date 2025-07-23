@@ -2,8 +2,8 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useState, useEffect } from 'react';
-import { FIREBASE_DATABASE } from '../firebaseConfig';
-import { useAuth } from '../contexts/AuthContext';
+import { FIREBASE_DATABASE } from '../../firebaseConfig';
+import { useAuth } from '../../contexts/AuthContext';
 import { doc, updateDoc, increment} from 'firebase/firestore';
 
 //format time into h, m, s
