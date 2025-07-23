@@ -182,6 +182,8 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
       completed: increment(duration - seconds)
     });
     await logUserDailyUsage(currentUser, duration - seconds);
+    setPendingLogMessage({user: currentUser, duration: duration, title: document.data().title});
+    setLogMessage(true);
   }
 
   const fill = duration == 0 ? 0 : seconds / duration * 100;
