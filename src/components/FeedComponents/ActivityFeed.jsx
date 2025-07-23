@@ -5,7 +5,7 @@ import LoadingSplash from '../LoadingSplash';
 import SpeechBubble from './SpeechBubble';
 
 const ActivityFeed = () => {
-    const { loading, feedItems } = useFeed(10);
+    const { loading, feedItems, hasMore, fetchMore, fetchingMore } = useFeed(10);
 
     if (loading) {
         return <LoadingSplash/>
@@ -17,6 +17,13 @@ const ActivityFeed = () => {
             data={feedItems}
             renderItem={({ item }) => <SpeechBubble item={item} />}
             keyExtractor={(item) => item.id}
+            onEndReached={() => {
+                if (hasMore && !fetchingMore) {
+                    fetchMore();
+                }
+            }}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={fetchingMore ? <Text>Loading more...</Text> : null}
         />
     )
 }
