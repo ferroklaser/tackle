@@ -85,7 +85,7 @@ const index = () => {
                 <Text style={styles.tabtitle}>Statistics</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => {}} style={styles.bar}>
+              <TouchableOpacity onPress={() => router.push('/about')} style={styles.bar}>
                 <Text style={styles.tabtitle}>About</Text>
               </TouchableOpacity>
 
