@@ -11,7 +11,11 @@ const TopNavBar = ( ) => {
   const [numCoins, setNumCoins] = useState(0);
 
   const pathname = usePathname();
-  const isBackable = pathname === '/profile' || pathname === '/stats' || pathname === '/friendlist' || pathname === '/friendprofile';
+  const isBackable = pathname === '/profile' 
+                  || pathname === '/stats' 
+                  || pathname === '/friendlist' 
+                  || pathname === '/friendprofile'
+                  || pathname === '/about';
 
   useEffect(() => {
     const user = FIREBASE_AUTH.currentUser;
