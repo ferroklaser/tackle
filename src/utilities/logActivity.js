@@ -1,16 +1,16 @@
 import { FIREBASE_DATABASE } from "../firebaseConfig";
-import { collection, addDoc, serverTimestamp, setDoc, doc, getDocs, writeBatch } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, doc, getDocs, writeBatch } from "firebase/firestore";
 import { getUsername } from "./getUsername"
 
 export const logActivity = async (user, time, title, message) => {
-    const postRef = collection(FIREBASE_DATABASE, 'posts');
-    const username = await getUsername(user.uid);
-    const friendRef = collection(FIREBASE_DATABASE, 'users', user.uid, 'friends');
-    const friendSnapshot = await getDocs(friendRef);
-    const friendUID = friendSnapshot.docs.map(doc => doc.id);
-    const currentTime = serverTimestamp();
-
     try {
+        const postRef = collection(FIREBASE_DATABASE, 'posts');
+        const username = await getUsername(user.uid);
+        const friendRef = collection(FIREBASE_DATABASE, 'users', user.uid, 'friends');
+        const friendSnapshot = await getDocs(friendRef);
+        const friendUID = friendSnapshot.docs.map(doc => doc.id);
+        const currentTime = serverTimestamp();
+
         const docRef = await addDoc(postRef, {
             likes: 0,
             message: message,

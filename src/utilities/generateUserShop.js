@@ -2,7 +2,7 @@ import { FIREBASE_DATABASE } from "../firebaseConfig"
 import { getDocs, collection, doc, getDoc, updateDoc, Timestamp } from "firebase/firestore"
 
 
-const isSameDay = (timestamp) => {
+export const isSameDay = (timestamp) => {
     const now = new Date();
     const generated = timestamp.toDate();
     return(

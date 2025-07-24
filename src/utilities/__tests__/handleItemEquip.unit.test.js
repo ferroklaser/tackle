@@ -1,10 +1,9 @@
 import { FIREBASE_DATABASE } from "../../firebaseConfig";
-import { collection, query, where, getDocs, updateDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, updateDoc, writeBatch } from "firebase/firestore";
 import { handleItemEquip } from "../handleItemEquip";
 
-jest.mock('../../firebaseConfig', () => ({
-    FIREBASE_DATABASE: {}
-}));
+const mockUpdate = jest.fn();
+const mockCommit = jest.fn();
 
 jest.mock('firebase/firestore', () => ({
     collection: jest.fn(),
@@ -12,6 +11,15 @@ jest.mock('firebase/firestore', () => ({
     where: jest.fn(),
     getDocs: jest.fn(),
     updateDoc: jest.fn(),
+    //writeBatch returns an object
+    writeBatch: jest.fn(() => ({
+        update: mockUpdate,
+        commit: mockCommit,
+    })),
+}));
+
+jest.mock('../../firebaseConfig', () => ({
+    FIREBASE_DATABASE: {}
 }));
 
 describe('handleItemEquip', () => {
@@ -20,7 +28,9 @@ describe('handleItemEquip', () => {
         query.mockClear(),
         where.mockClear(),
         getDocs.mockClear(),
-        updateDoc.mockClear()
+        updateDoc.mockClear(),
+        mockUpdate.mockClear(),
+        mockCommit.mockClear()
     });
 
     test('item is correctly equipped', async () => {
@@ -29,11 +39,13 @@ describe('handleItemEquip', () => {
         const mockItem = {
             name: 'hat',
             itemID: 'Hat',
-            equipped: false
+            equipped: false,
+            type: 'accessory'
         };
         const mockQuery = {};
         const docRef1 = { id: '123' };
         const docRef2 = { id: '456' };
+        const updateAvatar = jest.fn();
 
         collection.mockReturnValue(mockCollection);
         query.mockReturnValue(mockQuery);
@@ -60,9 +72,8 @@ describe('handleItemEquip', () => {
                 }
             ]
         });
-        updateDoc.mockResolvedValue();
 
-        await handleItemEquip(mockUser, mockItem);
+        await handleItemEquip(mockUser, mockItem, updateAvatar);
 
         expect(collection).toHaveBeenCalledWith(
             FIREBASE_DATABASE,
@@ -81,9 +92,19 @@ describe('handleItemEquip', () => {
         expect(getDocs).toHaveBeenCalledWith(mockQuery);
         expect(getDocs).toHaveBeenCalledTimes(1);
 
-        expect(updateDoc).toHaveBeenCalledTimes(2);
-        expect(updateDoc).toHaveBeenCalledWith(docRef1, { equipped: true });
-        expect(updateDoc).toHaveBeenCalledWith(docRef2, { equipped: false });
+        expect(writeBatch).toHaveBeenCalledTimes(1);
+        expect(writeBatch).toHaveBeenCalledWith(FIREBASE_DATABASE);
+
+        expect(mockUpdate).toHaveBeenCalledTimes(2);
+        expect(mockUpdate).toHaveBeenCalledWith(docRef1, { equipped: true });
+        expect(mockUpdate).toHaveBeenCalledWith(docRef2, { equipped: false });
+
+        expect(mockCommit).toHaveBeenCalledTimes(1);
+
+        expect(updateAvatar).toHaveBeenCalledTimes(1);
+        expect(updateAvatar).toHaveBeenCalledWith({
+            accessory: 'Hat'
+        })
     }),
     test('error handling', async () => {
         const mockUser = { uid: '123' };
@@ -96,13 +117,14 @@ describe('handleItemEquip', () => {
         const mockCollection = {};
         const mockQuery = {};
         const mockError = new Error('Test Error');
+        const updateAvatar = jest.fn();
 
         collection.mockReturnValue(mockCollection);
         query.mockReturnValue(mockQuery);
         getDocs.mockRejectedValue(mockError);
 
         const logSpy = jest.spyOn(console, 'log');
-        await handleItemEquip(mockUser, mockItem);
+        await handleItemEquip(mockUser, mockItem, updateAvatar);
 
         expect(logSpy).toHaveBeenCalledWith(
             'Unable to update inventory/equip item: Hat', mockError
@@ -116,8 +138,9 @@ describe('handleItemEquip', () => {
             name: 'hat',
             itemID: 'Hat'
         };
+        const updateAvatar = jest.fn();
 
-        await handleItemEquip(mockUser, mockItem);
+        await handleItemEquip(mockUser, mockItem, updateAvatar);
         
         expect(collection).not.toHaveBeenCalled();
         expect(query).not.toHaveBeenCalled();

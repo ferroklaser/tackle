@@ -3,6 +3,9 @@ import { FIREBASE_DATABASE } from "../firebaseConfig";
 
 export const getUsername = async (userID) => {
     try {
+        //added after testing 
+        if (!userID) return "";
+        
         const userRef = doc(FIREBASE_DATABASE, "users", userID);
         const docSnap = await getDoc(userRef);
 
