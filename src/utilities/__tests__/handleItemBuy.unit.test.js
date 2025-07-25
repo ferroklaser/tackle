@@ -8,6 +8,8 @@ jest.mock('../../firebaseConfig', () => ({
     FIREBASE_DATABASE: {}
 }));
 
+global.alert = jest.fn();
+
 jest.mock('firebase/firestore', () => ({
     doc: jest.fn(),
     getDoc: jest.fn(),

@@ -38,6 +38,15 @@ describe('isSameDay', () => {
 });
 
 describe('generateUserShop', () => {
+    beforeEach(() => {
+        getDocs.mockClear(),
+        collection.mockClear(),
+        getDoc.mockClear(),
+        updateDoc.mockClear(),
+        Timestamp.now.mockClear(),
+        doc.mockClear()
+    });
+
     test('if shop is from today, returns today shop with correct purchased field', async () => {
         const mockUser = { uid: '123' }; 
         const mockDoc = {};
@@ -95,20 +104,17 @@ describe('generateUserShop', () => {
         const mockDoc = {};
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1); 
-        const mockShopItems = [
-            {
-                available: true,
-                itemID: 'Shocked',
-                name: 'Shocked',
-                purchased: false
-            },
-            {
-                available: true,
-                itemID: 'Fangs',
-                name: 'Fangs',
-                purchased: false
-            }
-        ];
+        const mockItems = {
+            docs: [
+                    { data: () => ({ itemID: 'Fangs', name: 'Fangs'})},
+                    { data: () => ({ itemID: 'Shocked', name: 'Shocked'})}
+            ]
+        };
+        const mockInventorySnap = {
+            docs: [
+                {data: () => ({ itemID: 'Fangs' })}
+            ]
+        };
         const mockDocSnap = {
             exists: () => true,
             data: () => ({
@@ -120,11 +126,13 @@ describe('generateUserShop', () => {
                 }
             })
         };
-        const mockCollection = {};
-        const mockCollectionSnap = {}
 
         doc.mockReturnValue(mockDoc);
         getDoc.mockResolvedValue(mockDocSnap);
+        Timestamp.now.mockReturnValue({ seconds: 123456789, nanoseconds: 0 });
+
+        getDocs.mockResolvedValueOnce(mockInventorySnap)
+            .mockResolvedValueOnce(mockItems);
 
         const result = await generateUserShop(mockUser);
 
@@ -138,10 +146,89 @@ describe('generateUserShop', () => {
         expect(getDoc).toHaveBeenCalledTimes(1);
         expect(getDoc).toHaveBeenCalledWith(mockDoc);
 
-        expect(result).toEqual(mockShopItems);
+        expect(getDocs).toHaveBeenCalledTimes(2);
+
+        expect(collection).toHaveBeenCalledWith(
+            FIREBASE_DATABASE,
+            'users',
+            mockUser.uid,
+            'inventory'
+        );
+        expect(collection).toHaveBeenCalledWith(
+            FIREBASE_DATABASE,
+            'items'
+        );
+        expect(collection).toHaveBeenCalledTimes(2);
+        expect(updateDoc).toHaveBeenCalledTimes(1);
+        expect(updateDoc).toHaveBeenCalledWith(
+            mockDoc, 
+            expect.objectContaining({
+                shop: expect.objectContaining({
+                    shopItems: expect.any(Array),
+                    timestamp: { seconds: 123456789, nanoseconds: 0 }
+                })
+            })
+        )
+        expect(result).toHaveLength(1);
         expect(result[0].itemID).toEqual('Shocked');
         expect(result[0].purchased).toBe(false);
-        expect(result[1].purchased).toBe(true);
+    }),
+    test('shop does not exist, new shop generated', async () => {
+        const mockUser = { uid: '123' };
+        const mockDoc = {};
+        const mockDocSnap = {
+            exists: () => false,
+            data: () => {}
+        };
+        const mockItems = {
+            docs: [
+                    { data: () => ({ itemID: 'Fangs', name: 'Fangs'})},
+                    { data: () => ({ itemID: 'Shocked', name: 'Shocked'})}
+            ]
+        };
+        const mockInventorySnap = {
+            docs: [
+                {data: () => ({ itemID: 'Fangs' })}
+            ]
+        };
+
+        doc.mockReturnValue(mockDoc);
+        getDoc.mockResolvedValue(mockDocSnap);
+        getDocs.mockResolvedValueOnce(mockInventorySnap)
+            .mockResolvedValueOnce(mockItems);
+
+        const result = await generateUserShop(mockUser);
+
+        expect(getDocs).toHaveBeenCalledTimes(2);
+        expect(updateDoc).toHaveBeenCalledWith(
+            mockDoc,
+            expect.objectContaining({
+                shop: expect.objectContaining({
+                    shopItems: expect.any(Array),
+                    timestamp: { seconds: 123456789, nanoseconds: 0 }
+                })
+            })
+        );
+        expect(result).toHaveLength(1);
+        expect(result[0].itemID).toEqual('Shocked');
+        expect(result[0].purchased).toBe(false);
+    }),
+    test('error handling', async () => {
+        const mockUser = { uid: '123' };
+        const mockDoc = {};
+        const mockError = new Error('Test Error');
+
+        doc.mockReturnValue(mockDoc);
+        getDocs.mockRejectedValue(mockError);
+
+        const logSpy = jest.spyOn(console, 'log');
+
+        const result = await generateUserShop(mockUser);
+
+        expect(logSpy).toHaveBeenCalledWith(
+            'Error generating shop: ', mockError
+        );
+        logSpy.mockRestore();
     })
 })
 

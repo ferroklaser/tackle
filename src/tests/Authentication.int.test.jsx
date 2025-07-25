@@ -4,6 +4,7 @@ import { AuthProvider } from '../contexts/AuthContext';
 import { render, waitFor } from '@testing-library/react-native';
 import { FIREBASE_AUTH, FIREBASE_DATABASE, FIREBASE_RTDB } from '../firebaseConfig';
 import Home from '../app/(protected)/(main)/(tabs)';
+import { AuthContext } from '../contexts/AuthContext';
 
 jest.mock('../firebaseConfig', () => ({
   FIREBASE_AUTH: {},
@@ -63,9 +64,9 @@ describe('Home Integration with AuthContext', () => {
         });
 
         const { getByTestId } = render(
-            <AuthProvider>
+            <AuthContext.Provider value={ mockUser }>
                 <Home />
-            </AuthProvider>
+            </AuthContext.Provider>
         );
 
         await waitFor(() => {
