@@ -53,6 +53,10 @@ const EditProfileModal = ({ isModalVisible, setModalVisible }) => {
 
             await deleteSubcollectionDocs(`users/${user.uid}/inventory`);
             await deleteSubcollectionDocs(`users/${user.uid}/tasks`);
+            await deleteSubcollectionDocs(`users/${user.uid}/friends`);
+            await deleteSubcollectionDocs(`users/${user.uid}/feed`);
+            await deleteSubcollectionDocs(`users/${user.uid}/dailyUsage`);
+            await deleteSubcollectionDocs(`users/${user.uid}/taskRefs`);
 
             await deleteDoc(doc(FIREBASE_DATABASE, 'users', user.uid));
 
@@ -118,7 +122,7 @@ const EditProfileModal = ({ isModalVisible, setModalVisible }) => {
                                 'Confirm Password',
                                 'To delete your account, please enter your password:',
                                 (password) => {
-                                    handleDeleteAccount(password);
+                                    // handleDeleteAccount(password);
                                 }
                                 );}}>
                                     
