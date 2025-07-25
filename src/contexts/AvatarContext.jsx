@@ -7,10 +7,11 @@ import { getDoc, doc, updateDoc, onSnapshot } from 'firebase/firestore';
 import Tack from '../assets/Tack';
 import { Asset } from 'expo-asset';
 import { useAuth } from './AuthContext';
+import { useFonts } from 'expo-font';
 
 
-const AvatarContext = createContext({
-    avatar: { colour: null, eyes: null, mouth: null, accessory: null },
+export const AvatarContext = createContext({
+    avatar: { base: null, eyes: null, mouth: null, accessory: null },
     isAvatarLoaded: false,
     isAssetsLoaded: false,
 });
@@ -19,6 +20,9 @@ export const useAvatar = () => useContext(AvatarContext);
 
 export const AvatarProvider = ({ children }) => {
     const { user } = useAuth();
+    const [fontLoaded] = useFonts({
+        'Doodle': require('../assets/fonts/doodle.ttf')
+    })
 
     if (!user) return;
     const [avatar, setAvatar] = useState({
@@ -87,7 +91,7 @@ export const AvatarProvider = ({ children }) => {
     }
 
 
-    if (!isAssetsLoaded || !isAvatarLoaded) {
+    if (!isAssetsLoaded || !isAvatarLoaded || !fontLoaded) {
         return (
             <LoadingSplash />
         )
