@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, ImageBackground } from 'react-native'
 import CombinedTackAnimation from '../../../../components/TackComponents/CombinedTackSprite'
 import React from 'react'
 
@@ -9,7 +9,9 @@ const inventory = () => {
   const { avatar } = useAvatar();
 
   return (
-    <View style={styles.container}>
+    <ImageBackground 
+      source = {require('../../../../assets/Backgrounds/PaperTexture.png')}
+      style={styles.container}>
       <View style={styles.tackContainer}>
         <CombinedTackAnimation
           tackBaseOption={avatar.base}
@@ -19,7 +21,7 @@ const inventory = () => {
         </CombinedTackAnimation>
       </View>
       <TabContainer />
-    </View>
+    </ImageBackground>
   )
 }
 

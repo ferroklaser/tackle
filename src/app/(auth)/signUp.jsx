@@ -260,8 +260,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)', 
   },
   logo: {
-    width: '80%',
-    height: '100%',
+    width: '40%',
+    height: '60%',
     marginTop: 45
   }
 })

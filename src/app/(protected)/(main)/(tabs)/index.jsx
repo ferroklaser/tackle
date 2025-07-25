@@ -90,7 +90,11 @@ const index = () => {
           />
         </TouchableOpacity>
         <TouchableOpacity style={styles.temp} onPress={() => setFriendActivityPressed(true)}>
-          <Text>Friend Activity Page</Text>
+          <Image
+            source={require('../../../../assets/Icons/Activity.png')}
+            style={{ width: '100%', height: '100%' }}
+            resizeMode="contain"
+          />
         </TouchableOpacity>
 
         <MailModal isModalVisible={isMailPressed} setModalVisible={setMailPressed}/>
@@ -131,10 +135,8 @@ const styles = StyleSheet.create({
   temp: {
     width: 100,
     height: 100,
-    borderRadius: 10,
     position: 'absolute',
     marginTop: 123,
-    right: 0,
-    padding: 20,
+    right: 0
   }
 })

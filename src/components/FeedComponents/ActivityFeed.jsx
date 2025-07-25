@@ -8,7 +8,10 @@ const ActivityFeed = () => {
     const { loading, feedItems, hasMore, fetchMore, fetchingMore } = useFeed(10);
 
     if (loading) {
-        return <LoadingSplash/>
+        // return <LoadingSplash/>
+        return <View style={styles.container}>
+            <Text>Loading feed...</Text>
+        </View>
     }
 
     return (
@@ -30,4 +33,10 @@ const ActivityFeed = () => {
 
 export default ActivityFeed
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center', 
+        alignItems: 'center', 
+    },
+})
