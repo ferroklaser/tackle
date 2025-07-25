@@ -2,7 +2,6 @@ import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
 import React from 'react'
 import SingleFrameSprite from '../SingleFrameSprite'
 import TackIcons from '../../assets/TackIcons'
-import { useFonts } from 'expo-font';
 import { useAvatar } from '../../contexts/AvatarContext';
 import { handleItemEquip } from '../../utilities/handleItemEquip';
 import { useState } from 'react';
@@ -13,9 +12,6 @@ const ItemComponent = ({item}) => {
     const [equipped, isEquipped] = useState(item.equipped);
     const { user } = useAuth();
 
-    useFonts({
-        'Doodle': require('../../assets/fonts/doodle.ttf')
-    });
     const getData = () => {
             switch (item.type) {
                 case "base":
@@ -41,21 +37,13 @@ const ItemComponent = ({item}) => {
          <TouchableOpacity
             style={styles.container}
             activeOpacity={0.6}
-            onPress={() => itemPress(user, item)} >
+            onPress={() => itemPress(user, item)} 
+            testID={item.itemID}>
             <View style={styles.dummy}>
                 <Image source={data} style={styles.image} resizeMode="contain" />
             </View>
             <Text style={styles.text}>{item.name}</Text>
         </TouchableOpacity>
-
-        // <View style={styles.item}>
-        //     <View>
-        //         <TouchableOpacity onPress={() => itemPress(user, item)} activeOpacity={0.6} style={styles.square}>
-        //             <SingleFrameSprite {...data} />
-        //         </TouchableOpacity>
-        //         <Text style={styles.text}>{item.name}</Text>
-        //     </View>
-        // </View>
     )
 }
 

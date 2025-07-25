@@ -2,16 +2,21 @@ import { onAuthStateChanged } from 'firebase/auth'
 import React from 'react'
 import { AuthProvider } from '../contexts/AuthContext';
 import { render, waitFor } from '@testing-library/react-native';
-import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../firebaseConfig';
+import { FIREBASE_AUTH, FIREBASE_DATABASE, FIREBASE_RTDB } from '../firebaseConfig';
 import Home from '../app/(protected)/(main)/(tabs)';
 
 jest.mock('../firebaseConfig', () => ({
   FIREBASE_AUTH: {},
-  FIREBASE_DATABASE: {}
+  FIREBASE_DATABASE: {},
+  FIREBASE_RTDB: {}
 }));
 
 jest.mock('firebase/auth', () => ({
     onAuthStateChanged: jest.fn(),
+}));
+
+jest.mock('firebase/database', () => ({
+    ref: jest.fn()
 }));
 
 jest.mock('expo-router', () => ({
@@ -19,6 +24,8 @@ jest.mock('expo-router', () => ({
         replace: jest.fn(),
     }
 }));
+
+jest.mock('../components/LoadingSplash', () => () => null);
 
 jest.mock('../contexts/AvatarContext', () => ({
     useAvatar: () => ({
