@@ -1,6 +1,6 @@
 import React from "react";
 import { AuthProvider } from "../AuthContext";
-import { FIREBASE_AUTH, FIREBASE_DATABASE } from "../../firebaseConfig";
+import { FIREBASE_AUTH, FIREBASE_DATABASE, FIREBASE_RTDB} from "../../firebaseConfig";
 import { renderHook, act, render } from "@testing-library/react-native";
 import { useAuth } from "../AuthContext";
 import { 
@@ -12,12 +12,14 @@ import {
 } from "firebase/auth";
 import { setDoc } from "firebase/firestore";
 import { router } from "expo-router";
+import { onValue, ref, off } from "firebase/database";
 
 jest.mock('../../firebaseConfig', () => ({
     FIREBASE_AUTH: {
         currentUser: null,
     },
-    FIREBASE_DATABASE: {}
+    FIREBASE_DATABASE: {},
+    FIREBASE_RTDB: {}
 }));
 
 jest.mock('firebase/auth', () => ({
@@ -30,8 +32,15 @@ jest.mock('firebase/auth', () => ({
 
 jest.mock('firebase/firestore', () => ({
     setDoc: jest.fn(),
-    doc: jest.fn()
+    doc: jest.fn(),
 }));
+
+jest.mock('firebase/database', () => ({
+    ref: jest.fn(),
+    set: jest.fn(),
+    off: jest.fn(),
+    onValue: jest.fn()
+}))
 
 jest.mock('expo-router', () => ({
     router: {
@@ -69,7 +78,7 @@ describe("AuthContext", () => {
             'test123'
         );
         expect(sendEmailVerification).toHaveBeenCalledWith(mockUser);
-        expect(setDoc).toHaveBeenCalledTimes(2);
+        expect(setDoc).toHaveBeenCalledTimes(1);
     }),
     test("login only if verified email", async () => {
         const mockUser = { emailVerified: true }
