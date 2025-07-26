@@ -23,6 +23,14 @@ jest.mock('../../firebaseConfig', () => ({
 }));
 
 describe('handleItemEquip', () => {
+    beforeEach(() => {
+        collection.mockClear(),
+        query.mockClear(),
+        where.mockClear(),
+        getDocs.mockClear(),
+        updateDoc.mockClear(),
+        writeBatch.mockClear()
+    })
     test('item is correctly equipped', async () => {
         const mockUser = { uid: '123' };
         const mockCollection = {}

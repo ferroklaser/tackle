@@ -8,14 +8,6 @@ export const handleItemEquip = async (user, item, updateAvatar) => {
         const q = query(inventoryRef, where("type", "==", item.type))
         const querySnapShot = await getDocs(q);
 
-        // const updateInventory = querySnapShot.docs.map(async (doc) => {
-        //     const itemID = item.itemID;
-        //     const isEquip = itemID === doc.data().itemID;
-        //     await updateDoc(doc.ref, {
-        //         equipped: isEquip,
-        //     })
-        // })
-
         const batch = writeBatch(FIREBASE_DATABASE);
         const itemID = item.itemID;
 
