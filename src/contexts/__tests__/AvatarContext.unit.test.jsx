@@ -2,9 +2,16 @@ import { render, renderHook, waitFor, act } from "@testing-library/react-native"
 import { AvatarProvider, useAvatar } from "../AvatarContext";
 import { updateDoc, doc } from 'firebase/firestore'
 import * as AssetModule from 'expo-asset'
+import { AuthProvider, useAuth } from "../AuthContext";
 
 
-const wrapper = ({children}) => <AvatarProvider>{children}</AvatarProvider>
+const wrapper = ({ children }) => (
+  <AuthProvider>
+    <AvatarProvider>
+      {children}
+    </AvatarProvider>
+  </AuthProvider>
+);
 
 jest.mock('expo-asset');
 
@@ -13,20 +20,18 @@ AssetModule.Asset.fromModule = () => ({
 })
 
 jest.mock('../../firebaseConfig', () => ({
-  FIREBASE_AUTH: {
-    currentUser: {
-      uid: 'test-uid',
-    },
-  },
+  FIREBASE_AUTH: {},
   FIREBASE_DATABASE: {}, // mock this if needed
 }));
 
-
 jest.mock('../AuthContext', () => ({
-    useAuth: () => ({
-        user: {uid: 'test-uid'},
-    })
+  useAuth: () => ({
+    user: { uid: '123' }
+  }),
+  AuthProvider: ({ children }) => <>{children}</>,
 }))
+
+jest.mock('../../components/LoadingSplash', () => () => null);
 
 jest.mock('expo-asset', () => ({
   Asset: {
@@ -61,7 +66,7 @@ describe("AvatarContext unit test", () => {
     test('initial avatar state is empty', async () => {
         const { result } = renderHook(() => useAvatar(), { wrapper });
 
-        await waitFor(() => {
+        act(() => {
             expect(result.current.avatar).toEqual({
             base: null,
             eyes: null,

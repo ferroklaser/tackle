@@ -23,8 +23,6 @@ export const AvatarProvider = ({ children }) => {
     const [fontLoaded] = useFonts({
         'Doodle': require('../assets/fonts/doodle.ttf')
     })
-
-    if (!user) return;
     const [avatar, setAvatar] = useState({
         base: null,
         eyes: null,
@@ -76,7 +74,6 @@ export const AvatarProvider = ({ children }) => {
     }, []);
 
     const updateAvatar = async (updates) => {
-        const user = FIREBASE_AUTH.currentUser;
         if (!user) return;
         
         const userRef = doc(FIREBASE_DATABASE, "users", user.uid);
