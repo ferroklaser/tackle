@@ -134,42 +134,37 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
   const handleRewardBonus = async () => {
     setTaskId(null);
     const currentUser = FIREBASE_AUTH.currentUser;
-
     const docRefReward = doc(FIREBASE_DATABASE, 'users', currentUser.uid);
     const docRefComplete = doc(FIREBASE_DATABASE, 'users', taskData.ownerID, 'tasks', taskId);
-
     const coinsEarned = Math.floor(duration / 100 * 1.2);
     setReward(coinsEarned);
-    // setRewardVisible(true);
+    setLogMessage(true);
 
     try {
       await updateDoc(docRefReward, { coins: increment(coinsEarned) });
       await setFocusState(user, false);
-    } catch (err) {
-      console.error('Failed to update coins:', err);
+    } catch (error) {
+      console.log('Failed to update coins:', error)
     }
 
+    const document = await getDoc(docRefComplete);
+    setPendingLogMessage({ user: currentUser, duration: duration, title: document.data().title });
+    
     await updateDoc(docRefComplete, {
       completed: increment(duration)
     });
-    const document = await getDoc(docRefComplete);
-    await logUserDailyUsage(currentUser, duration);
-    // await logActivity(currentUser, duration, document.data().title);
 
-    setPendingLogMessage({user: currentUser, duration: duration, title: document.data().title});
-    setLogMessage(true);
+    await logUserDailyUsage(currentUser, duration);
   }
 
   const handleRewardNoBonus = async () => {
     setTaskId(null);
     const currentUser = FIREBASE_AUTH.currentUser;
-
     const docRefReward = doc(FIREBASE_DATABASE, 'users', currentUser.uid);
     const docRefComplete = doc(FIREBASE_DATABASE, 'users', taskData.ownerID, 'tasks', taskId);
-
     const coinsEarned = Math.floor((duration - seconds)/100);
     setReward(coinsEarned);
-    setRewardVisible(true);
+    setLogMessage(true);
     
     try {
       await updateDoc(docRefReward, { coins: increment(coinsEarned) });
@@ -178,12 +173,13 @@ const Timer = ({startingDuration = 0, isRunning = false, setIsRunning}) => {
       console.error('Failed to update coins:', err);
     }
 
+    const document = await getDoc(docRefComplete);
+    setPendingLogMessage({ user: currentUser, duration: (duration - seconds), title: document.data().title });
+  
     await updateDoc(docRefComplete, {
       completed: increment(duration - seconds)
     });
     await logUserDailyUsage(currentUser, duration - seconds);
-    setPendingLogMessage({user: currentUser, duration: duration, title: document.data().title});
-    setLogMessage(true);
   }
 
   const fill = duration == 0 ? 0 : seconds / duration * 100;
