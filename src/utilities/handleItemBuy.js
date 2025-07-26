@@ -20,13 +20,6 @@ export const handleItemBuy = async (user, item, updateAvatar) => {
                 return false;
             } else {
                 if (data.shop && data.shop.shopItems) {
-                    // const updatedShopItems = data.shop.shopItems.map(
-                    //     shopItem => {
-                    //         if (shopItem.itemID === item.itemID) {
-                    //             return { ...shopItem, purchased: true };
-                    //         }
-                    //         return shopItem;
-                    //     });
                     const updatedFields = {
                         coins: coins - price
                     }
