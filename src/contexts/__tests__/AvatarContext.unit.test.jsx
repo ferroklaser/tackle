@@ -1,6 +1,6 @@
 import { render, renderHook, waitFor, act } from "@testing-library/react-native";
 import { AvatarProvider, useAvatar } from "../AvatarContext";
-import { updateDoc, doc } from 'firebase/firestore'
+import { updateDoc, doc, waitForPendingWrites } from 'firebase/firestore'
 import * as AssetModule from 'expo-asset'
 import { AuthProvider, useAuth } from "../AuthContext";
 
@@ -41,6 +41,10 @@ jest.mock('expo-asset', () => ({
   },
 }));
 
+jest.mock('expo-font', () => ({
+  useFonts: () => [true],
+}));
+
 jest.mock('firebase/firestore', () => ({
   ...jest.requireActual('firebase/firestore'),
   onSnapshot: jest.fn((ref, callback) => {
@@ -66,7 +70,7 @@ describe("AvatarContext unit test", () => {
     test('initial avatar state is empty', async () => {
         const { result } = renderHook(() => useAvatar(), { wrapper });
 
-        act(() => {
+        await waitFor(() => {
             expect(result.current.avatar).toEqual({
             base: null,
             eyes: null,
@@ -85,8 +89,8 @@ describe("AvatarContext unit test", () => {
             expect(result.current.avatar).toBeDefined();
         })
 
-        await act(async () => {
-            await result.current.updateAvatar({ eyes: 'Angry_Eyes' });
+        await waitFor(async () => {
+            result.current.updateAvatar({ eyes: 'Angry_Eyes' });
         })
         expect(updateDoc).toHaveBeenCalledWith('mockUserRef', {
             avatar: expect.objectContaining({ eyes: 'Angry_Eyes' })
