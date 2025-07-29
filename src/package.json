@@ -59,6 +59,7 @@
     }
   },
   "jest": {
+    "verbose": true,
     "preset": "jest-expo",
     "transform": {
       "^.+\\.[jt]sx?$": "babel-jest"

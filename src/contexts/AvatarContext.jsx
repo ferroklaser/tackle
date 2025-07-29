@@ -14,6 +14,7 @@ export const AvatarContext = createContext({
     avatar: { base: null, eyes: null, mouth: null, accessory: null },
     isAvatarLoaded: false,
     isAssetsLoaded: false,
+    updateAvatar: () => {},
 });
 
 export const useAvatar = () => useContext(AvatarContext);
