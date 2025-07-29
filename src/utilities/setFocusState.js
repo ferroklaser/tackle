@@ -1,5 +1,5 @@
 import { FIREBASE_RTDB } from "../firebaseConfig";
-import { ref, update} from "firebase/database";
+import { ref, update } from "firebase/database";
 
 export async function setFocusState(user, isFocused) {
     if (!user?.uid) return;
