@@ -51,7 +51,7 @@ describe('useWeeklyFocusData', () => {
         const { result, waitForNextUpdate } = renderHook(() => useWeeklyFocusData());
 
         await waitFor(() => {
-             console.log("Current result:", result.current);
+            console.log("Current result:", result.current);
             expect(result.current.loading).toBe(false);
             expect(result.current.data).toEqual(
                 expect.arrayContaining(
