@@ -50,7 +50,7 @@ export function useWeeklyFocusData() {
             setLoading(false);
         })
         return () => unsubscribe();
-    }, [])
+    }, [user])
 
     return { data, loading };
 }
