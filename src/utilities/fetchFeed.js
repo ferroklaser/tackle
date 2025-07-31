@@ -26,7 +26,7 @@ export function useFeed({ pageSize }) {
                 const postRef = doc(FIREBASE_DATABASE, 'posts', document.id);
                 const docSnap = await getDoc(postRef);
                 return {
-                    id: docSnap.id,
+                    id: document.id,
                     ...docSnap.data(),
                     liked: document.data().liked,
                 }
@@ -60,7 +60,7 @@ export function useFeed({ pageSize }) {
             const postRef = doc(FIREBASE_DATABASE, 'posts', document.id);
             const docSnap = await getDoc(postRef);
             return {
-                id: docSnap.id,
+                id: document.id,
                 ...docSnap.data(),
                 liked: document.data().liked,
             }
@@ -75,8 +75,6 @@ export function useFeed({ pageSize }) {
         } catch (error) {
             console.log('Error fetching new items: ', error);
         }
-
-
     }
 
     return { loading, feedItems, fetchMore, hasMore, fetchingMore };
