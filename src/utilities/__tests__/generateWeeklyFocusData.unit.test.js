@@ -24,41 +24,68 @@ describe('useWeeklyFocusData', () => {
     const mockUser = { uid: '123' }
     beforeEach(() => {
         jest.clearAllMocks();
-        jest.useFakeTimers('modern').setSystemTime(new Date('2025-07-27T12:00:00Z'));
+        jest.spyOn(Date, 'now').mockImplementation(() => new Date('2025-07-27T12:00:00Z').getTime());
         useAuth.mockReturnValue({ user: mockUser });
     });
 
     afterAll(() => {
-        jest.useRealTimers();
+        jest.restoreAllMocks()
     })
 
     test('useWeeklyFocusData fetches data correctly', async () => {
         const mockSnapshot = {
             forEach: (callback) => {
                 [
-                    { id: '2025-07-27', data: () => ({ totalSeconds: 3000 }) },
-                    { id: '2025-07-29', data: () => ({ totalSeconds: 6000 }) }
+                    { id: '2025-07-27', data: () => ({ totalSeconds: 3600 }) },
+                    { id: '2025-07-29', data: () => ({ totalSeconds: 7200 }) }
                 ].forEach(callback)
             }
         }
 
         onSnapshot.mockImplementation((ref, callback) => {
-            console.log("Mock snapshot triggered");
             callback(mockSnapshot);
             return jest.fn();
         });
 
-        const { result, waitForNextUpdate } = renderHook(() => useWeeklyFocusData());
+        const { result } = renderHook(() => useWeeklyFocusData());
+
+        console.log(useAuth());
 
         await waitFor(() => {
-            console.log("Current result:", result.current);
             expect(result.current.loading).toBe(false);
             expect(result.current.data).toEqual(
                 expect.arrayContaining(
-                    [expect.objectContaining({ label: 'S', value: 0.83 }),
-                    expect.objectContaining({ label: 'T', value: 1.67 })]
+                    [expect.objectContaining({ label: 'S', value: 1 }),
+                    expect.objectContaining({ label: 'T', value: 2 })]
                 )
             );
-        })
+        });
+    }),
+    test('useWeeklyData clean up listeners on unmount', async () => {
+        const mockUnsubscribe = jest.fn();
+
+        const mockSnapshot = {
+            forEach: (callback) => {
+                [
+                    { id: '2025-07-27', data: () => ({ totalSeconds: 3600 }) },
+                    { id: '2025-07-29', data: () => ({ totalSeconds: 7200 }) }
+                ].forEach(callback)
+            }
+        }
+
+        onSnapshot.mockImplementation((ref, callback) => {
+            callback(mockSnapshot);
+            return mockUnsubscribe;
+        });
+
+        const { unmount } = renderHook(() => useWeeklyFocusData());
+
+        await waitFor(() => {
+            expect(onSnapshot).toHaveBeenCalled();
+        });
+
+        unmount();
+
+        expect(mockUnsubscribe).toHaveBeenCalled();
     })
 });
