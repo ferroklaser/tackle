@@ -32,7 +32,8 @@ const PreviewItemModal = ({ isModalVisible, setModalVisible, backgroundColor, it
             <Modal
                 isVisible={isModalVisible}
                 onBackdropPress={() => setModalVisible(false)}
-                hideModalContentWhileAnimating={true}>
+                hideModalContentWhileAnimating={true}
+                testID='previewItemModal'>
 
                 <View style={styles.overlay}>
                     <View style={[styles.previewContainer, backgroundColor]}>

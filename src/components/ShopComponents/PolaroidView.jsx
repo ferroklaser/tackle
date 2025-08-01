@@ -52,7 +52,8 @@ const PolaroidView = ({ item, fontStyle }) => {
                     styles.container,
                     { backgroundColor: getPolaroidColour(item) },
                     isPurchased && {opacity: 0.4 }]}
-                onPress={handleItemPress} >
+                onPress={handleItemPress}
+                testID={item.itemID} >
                 <View style={styles.dummy}>
                     <Image source={data} style={styles.image} resizeMode="contain" />
                 </View>
