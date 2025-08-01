@@ -8,7 +8,7 @@ import { useFonts } from 'expo-font'
 import LoadingSplash from '../../../../components/LoadingSplash.jsx'
 
 
-const store = () => {
+const Store = () => {
   const { user } = useAuth();
   const [shop, setShop] = useState();
   const [fontsLoaded] = useFonts({
@@ -54,7 +54,7 @@ const store = () => {
   )
 }
 
-export default store
+export default Store
 
 const styles = StyleSheet.create({
     container: {
