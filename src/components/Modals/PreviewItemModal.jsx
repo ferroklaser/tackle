@@ -45,6 +45,7 @@ const PreviewItemModal = ({ isModalVisible, setModalVisible, backgroundColor, it
                             mouthOption={previewAvatar.mouth}
                             accessoryOption={previewAvatar.accessory}
                             size={270}
+                            testID='combinedTackSprite'
                             />
                         </View>
                         
