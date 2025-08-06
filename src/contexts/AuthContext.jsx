@@ -86,19 +86,26 @@ export function AuthProvider({ children }) {
     }
 
     const signUp = async (email, password) => {
-        const cred = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
-        await sendEmailVerification(FIREBASE_AUTH.currentUser);
-        await setDoc(
-            doc(FIREBASE_DATABASE, "users", cred.user.uid), {
-            username: "",
-            avatar: {
-                base: "Yellow",
-                eyes: "Side_Eye",
-                mouth: "Side_Tongue",
-                accessory: "Hashtag_Doodle",
-            },
-            coins: 0,
-        });
+        try {
+            const cred = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
+            await sendEmailVerification(FIREBASE_AUTH.currentUser);
+            await setDoc(
+                doc(FIREBASE_DATABASE, "users", cred.user.uid), {
+                username: "",
+                avatar: {
+                    base: "Yellow",
+                    eyes: "Side_Eye",
+                    mouth: "Side_Tongue",
+                    accessory: "Hashtag_Doodle",
+                },
+                coins: 0,
+            });
+            return true;
+        } catch (error) {
+            authErrorHandler("Sign Up", error);
+            console.log(error);
+            return false;
+        }
     }
 
     const logOut = async () => {
