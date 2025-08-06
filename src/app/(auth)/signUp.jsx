@@ -36,11 +36,13 @@ const signUp = () => {
     }
 
     try {
-      setModalVisible(!modalVisible);
-      signUp(email, password);
       setEmail("");
       setPassword("");
       setConfirm("");
+      const success = await signUp(email, password);
+      if (success) {
+        setModalVisible(!modalVisible);
+      }
     } catch (error) {
       authErrorHandler("Sign up", error);
       console.log(error.code);
