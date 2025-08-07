@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Asset } from 'expo-asset'
 import TaskList from '../../../../components/TaskComponents/TaskList'
 import TaskBar from '../../../../components/TaskComponents/TaskBar'
-import LoadingSplash from '../../../../components/LoadingSplash';
+import LoadingSplash from '../../../../components/LoadingComponent/LoadingSplash';
 
 const manager = () => {
   const [isLoaded, setIsLoaded] = useState(false);

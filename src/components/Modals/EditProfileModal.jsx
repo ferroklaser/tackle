@@ -3,8 +3,8 @@ import Modal from 'react-native-modal'
 import React, { useState, useEffect } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import { getUsername } from '../../utilities/getUsername'
-import PillInput from '../PillInput'
-import GradientButton from '../GradientButton'
+import PillInput from '../Inputs/PillInput'
+import GradientButton from '../Buttons/GradientButton'
 import { EmailAuthProvider, reauthenticateWithCredential, deleteUser } from 'firebase/auth';
 import { deleteDoc, doc, collection, getDocs } from 'firebase/firestore';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig'

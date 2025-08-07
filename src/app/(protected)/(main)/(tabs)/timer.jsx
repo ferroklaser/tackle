@@ -3,7 +3,7 @@ import TimerComponent from '../../../../components/TimerComponents/TimerComponen
 import { useTimer } from '../../../../contexts/TimerContext';
 import { useState, useEffect } from 'react';
 import { Asset } from 'expo-asset';
-import LoadingSplash from '../../../../components/LoadingSplash.jsx';
+import LoadingSplash from '../../../../components/LoadingComponent/LoadingSplash.jsx';
 
 const timer = () => {
   const { isRunning, setIsRunning } = useTimer();

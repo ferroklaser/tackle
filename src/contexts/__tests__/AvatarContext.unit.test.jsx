@@ -31,7 +31,7 @@ jest.mock('../AuthContext', () => ({
   AuthProvider: ({ children }) => <>{children}</>,
 }))
 
-jest.mock('../../components/LoadingSplash', () => () => null);
+jest.mock('../../components/LoadingComponent/LoadingSplash', () => () => null);
 
 jest.mock('expo-asset', () => ({
   Asset: {

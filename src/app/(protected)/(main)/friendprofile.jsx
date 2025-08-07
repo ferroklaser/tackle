@@ -1,13 +1,13 @@
 import { ImageBackground, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import CombinedTackAnimation from '../../../components/TackComponents/CombinedTackSprite'
-import ChartComponent from '../../../components/ChartComponent'
+import ChartComponent from '../../../components/StatsComponents/ChartComponent'
 import { getUsername } from '../../../utilities/getUsername'
 import { useState, useEffect } from 'react'
 import { useLocalSearchParams } from 'expo-router'
 import { getAvatar } from '../../../utilities/getAvatar'
 import { getWeeklyUsage } from '../../../utilities/getWeeklyUsage'
-import LoadingSplash from '../../../components/LoadingSplash'
+import LoadingSplash from '../../../components/LoadingComponent/LoadingSplash'
 
 const FriendProfilePage = () => {
     const { userID } = useLocalSearchParams();

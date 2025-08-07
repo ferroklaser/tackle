@@ -5,7 +5,7 @@ import { generateUserShop } from '../../../../utilities/generateUserShop.js'
 import { useAuth } from '../../../../contexts/AuthContext.jsx'
 import { useState, useEffect } from 'react'
 import { useFonts } from 'expo-font'
-import LoadingSplash from '../../../../components/LoadingSplash.jsx'
+import LoadingSplash from '../../../../components/LoadingComponent/LoadingSplash.jsx';
 
 
 const Store = () => {

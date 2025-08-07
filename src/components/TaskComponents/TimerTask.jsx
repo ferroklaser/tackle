@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native'
-import ProgressBar from '../ProgressBar'
+import ProgressBar from './ProgressBar';
 import { FontAwesome } from '@expo/vector-icons';
 import { useTask } from '../../contexts/TaskContext';
 

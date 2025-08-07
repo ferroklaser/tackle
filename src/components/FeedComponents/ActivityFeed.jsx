@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, FlatList } from 'react-native'
 import React, { use } from 'react'
 import { useFeed } from '../../utilities/fetchFeed'
-import LoadingSplash from '../LoadingSplash';
+import LoadingSplash from '../LoadingComponent/LoadingSplash';
 import SpeechBubble from './SpeechBubble';
 
 const ActivityFeed = () => {

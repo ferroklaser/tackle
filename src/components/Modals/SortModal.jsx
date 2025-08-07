@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { useState } from 'react'
 import Modal from 'react-native-modal'
-import GradientButton from '../GradientButton'
+import GradientButton from '../Buttons/GradientButton'
 import { Picker } from '@react-native-picker/picker';
 
 const sortOptions = [

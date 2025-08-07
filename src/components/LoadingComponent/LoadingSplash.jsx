@@ -6,7 +6,7 @@ import { Link } from 'expo-router'
 const LoadingSplash = () => {
   return (
     <Video
-          source={require('../assets/videos/Loading.mp4')}
+          source={require('../../assets/videos/Loading.mp4')}
           rate={1.0}
           volume={1.0}
           isMuted={true}

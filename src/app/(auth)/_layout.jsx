@@ -3,7 +3,7 @@ import React from 'react'
 import { Slot } from 'expo-router'
 import { Platform } from 'react-native'
 import { Asset } from 'expo-asset';
-import LoadingSplash from '../../components/LoadingSplash.jsx';
+import LoadingSplash from '../../components/LoadingComponent/LoadingSplash';
 
 
 const layout = () => {

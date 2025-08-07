@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import BGHomeDay from '../../../../assets/Backgrounds/BGHomeDay/index.js';
 import BGHomeNight from '../../../../assets/Backgrounds/BGHomeNight/index.js';
 import CombinedTackSprite from '../../../../components/TackComponents/CombinedTackSprite.jsx';
-import LoadingSplash from '../../../../components/LoadingSplash.jsx';
+import LoadingSplash from '../../../../components/LoadingComponent/LoadingSplash.jsx';
 import { Asset } from 'expo-asset';
 import { useAvatar } from '../../../../contexts/AvatarContext.jsx';
 import { checkMail } from '../../../../utilities/checkMail.js';

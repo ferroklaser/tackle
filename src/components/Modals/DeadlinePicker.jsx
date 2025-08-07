@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Alert } from 'react-native'
 import { useState, useEffect } from 'react'
 import Modal from 'react-native-modal'
-import GradientButton from '../GradientButton'
+import GradientButton from '../Buttons/GradientButton'
 import { Picker } from '@react-native-picker/picker';
 
 const getDaysInMonth = (month, year) => {

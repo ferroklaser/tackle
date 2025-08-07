@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import { Stack } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import TopNavBar from '../../../components/TopNavBar.jsx';
+import TopNavBar from '../../../components/NaviComponents/TopNavBar.jsx';
 import { TimerProvider } from '../../../contexts/TimerContext.jsx';
 import { TaskProvider } from '../../../contexts/TaskContext.jsx';
 import { AvatarProvider } from '../../../contexts/AvatarContext.jsx';

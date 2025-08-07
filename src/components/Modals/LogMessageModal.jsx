@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, KeyboardAvoidingView, Keyboard, Platform} from 
 import React from 'react'
 import Modal from 'react-native-modal'
 import { useState } from 'react'
-import GradientButton from '../GradientButton'
+import GradientButton from '../Buttons/GradientButton'
 import ThemedInput from '../../components/AuthComponents/ThemedInput'
 
 

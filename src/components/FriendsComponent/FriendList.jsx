@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View, FlatList, RefreshControl } from 'react-native'
 import React from 'react'
 import FriendDisplay from './FriendDisplay'
-import { useFriendList } from '../utilities/fetchFriends'
-import LoadingSplash from './LoadingSplash'
+import { useFriendList } from '../../utilities/fetchFriends'
+import LoadingSplash from '../LoadingComponent/LoadingSplash'
 import { useState, useMemo } from 'react'
-import { useFriendsPresence } from '../utilities/fetchFriendsPresence'
+import { useFriendsPresence } from '../../utilities/fetchFriendsPresence'
 
 const FriendList = () => {
     const { friends, loadingFriends, refresh } = useFriendList();

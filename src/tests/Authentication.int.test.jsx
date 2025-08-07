@@ -26,7 +26,7 @@ jest.mock('expo-router', () => ({
     }
 }));
 
-jest.mock('../components/LoadingSplash', () => () => null);
+jest.mock('../components/LoadingComponent/LoadingSplash', () => () => null);
 
 jest.mock('../contexts/AvatarContext', () => ({
     useAvatar: () => ({

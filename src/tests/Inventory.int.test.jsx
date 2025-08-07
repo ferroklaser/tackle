@@ -11,7 +11,7 @@ jest.mock('../utilities/fetchInventory', () => ({
     useInventoryListener: jest.fn()
 }));
 
-jest.mock('../components/LoadingSplash', () => () => null);
+jest.mock('../components/LoadingComponent/LoadingSplash', () => () => null);
 
 jest.mock('../utilities/handleItemEquip', () => ({
     handleItemEquip: jest.fn()

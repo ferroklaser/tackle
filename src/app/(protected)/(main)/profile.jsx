@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View, ImageBackground, Button, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import CombinedTackSprite from '../../../components/TackComponents/CombinedTackSprite.jsx';
-import MyButton from '../../../components/MyButton.jsx';
-import GradientButton from '../../../components/GradientButton.jsx';
+import MyButton from '../../../components/Buttons/MyButton.jsx';
+import GradientButton from '../../../components/Buttons/GradientButton.jsx';
 import { useAuth } from '../../../contexts/AuthContext.jsx';
 import { useAvatar } from '../../../contexts/AvatarContext.jsx';
 import { getUsername } from '../../../utilities/getUsername.js';

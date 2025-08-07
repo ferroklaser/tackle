@@ -1,6 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
 import React from 'react'
-import SingleFrameSprite from '../SingleFrameSprite'
 import TackIcons from '../../assets/TackIcons'
 import { useAvatar } from '../../contexts/AvatarContext';
 import { handleItemEquip } from '../../utilities/handleItemEquip';

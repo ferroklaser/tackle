@@ -7,7 +7,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useEffect } from 'react';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import { useTimer } from '../contexts/TimerContext';
+import { useTimer } from '../../contexts/TimerContext';
 
 const BottomTabBar = ({ state, descriptors, navigation, isExpanded }) => {
   const {isRunning, setIsRunning} = useTimer();
