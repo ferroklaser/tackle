@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Image } from 'react-native'
 import Modal from 'react-native-modal'
-import GradientButton from '../GradientButton'
+import GradientButton from '../Buttons/GradientButton'
 
 const RewardModal = ({isModalVisible = false, setModalVisible, reward = 100}) => {
 

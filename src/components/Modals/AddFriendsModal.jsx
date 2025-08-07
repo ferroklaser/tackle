@@ -3,8 +3,8 @@ import Modal from 'react-native-modal'
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import { getFriendCode } from '../../utilities/getFriendCode'
-import PillInput from '../PillInput'
-import GradientButton from '../GradientButton'
+import PillInput from '../Inputs/PillInput'
+import GradientButton from '../Buttons/GradientButton'
 import { sendFriendRequest } from '../../utilities/sendFriendRequest'
 
 const AddFriendsModal = ({ isModalVisible, setModalVisible, username }) => {

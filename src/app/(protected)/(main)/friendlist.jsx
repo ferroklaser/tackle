@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import FriendList from '../../../components/FriendList'
+import FriendList from '../../../components/FriendsComponent/FriendList'
 
 const friendlist = () => {
   return (

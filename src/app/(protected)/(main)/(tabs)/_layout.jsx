@@ -1,8 +1,8 @@
 import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import { Tabs } from 'expo-router'
 import { useState } from 'react'
-import BottomTabBar from '../../../../components/BottomTabBar'
-import ToggleMenuButton from '../../../../components/ToggleMenuButton'
+import BottomTabBar from '../../../../components/NaviComponents/BottomTabBar'
+import ToggleMenuButton from '../../../../components/NaviComponents/ToggleMenuButton'
 
 
 const Layout = () => {

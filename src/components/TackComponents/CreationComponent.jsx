@@ -3,9 +3,9 @@ import { View, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
 import { Asset } from 'expo-asset';
 import Tack from '../../assets/Tack';
 import CombinedTackSprite from './CombinedTackSprite';
-import MyButton from '../MyButton';
+import MyButton from '../Buttons/MyButton.jsx';
 import { router } from 'expo-router';
-import UnderlinedInput from '../UnderlinedInput';
+import UnderlinedInput from '../Inputs/UnderlinedInput.jsx';
 import { useFonts } from 'expo-font';
 
 import { FIREBASE_DATABASE, FIREBASE_AUTH } from '../../firebaseConfig.js';

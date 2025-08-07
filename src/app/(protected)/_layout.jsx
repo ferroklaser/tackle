@@ -1,6 +1,6 @@
 import React from 'react'
 import { Redirect, Slot } from 'expo-router'
-import LoadingSplash from '../../components/LoadingSplash'
+import LoadingSplash from '../../components/LoadingComponent/LoadingSplash'
 import { useAuth } from '../../contexts/AuthContext'
 
 const Protectedlayout = () => {

@@ -1,8 +1,8 @@
 import { View, TouchableOpacity, StyleSheet, Image, Alert, Text } from 'react-native';
 import { router, usePathname } from 'expo-router';
 import { useState, useEffect } from 'react';
-import { useTimer } from '../contexts/TimerContext';
-import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../firebaseConfig';
+import { useTimer } from '../../contexts/TimerContext';
+import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig';
 import { doc, onSnapshot } from 'firebase/firestore';
 
 const TopNavBar = ( ) => {
@@ -10,12 +10,15 @@ const TopNavBar = ( ) => {
   const {isRunning, setIsRunning} = useTimer();
   const [numCoins, setNumCoins] = useState(0);
 
-  const pathname = usePathname();
-  const isBackable = pathname === '/profile' 
-                  || pathname === '/stats' 
-                  || pathname === '/friendlist' 
-                  || pathname === '/friendprofile'
-                  || pathname === '/about';
+  const pathname = usePathname() || '/';
+  // const isBackable = pathname === '/profile' 
+  //                 || pathname === '/stats' 
+  //                 || pathname === '/friendlist' 
+  //                 || pathname === '/friendprofile'
+  //                 || pathname === '/about';
+  const backablePaths = ['/profile', '/stats', '/friendlist', '/friendprofile', '/about'];
+  console.log(pathname);
+  const isBackable = backablePaths.includes(pathname);
 
   useEffect(() => {
     const user = FIREBASE_AUTH.currentUser;
@@ -56,13 +59,13 @@ const TopNavBar = ( ) => {
       { isBackable ?
         <TouchableOpacity onPress={handleBack}>
           <Image 
-            source={require('../assets/Icons/BackButton.png')}
+            source={require('../../assets/Icons/BackButton.png')}
             style={[styles.Button, {width: 35}, {height: 35}]}
           />
         </TouchableOpacity> :
         <TouchableOpacity onPress={isRunning ? handleWhileRunning : handleProfile}>
           <Image 
-            source={require('../assets/Icons/ProfileIcon.png')}
+            source={require('../../assets/Icons/ProfileIcon.png')}
             style={styles.Button}
           />
         </TouchableOpacity>

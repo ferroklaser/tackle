@@ -3,7 +3,7 @@ import React from 'react'
 import CreationComponent from '../../../components/TackComponents/CreationComponent.jsx'
 import { Video } from 'expo-av';
 import { Asset } from 'expo-asset';
-import LoadingSplash from '../../../components/LoadingSplash.jsx';
+import LoadingSplash from '../../../components/LoadingComponent/LoadingSplash.jsx';
 
 
 const index = () => {

@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import ChartComponent from '../../../components/ChartComponent';
+import ChartComponent from '../../../components/StatsComponents/ChartComponent';
 import { useWeeklyFocusData } from '../../../utilities/generateWeeklyFocusData';
-import LoadingSplash from '../../../components/LoadingSplash';
+import LoadingSplash from '../../../components/LoadingComponent/LoadingSplash';
 
 const stats = () => {
     const { data, loading} = useWeeklyFocusData();

@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { useState } from 'react'
 import { FontAwesome5 } from '@expo/vector-icons';
 import AddTaskModal from '../Modals/AddTaskModal';
-import PillInput from '../PillInput.jsx';
+import PillInput from '../Inputs/PillInput.jsx';
 import FilterModal from '../Modals/FilterModal.jsx';
 import SortModal from '../Modals/SortModal.jsx';
 

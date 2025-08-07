@@ -6,7 +6,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { useState, useEffect } from 'react';
 import { handleItemBuy } from '../../utilities/handleItemBuy.js';
 import { useAuth } from '../../contexts/AuthContext.jsx';
-import GradientButton from '../GradientButton.jsx';
+import GradientButton from '../Buttons/GradientButton.jsx';
 
 const PreviewItemModal = ({ isModalVisible, setModalVisible, backgroundColor, item, fontStyle, setPurchased}) => {
     const { avatar, updateAvatar } = useAvatar();

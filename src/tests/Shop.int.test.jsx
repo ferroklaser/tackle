@@ -9,7 +9,7 @@ jest.mock('../utilities/generateUserShop', () => ({
     generateUserShop: jest.fn()
 }));
 
-jest.mock('../components/LoadingSplash', () => () => null);
+jest.mock('../components/LoadingComponent/LoadingSplash', () => () => null);
 
 jest.mock('expo-av', () => ({
     Video: () => null

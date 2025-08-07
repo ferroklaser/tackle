@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import React, { createContext, useEffect } from 'react'
 import { useState, useContext } from 'react';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../firebaseConfig';
-import LoadingSplash from '../components/LoadingSplash';
+import LoadingSplash from '../components/LoadingComponent/LoadingSplash';
 import { getDoc, doc, updateDoc, onSnapshot } from 'firebase/firestore';
 import Tack from '../assets/Tack';
 import { Asset } from 'expo-asset';

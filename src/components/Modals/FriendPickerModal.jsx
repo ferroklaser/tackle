@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View, FlatList, Alert } from 'react-native'
 import Modal from 'react-native-modal'
 import React from 'react'
-import FriendDisplayPicker from '../FriendDisplayPicker'
+import FriendDisplayPicker from '../FriendsComponent/FriendDisplayPicker'
 import { useFriendList } from '../../utilities/fetchFriends'
 import { useState } from 'react'
-import GradientButton from '../GradientButton'
+import GradientButton from '../Buttons/GradientButton'
 
 const MAX_SELECTION = 4;
 

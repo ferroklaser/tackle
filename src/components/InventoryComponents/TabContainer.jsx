@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import ContentTab from './ContentTab';
 import { useFonts } from 'expo-font';
-import LoadingSplash from '../LoadingSplash';
+import LoadingSplash from '../LoadingComponent/LoadingSplash';
 import { useInventoryListener } from '../../utilities/fetchInventory';
 
 const TabContainer = () => {

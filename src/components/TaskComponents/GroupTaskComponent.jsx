@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native'
 import { useState, useEffect } from 'react'
-import ProgressBar from '../ProgressBar'
+import ProgressBar from './ProgressBar';
 import { FontAwesome, MaterialIcons, Fontisto, MaterialCommunityIcons } from '@expo/vector-icons';
 import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '../../firebaseConfig';
