@@ -35,18 +35,16 @@ const signUp = () => {
       return;
     }
 
-    try {
+    const { success, error } = await signUp(email, password);
+    if (success) {
+      setModalVisible(!modalVisible);
       setEmail("");
       setPassword("");
       setConfirm("");
-      const success = await signUp(email, password);
-      if (success) {
-        setModalVisible(!modalVisible);
-      }
-    } catch (error) {
+    } else {
       authErrorHandler("Sign up", error);
-      console.log(error.code);
-    } 
+      console.log('Error with sign up', error);
+    }
   }
 
   const handleVerification = async () => {
