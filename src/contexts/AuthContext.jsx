@@ -100,11 +100,10 @@ export function AuthProvider({ children }) {
                 },
                 coins: 0,
             });
-            return true;
+            return { success: true };
         } catch (error) {
-            authErrorHandler("Sign Up", error);
             console.log(error);
-            return false;
+            return { success: false , error };
         }
     }
 
