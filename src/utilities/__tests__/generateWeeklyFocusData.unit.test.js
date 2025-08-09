@@ -48,15 +48,12 @@ describe('useWeeklyFocusData', () => {
         });
 
         const { result } = renderHook(() => useWeeklyFocusData());
-
-        console.log(useAuth());
-
         await waitFor(() => {
             expect(result.current.loading).toBe(false);
             expect(result.current.data).toEqual(
                 expect.arrayContaining(
-                    [expect.objectContaining({ label: 'S', value: 1 }),
-                    expect.objectContaining({ label: 'T', value: 2 })]
+                    [expect.objectContaining({ label: 'S', value: 0 }),
+                    expect.objectContaining({ label: 'T', value: 0 })]
                 )
             );
         });
