@@ -47,10 +47,12 @@ To experience the final prototype of Tackle on your mobile device, follow these 
 - Download **Expo Go** app from the App Store or Google Play Store.
 
 #### Launching the App
+
 Open the Expo Go app or your phone camera and scan the QR code provided in the project documentation, or click this [link](https://expo.dev/preview/update?message=Final+Prototype&updateRuntimeVersion=1.0.0&createdAt=2025-08-13T10%3A00%3A03.673Z&slug=exp&projectId=0feef38e-068e-463a-959e-2c3c8261329a&group=4c5684d5-cb57-4248-9575-02e83487c18e
 ) on your mobile device. 
 
-![qrcode](/images/qr_code.png)
+<img src="images/qr_code.png" alt="qrcode" width="200"/>
+
 
 ---
 
