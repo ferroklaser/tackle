@@ -1,4 +1,10 @@
 ## Tackle
+
+<p align="center">
+  <img src="src/assets/Icons/Logo.png" alt="logo" width="200"/>
+</p>
+
+
 **Tackle** is a gamified mobile productivity app designed to help students overcome distractions and build healthy study habits. By centralising task management, time tracking, and distraction blocking into one platform, Tackle turns productivity into an engaging experience through a customiable avatar and social features.
 
 ---
