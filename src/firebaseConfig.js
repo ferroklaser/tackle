@@ -10,13 +10,13 @@ import { getDatabase } from "firebase/database";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAO2TCbL0EPVc11KCqEXeJ8EYjeschcSPM",
-  authDomain: "tackle-2d290.firebaseapp.com",
-  projectId: "tackle-2d290",
-  storageBucket: "tackle-2d290.firebasestorage.app",
-  messagingSenderId: "266555871877",
-  appId: "1:266555871877:web:19aa56bdd00a363b674fec",
-  databaseURL: "https://tackle-2d290-default-rtdb.firebaseio.com/"
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: FIREBASE_APP_ID,
+  databaseURL: FIREBASE_DATABASE_URL
 };
 
 // Initialize Firebase
