@@ -15,8 +15,8 @@ const firebaseConfig = {
   projectId: process.env.FIREBASE_PROJECT_ID,
   storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: FIREBASE_APP_ID,
-  databaseURL: FIREBASE_DATABASE_URL
+  appId: process.env.FIREBASE_APP_ID,
+  databaseURL: process.envFIREBASE_DATABASE_URL
 };
 
 // Initialize Firebase
